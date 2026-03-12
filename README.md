@@ -74,33 +74,16 @@ Point your agent to `kubeblocks-overview/SKILL.md` — it serves as a navigation
 | [addon-mongodb](./addon-mongodb/SKILL.md) | MongoDB ReplicaSet and Sharding topologies. |
 | [addon-kafka](./addon-kafka/SKILL.md) | Apache Kafka combined and separated broker/controller modes. |
 
-## How to Use
+## Install
 
-### Cursor
+| Platform | Install |
+|----------|---------|
+| **Cursor** (2.4+) | Settings → Rules → Add Rule → Remote Rule (GitHub) → `https://github.com/apecloud/kubeblocks-skills` |
+| **OpenAI Codex** | `$skill-installer https://github.com/apecloud/kubeblocks-skills` |
+| **Claude Code** | `git clone https://github.com/apecloud/kubeblocks-skills ~/.claude/skills/kubeblocks` |
+| **OpenClaw / Other** | `git clone https://github.com/apecloud/kubeblocks-skills ~/.agents/skills/kubeblocks` |
 
-Copy or symlink skill directories into your Cursor skills folder:
-
-```bash
-# Personal skills (available across all projects)
-cp -r kubeblocks-overview ~/.cursor/skills/
-cp -r install-kubeblocks ~/.cursor/skills/
-# ... repeat for desired skills
-
-# Or clone the whole repo and symlink
-ln -s /path/to/kubeblocks-skills/kubeblocks-overview ~/.cursor/skills/kubeblocks-overview
-```
-
-### Claude Code
-
-Reference skill files when prompting:
-
-```
-Read kubeblocks-overview/SKILL.md and help me deploy a MySQL cluster.
-```
-
-### Other Agents
-
-Point the agent to the `SKILL.md` file in the relevant skill directory. All instructions are in standard markdown and agent-agnostic.
+All skills follow the [Agent Skills](https://agentskills.io/) open standard and work with any agent that reads `SKILL.md` files.
 
 ## Skill Structure
 
