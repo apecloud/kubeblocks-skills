@@ -33,7 +33,7 @@ Check current configuration values:
 kubectl get configurations -n <ns> -l app.kubernetes.io/instance=<cluster>
 ```
 
-For a reference of common parameters per addon, see [reference.md](reference.md).
+For a reference of common parameters per addon, see [reference.md](references/reference.md).
 
 ## Step 2: Create Reconfiguring OpsRequest
 
@@ -131,4 +131,4 @@ KubeBlocks handles the restart automatically for static parameters. Secondary po
 
 ## Additional Reference
 
-For a list of common tunable parameters per database addon, see [reference.md](reference.md).
+For a list of common tunable parameters per database addon, see [reference.md](references/reference.md).

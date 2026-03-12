@@ -1,6 +1,6 @@
 ---
 name: install-kubeblocks
-description: Install the KubeBlocks operator on any Kubernetes cluster via Helm. Handles version selection, environment detection (local dev vs production, China mainland vs global network), image registry configuration, prerequisite checks, and post-install verification. Use when the user asks to install, deploy, or set up KubeBlocks. NOT for upgrading an existing KubeBlocks installation (see KubeBlocks official upgrade docs), uninstalling KubeBlocks (see reference.md), or creating database clusters after installation (see create-cluster or addon-* skills).
+description: Install the KubeBlocks operator on any Kubernetes cluster via Helm. Handles version selection, environment detection (local dev vs production, China mainland vs global network), image registry configuration, prerequisite checks, and post-install verification. Use when the user asks to install, deploy, or set up KubeBlocks. NOT for upgrading an existing KubeBlocks installation (see KubeBlocks official upgrade docs), uninstalling KubeBlocks (see the Uninstall section in this skill), or creating database clusters after installation (see create-cluster or addon-* skills).
 ---
 
 # Install KubeBlocks Operator
@@ -183,7 +183,7 @@ helm install kubeblocks kubeblocks/kubeblocks \
 --set featureGates.inPlacePodVerticalScaling.enabled=true
 ```
 
-For the full options reference, see [reference.md](reference.md).
+For the full options reference, see [reference.md](references/reference.md).
 
 ## Step 6: Verify Installation
 
@@ -224,7 +224,7 @@ kubectl -n kb-system get events --sort-by='.lastTimestamp'
 
 ## Uninstall
 
-See [reference.md](reference.md) for detailed uninstall instructions.
+See [reference.md](references/reference.md) for detailed uninstall instructions.
 
 Quick uninstall:
 

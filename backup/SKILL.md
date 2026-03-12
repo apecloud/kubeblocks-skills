@@ -20,6 +20,12 @@ Official docs: https://kubeblocks.io/docs/preview/user_docs/concepts/backup-and-
 | Redis      | datafile             | volume-snapshot     | —                   |
 | MongoDB    | datafile             | volume-snapshot     | —                   |
 
+### Choosing a Backup Method
+
+- **Physical backup** (xtrabackup, pg-basebackup, datafile): Portable and self-contained — the backup is a complete copy of the data files stored in BackupRepo. Works on any storage backend. Recommended as the default because it has no infrastructure dependencies beyond BackupRepo.
+- **Volume snapshot**: Leverages the storage layer's native snapshot capability (via CSI). Extremely fast for large databases since it's a copy-on-write operation, but requires a VolumeSnapshotClass and a CSI driver that supports snapshots — not always available, especially in local/dev environments.
+- **Continuous backup** (archive-binlog, wal-archive): Streams transaction logs in real time to enable Point-in-Time Recovery (PITR). Essential for production workloads where you need to recover to any arbitrary point in time, not just the moment of the last full backup.
+
 ## Workflow
 
 ```
@@ -37,7 +43,7 @@ A `BackupRepo` defines where backups are stored (S3, OSS, MinIO, GCS, etc.). At 
 kubectl get backuprepo
 ```
 
-If no BackupRepo exists, see [reference.md](reference.md) for setup instructions with various storage providers.
+If no BackupRepo exists, see [reference.md](references/reference.md) for setup instructions with various storage providers.
 
 ## Step 2: Check BackupPolicy
 
@@ -169,4 +175,4 @@ kubectl describe backup <backup-name> -n <ns>
 
 ## Additional Reference
 
-For BackupRepo setup (S3, OSS, MinIO, GCS), continuous backup configuration, and advanced BackupPolicy customization, see [reference.md](reference.md).
+For BackupRepo setup (S3, OSS, MinIO, GCS), continuous backup configuration, and advanced BackupPolicy customization, see [reference.md](references/reference.md).

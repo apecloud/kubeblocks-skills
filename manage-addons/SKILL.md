@@ -221,4 +221,4 @@ helm list -n kb-system | grep kb-addon | awk '{print $1}' | xargs -I {} helm -n 
 
 ## Reference
 
-For a complete list of supported addons and their feature matrix, see [reference.md](reference.md).
+For a complete list of supported addons and their feature matrix, see [reference.md](references/reference.md).

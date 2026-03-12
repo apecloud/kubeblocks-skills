@@ -207,4 +207,4 @@ kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP
 
 ## Additional Resources
 
-For complete cloud provider annotations, exposing read replicas, local development without cloud LB (MetalLB, port-forward), and security considerations, see [reference.md](reference.md).
+For complete cloud provider annotations, exposing read replicas, local development without cloud LB (MetalLB, port-forward), and security considerations, see [reference.md](references/reference.md).

@@ -240,5 +240,5 @@ https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mongodb/cluster-mana
 
 ## Next Steps
 
-- For detailed sharding YAML examples, see [reference.md](reference.md)
+- For detailed sharding YAML examples, see [reference.md](references/reference.md)
 - For cluster operations, see the KubeBlocks operations docs

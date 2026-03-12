@@ -105,6 +105,10 @@ The rolling upgrade follows this sequence:
 2. A **switchover** promotes an upgraded secondary to primary
 3. The **original primary** (now secondary) restarts with the new version
 
+This order matters: by upgrading secondaries first, the cluster maintains a working primary throughout the process. If a secondary fails to start on the new version, the primary is still on the old (known-good) version and the cluster remains fully operational — you can investigate and roll back without any write downtime. Upgrading the primary last also ensures the switchover only happens once, minimizing the brief write interruption to a single event.
+
+Ref: https://kubeblocks.io/blog/in-place-updates
+
 ### Confirm New Version
 
 ```bash

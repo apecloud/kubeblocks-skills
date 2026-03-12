@@ -229,5 +229,5 @@ https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-postgresql/cluster-m
 
 ## Next Steps
 
-- For detailed YAML examples and the vanilla-postgresql variant, see [reference.md](reference.md)
+- For detailed YAML examples and the vanilla-postgresql variant, see [reference.md](references/reference.md)
 - For cluster operations, see the KubeBlocks operations docs

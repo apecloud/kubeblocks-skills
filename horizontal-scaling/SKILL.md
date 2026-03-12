@@ -12,6 +12,16 @@ Horizontal scaling changes the number of replicas (or shards) in a KubeBlocks da
 Official docs: https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mysql/cluster-management/scale-a-mysql-cluster
 Full doc index: https://kubeblocks.io/llms-full.txt
 
+### When to Use Which Scaling Type
+
+- **Horizontal scaling** (this skill): Add read capacity, improve HA, or distribute sharded data. Each new replica gets its own CPU/memory/storage — you're scaling by adding independent database instances.
+- **Vertical scaling**: Increase CPU/memory on existing replicas when the workload is write-heavy or CPU-bound (adding replicas won't help if the bottleneck is single-primary write throughput).
+- **Volume expansion**: Increase disk space when storage is running low — unrelated to compute capacity.
+
+### Minimum Replica Constraints
+
+Consensus-based topologies (MySQL Group Replication, Kafka KRaft controllers) require an odd number of replicas (minimum 3) because Raft/Paxos protocols need a majority quorum to elect a leader. With 3 replicas, the system tolerates 1 failure; with 2 replicas, any single failure breaks quorum and the cluster becomes unavailable.
+
 ## Workflow
 
 ```
@@ -228,4 +238,4 @@ kubectl get pods -n <namespace> -l app.kubernetes.io/instance=<cluster-name>
 
 ## Additional Resources
 
-For engine-specific scaling behaviors, minimum replica constraints, replicas vs shards comparison, and decommissioning patterns, see [reference.md](reference.md).
+For engine-specific scaling behaviors, minimum replica constraints, replicas vs shards comparison, and decommissioning patterns, see [reference.md](references/reference.md).

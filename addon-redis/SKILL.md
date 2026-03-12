@@ -246,5 +246,5 @@ https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-redis/cluster-manage
 
 ## Next Steps
 
-- For full YAML examples of all topologies, see [reference.md](reference.md)
+- For full YAML examples of all topologies, see [reference.md](references/reference.md)
 - For cluster operations, see the KubeBlocks operations docs

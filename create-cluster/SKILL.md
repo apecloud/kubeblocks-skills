@@ -296,4 +296,4 @@ User wants to create a cluster
 
 ## Reference
 
-For detailed Cluster CR field descriptions and more addon examples, see [reference.md](reference.md).
+For detailed Cluster CR field descriptions and more addon examples, see [reference.md](references/reference.md).

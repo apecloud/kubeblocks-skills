@@ -138,7 +138,7 @@ spec:
             resources: {requests: {storage: 20Gi}}
 ```
 
-For topologies with ProxySQL or Orchestrator, see [reference.md](reference.md).
+For topologies with ProxySQL or Orchestrator, see [reference.md](references/reference.md).
 
 ## Step 4: Wait for Cluster Ready
 
@@ -226,5 +226,5 @@ https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mysql/cluster-manage
 
 ## Next Steps
 
-- For detailed YAML examples of all topologies, see [reference.md](reference.md)
+- For detailed YAML examples of all topologies, see [reference.md](references/reference.md)
 - For cluster operations, see the KubeBlocks operations docs

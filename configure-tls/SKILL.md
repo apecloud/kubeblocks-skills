@@ -31,6 +31,12 @@ Official docs: https://kubeblocks.io/docs/preview/user_docs/connect-databases/tl
 | User-provided | Manual (bring your own CA) | Production with existing PKI |
 | mTLS | Manual + client certs | High-security environments |
 
+### Why Use cert-manager for Built-in TLS?
+
+cert-manager automates the entire certificate lifecycle — issuance, renewal, and rotation — so you never end up with an expired certificate causing a production outage at 3 AM. Manually managed certificates are fine when you already have a PKI team and established rotation processes, but for most users, cert-manager eliminates a whole class of operational risk. KubeBlocks integrates with cert-manager's `Issuer` and `Certificate` CRDs, so enabling TLS is a single field toggle rather than a multi-step manual process.
+
+TLS docs: https://kubeblocks.io/docs/preview/kubeblocks-for-mysql/07-tls/01-tls-overview
+
 ### Prerequisites for Built-in TLS
 
 The built-in mode requires **cert-manager**. Install it if not present:
@@ -204,4 +210,4 @@ kubectl exec -it <pod> -n <ns> -- openssl x509 -in /var/run/secrets/tls/tls.crt 
 
 ## Additional Resources
 
-For engine-specific TLS configuration details, full certificate generation workflows with SANs, and troubleshooting matrix, see [reference.md](reference.md).
+For engine-specific TLS configuration details, full certificate generation workflows with SANs, and troubleshooting matrix, see [reference.md](references/reference.md).

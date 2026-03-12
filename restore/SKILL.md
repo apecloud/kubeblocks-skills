@@ -7,10 +7,12 @@ description: Restore KubeBlocks database clusters from backups. Supports full re
 
 ## Overview
 
-KubeBlocks supports restoring database clusters from backups. A restore always creates a **new cluster** from an existing backup. Two restore modes are available:
+KubeBlocks supports restoring database clusters from backups. A restore always creates a **new cluster** from an existing backup — it does not modify the original cluster in-place. This design is intentional: by creating a new cluster, you can verify the restored data before switching traffic, and the original cluster remains available as a fallback.
 
-- **Full restore**: Restore from a completed full backup to get the exact state at backup time
-- **PITR (Point-in-Time Recovery)**: Restore to any specific timestamp between a full backup and the latest continuous backup
+Two restore modes are available:
+
+- **Full restore**: Restore from a completed full backup to get the exact state at backup time. Use this when you need to recover from a catastrophic failure, clone a cluster for testing, or roll back after a failed upgrade.
+- **PITR (Point-in-Time Recovery)**: Restore to any specific timestamp between a full backup and the latest continuous backup. Essential for recovering from accidental data corruption (e.g., a wrong `DELETE` or `DROP TABLE`) where you need to rewind to the moment just before the mistake.
 
 Official docs: https://kubeblocks.io/docs/preview/user_docs/handle-an-exception/recovery
 
@@ -159,3 +161,7 @@ kubectl get secrets -n <ns> <new-cluster>-<component>-account-root -o jsonpath='
 **New cluster spec mismatch:**
 - The restored cluster spec should match the original (same component definitions, storage size)
 - Storage size in the new cluster must be >= the original backup's data size
+
+## Additional Reference
+
+For addon-specific restore behaviors (MySQL/PostgreSQL/Redis/MongoDB), PITR time range calculation details, the full restore annotation schema, and volume restore policy comparison, see [reference.md](references/reference.md).

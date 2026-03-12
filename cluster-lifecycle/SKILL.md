@@ -204,4 +204,4 @@ kubectl get pods -n <namespace> -l app.kubernetes.io/instance=<cluster-name>
 
 ## Additional Resources
 
-For component names by engine, kubectl patch alternatives, cluster status transitions, and cost-saving patterns, see [reference.md](reference.md).
+For component names by engine, kubectl patch alternatives, cluster status transitions, and cost-saving patterns, see [reference.md](references/reference.md).

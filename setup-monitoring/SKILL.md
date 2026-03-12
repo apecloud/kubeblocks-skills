@@ -216,3 +216,7 @@ To import: Grafana → Dashboards → Import → Enter the ID → Select Prometh
 **Grafana cannot reach Prometheus:**
 - Verify Prometheus service: `kubectl get svc -n monitoring | grep prometheus`
 - The default data source URL is `http://prometheus-kube-prometheus-prometheus.monitoring:9090`
+
+## Additional Reference
+
+For per-addon exporter details (port names, port numbers, metrics paths), custom alerting rule examples (MySQL, PostgreSQL, Redis), and extended Grafana dashboard IDs, see [reference.md](references/reference.md).

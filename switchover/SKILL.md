@@ -100,6 +100,16 @@ kubectl exec -it <primary-pod> -n <ns> -- psql -U postgres -c "SELECT * FROM pg_
 - Client connections to the primary service are automatically re-routed after switchover completes.
 - KubeBlocks uses the HA proxy or service endpoint to ensure clients connect to the new primary.
 
+### Switchover vs Failover
+
+A **switchover** is initiated by the operator (you) when both primary and secondaries are healthy — for example, before node maintenance, to rebalance load, or to test your HA setup. Because the current primary is still running, it can gracefully finish in-flight transactions and hand off leadership cleanly, resulting in minimal downtime (seconds).
+
+A **failover** happens automatically when the primary crashes or becomes unreachable. HA middleware (Patroni for PostgreSQL, Orchestrator for MySQL, Sentinel for Redis, or the built-in MongoDB election) detects the failure and promotes a secondary without human intervention. You typically don't need to trigger a failover manually — the HA stack handles it.
+
+### Best Practice: Backup Before Switchover
+
+While switchover is designed to be safe, creating a backup beforehand provides an extra safety net — especially if your application is sensitive to replication lag or you're performing switchover as part of a larger maintenance window.
+
 ## Troubleshooting
 
 **Switchover OpsRequest fails:**
@@ -114,3 +124,7 @@ kubectl exec -it <primary-pod> -n <ns> -- psql -U postgres -c "SELECT * FROM pg_
 **Replication lag after switchover:**
 - The new secondary (former primary) may need time to catch up
 - Monitor with: `kubectl exec -it <pod> -n <ns> -- <db-specific-replication-check>`
+
+## Additional Reference
+
+For per-engine switchover behaviors, HA middleware details (Orchestrator, Patroni, Sentinel), and complete replication health check commands for MySQL/PostgreSQL/Redis/MongoDB, see [reference.md](references/reference.md).
