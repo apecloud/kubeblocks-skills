@@ -1,6 +1,6 @@
 ---
 name: create-local-k8s-cluster
-description: Create a local Kubernetes test cluster using Kind, Minikube, or k3d. Handles tool installation, cluster creation, multi-node configuration, and verification. Use when the user needs a local K8s cluster for testing or development, or when they have no existing Kubernetes cluster.
+description: Create a local Kubernetes test cluster using Kind, Minikube, or k3d. Handles tool installation, cluster creation, multi-node configuration, and verification. Use when the user needs a local K8s cluster for testing or development, or when they have no existing Kubernetes cluster. NOT for production cluster provisioning (use cloud provider tools like EKS, AKS, GKE) or for installing KubeBlocks (see install-kubeblocks).
 ---
 
 # Create a Local Kubernetes Test Cluster

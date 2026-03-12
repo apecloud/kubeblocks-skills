@@ -1,6 +1,6 @@
 ---
 name: horizontal-scaling
-description: Scale database cluster replicas or shards horizontally with KubeBlocks. Supports scale-out and scale-in for all addons including sharding topologies. Use when the user wants to add or remove replicas, nodes, or shards.
+description: Scale database cluster replicas or shards horizontally with KubeBlocks via OpsRequest. Supports scale-out (add replicas), scale-in (remove replicas), decommissioning specific instances, and shard scaling for Redis Cluster and MongoDB sharded topologies. Use when the user wants to add or remove replicas, nodes, instances, or shards. NOT for changing CPU/memory (see vertical-scaling) or expanding disk (see volume-expansion).
 ---
 
 # Horizontal Scaling: Add or Remove Replicas and Shards
@@ -225,3 +225,7 @@ kubectl get pods -n <namespace> -l app.kubernetes.io/instance=<cluster-name>
 **Data rebalancing after shard scaling:**
 - For Redis Cluster, data resharding happens automatically. Monitor with `redis-cli --cluster check`.
 - For MongoDB, balancer redistributes chunks. This may take time for large datasets.
+
+## Additional Resources
+
+For engine-specific scaling behaviors, minimum replica constraints, replicas vs shards comparison, and decommissioning patterns, see [reference.md](reference.md).

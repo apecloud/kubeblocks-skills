@@ -1,6 +1,6 @@
 ---
 name: reconfigure-parameters
-description: Modify database configuration parameters for KubeBlocks clusters. Supports dynamic (no restart) and static (requires restart) parameter changes. Use when the user wants to change, tune, or modify database settings or parameters.
+description: Modify database configuration parameters for KubeBlocks clusters via OpsRequest. Supports dynamic parameters (applied without restart) and static parameters (require pod restart). Use when the user wants to change, tune, modify, optimize, or adjust database settings, config, or parameters (e.g. max_connections, innodb_buffer_pool_size, shared_buffers). NOT for changing cluster resource limits (see vertical-scaling) or managing database user accounts (see manage-accounts).
 ---
 
 # Reconfigure Database Parameters

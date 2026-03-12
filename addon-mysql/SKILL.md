@@ -1,6 +1,6 @@
 ---
 name: addon-mysql
-description: Deploy and manage MySQL clusters on KubeBlocks. Covers all topologies (semi-sync, group replication, orchestrator) with optional ProxySQL. Use when the user mentions MySQL, MariaDB, or wants to create/manage a MySQL database cluster.
+description: Deploy and manage MySQL clusters on KubeBlocks with topology selection guidance. Covers semi-synchronous replication, MySQL Group Replication (MGR), Orchestrator-managed HA, and optional ProxySQL load balancing. Use when the user mentions MySQL, MariaDB, or explicitly wants to create a MySQL database cluster. Provides engine-specific topology comparison, best-practice defaults, and connection methods. For generic cluster creation across all engines, see create-cluster. For Day-2 operations (scaling, backup, etc.), use the corresponding operation skill.
 ---
 
 # Deploy MySQL on KubeBlocks

@@ -1,6 +1,6 @@
 ---
 name: create-cluster
-description: Create a database cluster on KubeBlocks. Supports all addons (MySQL, PostgreSQL, Redis, MongoDB, Kafka, etc.) with various topologies. Use when the user wants to deploy, create, or set up a new database cluster.
+description: Create a database cluster on KubeBlocks using the generic Cluster CR template. Supports all addons (MySQL, PostgreSQL, Redis, MongoDB, Kafka, Elasticsearch, Milvus, Qdrant, etc.) with various topologies. Use when the user wants to deploy, create, provision, or launch a new database cluster — especially for engines without a dedicated addon-* skill. For MySQL, PostgreSQL, Redis, MongoDB, or Kafka, prefer the engine-specific addon skill (addon-mysql, addon-postgresql, addon-redis, addon-mongodb, addon-kafka) which provides topology guidance and tuned defaults. NOT for managing existing clusters (see Day-2 operation skills).
 ---
 
 # Create a Database Cluster on KubeBlocks

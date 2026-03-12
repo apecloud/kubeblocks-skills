@@ -1,6 +1,6 @@
 ---
 name: setup-monitoring
-description: Set up monitoring and observability for KubeBlocks database clusters using Prometheus Operator. Use when the user wants to monitor, observe, or set up metrics and dashboards for databases.
+description: Set up monitoring and observability for KubeBlocks database clusters using the Prometheus Operator stack. Covers ServiceMonitor configuration, Prometheus scraping, and Grafana dashboard integration. Use when the user wants to monitor, observe, set up metrics, alerts, dashboards, or enable observability for database clusters. NOT for application-level monitoring or for KubeBlocks operator monitoring itself.
 ---
 
 # Set Up Monitoring for KubeBlocks Clusters

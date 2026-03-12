@@ -1,6 +1,6 @@
 ---
 name: kubeblocks-overview
-description: Navigate KubeBlocks capabilities and find the right skill for any database management task. Use when the user asks about KubeBlocks features, wants to manage databases, or needs guidance on which operation to perform.
+description: Navigate KubeBlocks capabilities and route to the right skill for any database management task. Use when the user asks about KubeBlocks features, wants to manage databases on Kubernetes, or needs guidance on which operation to perform. Also use as an entry point when the intent is unclear. NOT a skill that performs actions itself — it identifies and delegates to the appropriate skill.
 ---
 
 # KubeBlocks Skills Navigator
@@ -96,26 +96,56 @@ Is KubeBlocks installed?
 │        └─ Yes → install-kubeblocks
 └─ Yes → What do they want to do?
          ├─ Create a database     → Is the engine addon installed?
-         │                          ├─ No  → manage-addons → create-cluster / addon-*
-         │                          └─ Yes → create-cluster / addon-*
-         ├─ Delete a database     → delete-cluster
-         ├─ Stop/Start/Restart    → cluster-lifecycle
-         ├─ Scale resources       → vertical-scaling or horizontal-scaling
-         ├─ Expand storage        → volume-expansion
-         ├─ Backup / Restore      → backup or restore
+         │                          ├─ No  → manage-addons → then create cluster
+         │                          └─ Yes → Is it MySQL/PG/Redis/MongoDB/Kafka?
+         │                                   ├─ Yes → addon-{engine} (topology guidance)
+         │                                   └─ No  → create-cluster (generic template)
+         ├─ Delete permanently    → delete-cluster
+         ├─ Stop temporarily      → cluster-lifecycle (stop, preserves PVCs)
+         ├─ Start / Restart       → cluster-lifecycle
+         ├─ Scale CPU/Memory      → vertical-scaling
+         ├─ Add/remove replicas   → horizontal-scaling
+         ├─ Add/remove shards     → horizontal-scaling (shard scaling)
+         ├─ Expand disk           → volume-expansion
+         ├─ Backup data           → backup
+         ├─ Restore from backup   → restore
          ├─ Change DB config      → reconfigure-parameters
-         ├─ Switchover            → switchover
+         ├─ Switchover primary    → switchover
          ├─ Upgrade DB version    → minor-version-upgrade
          ├─ Manage passwords      → manage-accounts
-         ├─ Enable TLS            → configure-tls
+         ├─ Enable TLS/SSL        → configure-tls
          ├─ Expose externally     → expose-service
          └─ Setup monitoring      → setup-monitoring
 ```
 
-## Choosing an Engine-Specific Skill vs. Generic create-cluster
+## Disambiguation Guide
+
+### create-cluster vs addon-* skills
 
 - Use **addon-mysql**, **addon-postgresql**, **addon-redis**, **addon-mongodb**, or **addon-kafka** when the user explicitly names one of these engines. These skills include engine-specific topology options, best-practice defaults, and connection instructions.
-- Use **create-cluster** for any engine not listed above, or when the user wants a general guide that works across all supported databases.
+- Use **create-cluster** for any engine not listed above (Elasticsearch, Milvus, Qdrant, ClickHouse, etc.), or when the user wants a general guide that works across all supported databases.
+
+### "Scale" ambiguity
+
+| User says | Skill |
+|-----------|-------|
+| "scale up", "more CPU", "more memory", "resize" | vertical-scaling |
+| "add replicas", "more nodes", "scale out", "add shards" | horizontal-scaling |
+| "more disk", "more storage", "expand volume" | volume-expansion |
+
+### "Delete" vs "Stop"
+
+| User says | Skill |
+|-----------|-------|
+| "delete", "remove", "destroy", "drop" (permanent) | delete-cluster |
+| "stop", "pause", "shut down" (temporary, keeps data) | cluster-lifecycle |
+
+### "Upgrade" ambiguity
+
+| User says | Skill |
+|-----------|-------|
+| "upgrade MySQL/PG version", "patch database" | minor-version-upgrade |
+| "upgrade KubeBlocks", "update operator" | Not covered by skills — see [official upgrade docs](https://kubeblocks.io/docs/preview/user_docs/upgrade/upgrade-to-v10x) |
 
 ## Common Debugging Commands
 

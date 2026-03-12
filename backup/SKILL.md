@@ -1,6 +1,6 @@
 ---
 name: backup
-description: Create backups for KubeBlocks database clusters. Supports on-demand full backups, scheduled backups, and continuous backups for PITR. Use when the user wants to backup, snapshot, or protect database data.
+description: Create backups for KubeBlocks database clusters. Supports on-demand full backups, scheduled (cron-based) backups, and continuous backups for Point-in-Time Recovery (PITR). Covers BackupRepo configuration for S3, GCS, Azure Blob, and MinIO. Use when the user wants to backup, snapshot, protect, or archive database data. NOT for restoring from backups (see restore skill) or managing backup storage infrastructure (see BackupRepo docs).
 ---
 
 # Backup KubeBlocks Database Clusters

@@ -1,6 +1,6 @@
 ---
 name: configure-tls
-description: Configure TLS encryption for KubeBlocks database clusters. Supports built-in certificates, user-provided certificates, and mTLS. Use when the user wants to enable TLS, SSL, encryption, or secure database connections.
+description: Configure TLS encryption for KubeBlocks database clusters. Supports built-in certificates (auto-managed via cert-manager), user-provided certificates (bring your own CA/PKI), and mTLS (mutual TLS with client certificates). Use when the user wants to enable TLS, SSL, encryption, HTTPS, or secure database connections with certificates. NOT for managing database passwords (see manage-accounts) or exposing services externally (see expose-service).
 ---
 
 # Configure TLS Encryption
@@ -201,3 +201,7 @@ kubectl exec -it <pod> -n <ns> -- openssl x509 -in /var/run/secrets/tls/tls.crt 
 **Client cannot connect with TLS:**
 - Verify the CA certificate matches: client's `ca.crt` must match the server's CA
 - Check SAN (Subject Alternative Names) in the server certificate
+
+## Additional Resources
+
+For engine-specific TLS configuration details, full certificate generation workflows with SANs, and troubleshooting matrix, see [reference.md](reference.md).

@@ -1,6 +1,6 @@
 ---
 name: addon-kafka
-description: Deploy and manage Apache Kafka clusters on KubeBlocks. Supports combined and separated broker/controller topologies with optional monitoring. Use when the user mentions Kafka, message queue, event streaming, or wants to create/manage a Kafka cluster.
+description: Deploy and manage Apache Kafka clusters on KubeBlocks with topology selection guidance. Supports combined mode (broker + controller co-located) and separated mode (dedicated broker and controller nodes) with optional monitoring exporter. Use when the user mentions Kafka, message queue, event streaming, message broker, or explicitly wants to create a Kafka cluster. Provides topology comparison, best-practice defaults, and connection methods. For generic cluster creation across all engines, see create-cluster. For Day-2 operations (scaling, etc.), use the corresponding operation skill.
 ---
 
 # Deploy Kafka on KubeBlocks

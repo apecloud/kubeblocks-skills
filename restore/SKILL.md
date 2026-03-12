@@ -1,6 +1,6 @@
 ---
 name: restore
-description: Restore KubeBlocks database clusters from backups. Supports full restore and Point-in-Time Recovery (PITR). Use when the user wants to restore, recover, or rebuild a database cluster from a backup.
+description: Restore KubeBlocks database clusters from backups. Supports full restore (create new cluster from backup) and Point-in-Time Recovery (PITR) to a specific timestamp. Use when the user wants to restore, recover, rebuild, or roll back a database cluster from a backup. Requires an existing backup created by the backup skill. NOT for creating backups (see backup skill) or for creating a brand new cluster without backup data (see create-cluster).
 ---
 
 # Restore KubeBlocks Database Clusters

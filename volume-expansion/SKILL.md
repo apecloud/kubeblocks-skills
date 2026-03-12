@@ -1,6 +1,6 @@
 ---
 name: volume-expansion
-description: Expand persistent volume storage for KubeBlocks database clusters. Use when the user needs more disk space, wants to increase storage, or expand volumes.
+description: Expand persistent volume storage for KubeBlocks database clusters via OpsRequest. Requires the StorageClass to support volume expansion (allowVolumeExpansion=true). Use when the user needs more disk space, wants to increase storage, expand volumes, or resize PVCs. NOT for changing CPU/memory (see vertical-scaling) or adding more replicas (see horizontal-scaling). Note that volume shrinking is not supported by Kubernetes.
 ---
 
 # Volume Expansion: Increase Storage

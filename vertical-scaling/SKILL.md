@@ -1,6 +1,6 @@
 ---
 name: vertical-scaling
-description: Scale CPU and memory resources for KubeBlocks database clusters (vertical scaling). Use when the user wants to change, increase, or decrease CPU/memory resources of a database cluster.
+description: Scale CPU and memory resources for KubeBlocks database clusters via OpsRequest (vertical scaling). Supports in-place updates when the feature gate is enabled. Use when the user wants to change, increase, decrease, resize, or adjust CPU or memory resources of a database cluster. NOT for adding/removing replicas or shards (see horizontal-scaling) or expanding disk storage (see volume-expansion).
 ---
 
 # Vertical Scaling: Change CPU and Memory

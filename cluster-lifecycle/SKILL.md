@@ -1,6 +1,6 @@
 ---
 name: cluster-lifecycle
-description: "Manage KubeBlocks cluster lifecycle: stop, start, and restart database clusters. Use when the user wants to stop, start, restart, pause, or resume a database cluster."
+description: "Manage KubeBlocks cluster lifecycle: stop, start, and restart database clusters via OpsRequest. Stopping terminates pods while retaining PVCs for cost savings. Use when the user wants to stop, start, restart, pause, resume, or shut down a database cluster temporarily. NOT for deleting a cluster permanently (see delete-cluster) or for scaling operations (see vertical-scaling, horizontal-scaling)."
 ---
 
 # Manage Cluster Lifecycle: Stop, Start, Restart
@@ -201,3 +201,7 @@ kubectl get pods -n <namespace> -l app.kubernetes.io/instance=<cluster-name>
 **Restart takes too long:**
 - Rolling restart is sequential. For large clusters, it processes one pod at a time.
 - Check if pods are stuck: `kubectl describe pod <pod-name> -n <namespace>`
+
+## Additional Resources
+
+For component names by engine, kubectl patch alternatives, cluster status transitions, and cost-saving patterns, see [reference.md](reference.md).

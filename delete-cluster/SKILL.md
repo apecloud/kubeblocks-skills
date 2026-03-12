@@ -1,6 +1,6 @@
 ---
 name: delete-cluster
-description: Safely delete a KubeBlocks database cluster. Includes pre-deletion checks for backups and dependent resources. Use when the user wants to remove, delete, or destroy a database cluster.
+description: Safely delete a KubeBlocks database cluster with pre-deletion checks for backups, PVCs, and dependent resources. Use when the user wants to remove, delete, destroy, tear down, or clean up a database cluster. NOT for stopping a cluster temporarily (see cluster-lifecycle) or uninstalling the KubeBlocks operator (see install-kubeblocks reference.md).
 ---
 
 # Delete a KubeBlocks Database Cluster
