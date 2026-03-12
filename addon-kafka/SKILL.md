@@ -302,4 +302,5 @@ https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-kafka/cluster-manage
 
 ## Next Steps
 
+- For full YAML examples of all topologies (combined_monitor, separated_monitor with production sizing), environment variable reference, and component/volume matrix, see [reference.md](references/reference.md)
 - For cluster operations, see the KubeBlocks operations docs

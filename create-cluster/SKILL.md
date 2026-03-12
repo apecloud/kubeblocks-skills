@@ -181,13 +181,29 @@ spec:
 
 ### Apply the YAML
 
-Save the YAML to a file (e.g., `cluster.yaml`) and apply:
+Save the YAML to a file (e.g., `cluster.yaml`) and apply.
+
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f cluster.yaml --dry-run=server
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
 
 ```bash
 kubectl apply -f cluster.yaml
 ```
 
-Or apply inline:
+Or apply inline. Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f - --dry-run=server <<'EOF'
+# paste YAML here
+EOF
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
 
 ```bash
 kubectl apply -f - <<'EOF'
@@ -202,6 +218,8 @@ Watch the cluster status until it becomes `Running`:
 ```bash
 kubectl get cluster <cluster-name> -n <namespace> -w
 ```
+
+> **Success condition:** `.status.phase` = `Running` | **Typical:** 1-5min | **If stuck >10min:** `kubectl describe cluster <cluster-name> -n <namespace>`
 
 Check all pods are Ready:
 
@@ -293,6 +311,8 @@ User wants to create a cluster
 
 **Insufficient resources:**
 - Reduce `resources.requests` or add more nodes to the cluster.
+
+For general agent safety conventions (dry-run, status confirmation, production protection), see [safety-patterns.md](../kubeblocks-overview/references/safety-patterns.md).
 
 ## Reference
 

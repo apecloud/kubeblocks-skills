@@ -22,6 +22,26 @@ Full doc index: https://kubeblocks.io/llms-full.txt
 
 Consensus-based topologies (MySQL Group Replication, Kafka KRaft controllers) require an odd number of replicas (minimum 3) because Raft/Paxos protocols need a majority quorum to elect a leader. With 3 replicas, the system tolerates 1 failure; with 2 replicas, any single failure breaks quorum and the cluster becomes unavailable.
 
+## Pre-Check
+
+Before proceeding, verify the cluster is healthy and no other operation is running:
+
+```bash
+# Cluster must be Running
+kubectl get cluster <cluster-name> -n <namespace> -o jsonpath='{.status.phase}'
+
+# No pending OpsRequests
+kubectl get opsrequest -n <namespace> -l app.kubernetes.io/instance=<cluster-name> --field-selector=status.phase!=Succeed
+```
+
+If the cluster is not `Running` or has a pending OpsRequest, wait for it to complete before proceeding.
+
+Check the current replica count:
+
+```bash
+kubectl get cluster <cluster-name> -n <namespace> -o yaml | grep replicas
+```
+
 ## Workflow
 
 ```
@@ -62,7 +82,28 @@ spec:
         replicaChanges: <number-to-add>
 ```
 
-Example — add 2 replicas to a MySQL cluster:
+Example — add 2 replicas to a MySQL cluster.
+
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f - --dry-run=server <<'EOF'
+apiVersion: apps.kubeblocks.io/v1beta1
+kind: OpsRequest
+metadata:
+  name: scaleout-mysql-cluster
+  namespace: default
+spec:
+  clusterName: mysql-cluster
+  type: HorizontalScaling
+  horizontalScaling:
+    - componentName: mysql
+      scaleOut:
+        replicaChanges: 2
+EOF
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
 
 ```bash
 kubectl apply -f - <<'EOF'
@@ -98,7 +139,28 @@ spec:
         replicaChanges: <number-to-remove>
 ```
 
-Example — remove 1 replica from a PostgreSQL cluster:
+Example — remove 1 replica from a PostgreSQL cluster.
+
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f - --dry-run=server <<'EOF'
+apiVersion: apps.kubeblocks.io/v1beta1
+kind: OpsRequest
+metadata:
+  name: scalein-pg-cluster
+  namespace: default
+spec:
+  clusterName: pg-cluster
+  type: HorizontalScaling
+  horizontalScaling:
+    - componentName: postgresql
+      scaleIn:
+        replicaChanges: 1
+EOF
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
 
 ```bash
 kubectl apply -f - <<'EOF'
@@ -138,7 +200,30 @@ spec:
           - "<pod-name>"
 ```
 
-Example — decommission a specific MongoDB replica:
+Example — decommission a specific MongoDB replica.
+
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f - --dry-run=server <<'EOF'
+apiVersion: apps.kubeblocks.io/v1beta1
+kind: OpsRequest
+metadata:
+  name: scalein-specific-mongo
+  namespace: default
+spec:
+  clusterName: mongo-cluster
+  type: HorizontalScaling
+  horizontalScaling:
+    - componentName: mongodb
+      scaleIn:
+        replicaChanges: 1
+        onlineInstancesToOffline:
+          - "mongo-cluster-mongodb-2"
+EOF
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
 
 ```bash
 kubectl apply -f - <<'EOF'
@@ -202,6 +287,8 @@ kubectl patch cluster mysql-cluster -n default \
 kubectl get ops -n <namespace> -w
 ```
 
+> **Success condition:** `.status.phase` = `Succeed` | **Typical:** 1-5min | **If stuck >10min:** `kubectl describe ops <ops-name> -n <namespace>`
+
 Expected progression: `Pending` → `Running` → `Succeed`.
 
 Watch pods:
@@ -209,6 +296,8 @@ Watch pods:
 ```bash
 kubectl get pods -n <namespace> -l app.kubernetes.io/instance=<cluster-name> -w
 ```
+
+> **Success condition:** `.status.phase` = `Running` | **Typical:** 1-5min | **If stuck >10min:** `kubectl describe pod <pod-name> -n <namespace>`
 
 ## Step 4: Verify New Topology
 
@@ -235,6 +324,8 @@ kubectl get pods -n <namespace> -l app.kubernetes.io/instance=<cluster-name>
 **Data rebalancing after shard scaling:**
 - For Redis Cluster, data resharding happens automatically. Monitor with `redis-cli --cluster check`.
 - For MongoDB, balancer redistributes chunks. This may take time for large datasets.
+
+For general agent safety conventions (dry-run, status confirmation, production protection), see [safety-patterns.md](../kubeblocks-overview/references/safety-patterns.md).
 
 ## Additional Resources
 

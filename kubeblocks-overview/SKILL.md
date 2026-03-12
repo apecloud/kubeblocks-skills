@@ -50,6 +50,10 @@ Use the table below to find the right skill for any task.
 | Create a Redis cluster | [addon-redis](../addon-redis/SKILL.md) | `addon-redis/SKILL.md` |
 | Create a MongoDB cluster | [addon-mongodb](../addon-mongodb/SKILL.md) | `addon-mongodb/SKILL.md` |
 | Create a Kafka cluster | [addon-kafka](../addon-kafka/SKILL.md) | `addon-kafka/SKILL.md` |
+| Create an Elasticsearch cluster | [addon-elasticsearch](../addon-elasticsearch/SKILL.md) | `addon-elasticsearch/SKILL.md` |
+| Create a Milvus (vector DB) cluster | [addon-milvus](../addon-milvus/SKILL.md) | `addon-milvus/SKILL.md` |
+| Create a Qdrant (vector DB) cluster | [addon-qdrant](../addon-qdrant/SKILL.md) | `addon-qdrant/SKILL.md` |
+| Create a RabbitMQ cluster | [addon-rabbitmq](../addon-rabbitmq/SKILL.md) | `addon-rabbitmq/SKILL.md` |
 | Delete a database cluster | [delete-cluster](../delete-cluster/SKILL.md) | `delete-cluster/SKILL.md` |
 
 ### Day-2 Operations
@@ -63,6 +67,8 @@ Use the table below to find the right skill for any task.
 | Change database parameters | [reconfigure-parameters](../reconfigure-parameters/SKILL.md) | `reconfigure-parameters/SKILL.md` |
 | Primary / secondary switchover | [switchover](../switchover/SKILL.md) | `switchover/SKILL.md` |
 | Upgrade database engine version | [minor-version-upgrade](../minor-version-upgrade/SKILL.md) | `minor-version-upgrade/SKILL.md` |
+| Rebuild a failed replica | [rebuild-replica](../rebuild-replica/SKILL.md) | `rebuild-replica/SKILL.md` |
+| Upgrade KubeBlocks operator | [upgrade-kubeblocks](../upgrade-kubeblocks/SKILL.md) | `upgrade-kubeblocks/SKILL.md` |
 
 ### Data Protection
 
@@ -85,6 +91,12 @@ Use the table below to find the right skill for any task.
 |---|---|---|
 | Setup monitoring (Prometheus/Grafana) | [setup-monitoring](../setup-monitoring/SKILL.md) | `setup-monitoring/SKILL.md` |
 
+### Troubleshooting
+
+| User Intent | Skill | Path |
+|---|---|---|
+| Cluster not working, error, failed, stuck, CrashLoopBackOff, diagnose | [troubleshoot](../troubleshoot/SKILL.md) | `troubleshoot/SKILL.md` |
+
 ## Decision Tree
 
 Use this flowchart when the user's intent is unclear:
@@ -97,7 +109,7 @@ Is KubeBlocks installed?
 └─ Yes → What do they want to do?
          ├─ Create a database     → Is the engine addon installed?
          │                          ├─ No  → manage-addons → then create cluster
-         │                          └─ Yes → Is it MySQL/PG/Redis/MongoDB/Kafka?
+         │                          └─ Yes → Is it MySQL/PG/Redis/MongoDB/Kafka/ES/Milvus/Qdrant/RabbitMQ?
          │                                   ├─ Yes → addon-{engine} (topology guidance)
          │                                   └─ No  → create-cluster (generic template)
          ├─ Delete permanently    → delete-cluster
@@ -112,18 +124,21 @@ Is KubeBlocks installed?
          ├─ Change DB config      → reconfigure-parameters
          ├─ Switchover primary    → switchover
          ├─ Upgrade DB version    → minor-version-upgrade
+         ├─ Rebuild failed replica → rebuild-replica
+         ├─ Upgrade KubeBlocks    → upgrade-kubeblocks
          ├─ Manage passwords      → manage-accounts
          ├─ Enable TLS/SSL        → configure-tls
          ├─ Expose externally     → expose-service
-         └─ Setup monitoring      → setup-monitoring
+         ├─ Setup monitoring      → setup-monitoring
+         └─ Cluster error/failed/stuck → troubleshoot
 ```
 
 ## Disambiguation Guide
 
 ### create-cluster vs addon-* skills
 
-- Use **addon-mysql**, **addon-postgresql**, **addon-redis**, **addon-mongodb**, or **addon-kafka** when the user explicitly names one of these engines. These skills include engine-specific topology options, best-practice defaults, and connection instructions.
-- Use **create-cluster** for any engine not listed above (Elasticsearch, Milvus, Qdrant, ClickHouse, etc.), or when the user wants a general guide that works across all supported databases.
+- Use **addon-mysql**, **addon-postgresql**, **addon-redis**, **addon-mongodb**, **addon-kafka**, **addon-elasticsearch**, **addon-milvus**, **addon-qdrant**, or **addon-rabbitmq** when the user explicitly names one of these engines. These skills include engine-specific topology options, best-practice defaults, and connection instructions.
+- Use **create-cluster** for any engine not listed above (ClickHouse, etc.), or when the user wants a general guide that works across all supported databases.
 
 ### "Scale" ambiguity
 
@@ -145,7 +160,11 @@ Is KubeBlocks installed?
 | User says | Skill |
 |-----------|-------|
 | "upgrade MySQL/PG version", "patch database" | minor-version-upgrade |
-| "upgrade KubeBlocks", "update operator" | Not covered by skills — see [official upgrade docs](https://kubeblocks.io/docs/preview/user_docs/upgrade/upgrade-to-v10x) |
+| "upgrade KubeBlocks", "update operator" | upgrade-kubeblocks |
+
+## Safety Patterns
+
+Before performing any cluster-modifying operation, review the [safety-patterns](references/safety-patterns.md) reference for dry-run requirements, status confirmation conventions, and production cluster protection rules.
 
 ## Common Debugging Commands
 

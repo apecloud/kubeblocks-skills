@@ -11,6 +11,30 @@ KubeBlocks supports upgrading the database engine's minor version (e.g., MySQL 8
 
 Official docs: https://kubeblocks.io/docs/preview/user_docs/handle-an-exception/upgrade-database-engine
 
+## Pre-Check
+
+Before proceeding, verify the cluster is healthy and no other operation is running:
+
+```bash
+# Cluster must be Running
+kubectl get cluster <cluster-name> -n <namespace> -o jsonpath='{.status.phase}'
+
+# No pending OpsRequests
+kubectl get opsrequest -n <namespace> -l app.kubernetes.io/instance=<cluster-name> --field-selector=status.phase!=Succeed
+```
+
+If the cluster is not `Running` or has a pending OpsRequest, wait for it to complete before proceeding.
+
+Check current version and available upgrade targets:
+
+```bash
+# Current version
+kubectl get cluster <cluster-name> -n <namespace> -o jsonpath='{.spec.componentSpecs[*].serviceVersion}'
+
+# Available versions
+kubectl get cmpv
+```
+
 ## Workflow
 
 ```
@@ -76,7 +100,23 @@ spec:
     # ... rest of component spec
 ```
 
-Or patch it directly:
+Or patch it directly. Before patching, validate with dry-run:
+
+```bash
+kubectl patch cluster <cluster> -n <ns> --type merge -p '
+{
+  "spec": {
+    "componentSpecs": [
+      {
+        "name": "<component>",
+        "serviceVersion": "<new-version>"
+      }
+    ]
+  }
+}' --dry-run=server
+```
+
+If dry-run reports errors, fix the patch before proceeding.
 
 ```bash
 kubectl patch cluster <cluster> -n <ns> --type merge -p '
@@ -99,6 +139,8 @@ kubectl patch cluster <cluster> -n <ns> --type merge -p '
 ```bash
 kubectl get pods -n <ns> -l app.kubernetes.io/instance=<cluster> -w
 ```
+
+> **Success condition:** All pods `.status.phase` = `Running` | **Typical:** 5-15min for rolling upgrade | **If stuck >20min:** `kubectl describe pod <pod> -n <ns>`
 
 The rolling upgrade follows this sequence:
 1. **Secondary pods** restart first with the new version
@@ -150,3 +192,5 @@ kubectl exec -it <pod> -n <ns> -- mongosh --eval "db.version()"
 **Rollback:**
 - Set `serviceVersion` back to the previous version to trigger a rollback
 - This follows the same rolling restart process
+
+For general agent safety conventions (dry-run, status confirmation, production protection), see [safety-patterns.md](../kubeblocks-overview/references/safety-patterns.md).

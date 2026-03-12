@@ -28,6 +28,30 @@ Look for `ALLOWVOLUMEEXPANSION = true` in the output. If it shows `false`, the S
 kubectl get sc <storage-class-name> -o jsonpath='{.allowVolumeExpansion}'
 ```
 
+## Pre-Check
+
+Before proceeding, verify the cluster is healthy and no other operation is running:
+
+```bash
+# Cluster must be Running
+kubectl get cluster <cluster-name> -n <namespace> -o jsonpath='{.status.phase}'
+
+# No pending OpsRequests
+kubectl get opsrequest -n <namespace> -l app.kubernetes.io/instance=<cluster-name> --field-selector=status.phase!=Succeed
+```
+
+If the cluster is not `Running` or has a pending OpsRequest, wait for it to complete before proceeding.
+
+Check current PVC sizes and StorageClass expansion support:
+
+```bash
+# Current PVC sizes
+kubectl get pvc -n <namespace> -l app.kubernetes.io/instance=<cluster-name>
+
+# StorageClass supports expansion
+kubectl get sc -o custom-columns='NAME:.metadata.name,EXPANSION:.allowVolumeExpansion'
+```
+
 ## Workflow
 
 ```
@@ -90,6 +114,28 @@ spec:
 
 ### Example: Expand MySQL Data Volume to 50Gi
 
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f - --dry-run=server <<'EOF'
+apiVersion: apps.kubeblocks.io/v1beta1
+kind: OpsRequest
+metadata:
+  name: volumeexpand-mysql-cluster
+  namespace: default
+spec:
+  clusterName: mysql-cluster
+  type: VolumeExpansion
+  volumeExpansion:
+    - componentName: mysql
+      volumeClaimTemplates:
+        - name: data
+          storage: "50Gi"
+EOF
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
+
 ```bash
 kubectl apply -f - <<'EOF'
 apiVersion: apps.kubeblocks.io/v1beta1
@@ -110,6 +156,28 @@ EOF
 
 ### Example: Expand PostgreSQL Data Volume to 100Gi
 
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f - --dry-run=server <<'EOF'
+apiVersion: apps.kubeblocks.io/v1beta1
+kind: OpsRequest
+metadata:
+  name: volumeexpand-pg-cluster
+  namespace: default
+spec:
+  clusterName: pg-cluster
+  type: VolumeExpansion
+  volumeExpansion:
+    - componentName: postgresql
+      volumeClaimTemplates:
+        - name: data
+          storage: "100Gi"
+EOF
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
+
 ```bash
 kubectl apply -f - <<'EOF'
 apiVersion: apps.kubeblocks.io/v1beta1
@@ -129,6 +197,30 @@ EOF
 ```
 
 ### Example: Expand Kafka Data and Metadata Volumes
+
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f - --dry-run=server <<'EOF'
+apiVersion: apps.kubeblocks.io/v1beta1
+kind: OpsRequest
+metadata:
+  name: volumeexpand-kafka-cluster
+  namespace: default
+spec:
+  clusterName: kafka-cluster
+  type: VolumeExpansion
+  volumeExpansion:
+    - componentName: kafka-combine
+      volumeClaimTemplates:
+        - name: data
+          storage: "100Gi"
+        - name: metadata
+          storage: "20Gi"
+EOF
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
 
 ```bash
 kubectl apply -f - <<'EOF'
@@ -173,6 +265,8 @@ Watch the OpsRequest:
 kubectl get ops volumeexpand-<cluster-name> -n <namespace> -w
 ```
 
+> **Success condition:** `.status.phase` = `Succeed` | **Typical:** 1-5min | **If stuck >10min:** `kubectl describe ops volumeexpand-<cluster-name> -n <namespace>`
+
 Expected progression: `Pending` → `Running` → `Succeed`.
 
 Watch PVC resize:
@@ -213,3 +307,7 @@ kubectl exec -it <cluster-name>-<component>-0 -n <namespace> -- df -h /data
 
 **Expansion for `log` or `metadata` volumes:**
 - Some addons define additional volumes (e.g., Kafka's `metadata` volume). Use the correct volume name from the reference table above.
+
+For complete volume name reference across all addons, additional OpsRequest examples (Redis, MongoDB, Elasticsearch, Milvus), and StorageClass expansion support by cloud provider, see [reference.md](references/reference.md).
+
+For general agent safety conventions (dry-run, status confirmation, production protection), see [safety-patterns.md](../kubeblocks-overview/references/safety-patterns.md).

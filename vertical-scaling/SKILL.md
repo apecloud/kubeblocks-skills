@@ -12,6 +12,26 @@ Vertical scaling adjusts the CPU and memory resources allocated to a KubeBlocks 
 Official docs: https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mysql/cluster-management/scale-a-mysql-cluster
 Full doc index: https://kubeblocks.io/llms-full.txt
 
+## Pre-Check
+
+Before proceeding, verify the cluster is healthy and no other operation is running:
+
+```bash
+# Cluster must be Running
+kubectl get cluster <cluster-name> -n <namespace> -o jsonpath='{.status.phase}'
+
+# No pending OpsRequests
+kubectl get opsrequest -n <namespace> -l app.kubernetes.io/instance=<cluster-name> --field-selector=status.phase!=Succeed
+```
+
+If the cluster is not `Running` or has a pending OpsRequest, wait for it to complete before proceeding.
+
+Check current resource allocations:
+
+```bash
+kubectl get cluster <cluster-name> -n <namespace> -o yaml | grep -A 4 resources
+```
+
 ## Workflow
 
 ```
@@ -58,6 +78,31 @@ spec:
 
 ### Example: Scale MySQL to 2 CPU / 4Gi Memory
 
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f - --dry-run=server <<'EOF'
+apiVersion: apps.kubeblocks.io/v1beta1
+kind: OpsRequest
+metadata:
+  name: verticalscaling-mysql-cluster
+  namespace: default
+spec:
+  clusterName: mysql-cluster
+  type: VerticalScaling
+  verticalScaling:
+    - componentName: mysql
+      requests:
+        cpu: "2"
+        memory: "4Gi"
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+EOF
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
+
 ```bash
 kubectl apply -f - <<'EOF'
 apiVersion: apps.kubeblocks.io/v1beta1
@@ -80,6 +125,31 @@ EOF
 ```
 
 ### Example: Scale PostgreSQL to 1 CPU / 2Gi Memory
+
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f - --dry-run=server <<'EOF'
+apiVersion: apps.kubeblocks.io/v1beta1
+kind: OpsRequest
+metadata:
+  name: verticalscaling-pg-cluster
+  namespace: default
+spec:
+  clusterName: pg-cluster
+  type: VerticalScaling
+  verticalScaling:
+    - componentName: postgresql
+      requests:
+        cpu: "1"
+        memory: "2Gi"
+      limits:
+        cpu: "1"
+        memory: "2Gi"
+EOF
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
 
 ```bash
 kubectl apply -f - <<'EOF'
@@ -140,6 +210,8 @@ Watch the OpsRequest status:
 kubectl get ops verticalscaling-<cluster-name> -n <namespace> -w
 ```
 
+> **Success condition:** `.status.phase` = `Succeed` | **Typical:** 1-5min | **If stuck >10min:** `kubectl describe ops verticalscaling-<cluster-name> -n <namespace>`
+
 Expected progression: `Pending` → `Running` → `Succeed`.
 
 Watch the cluster status:
@@ -148,6 +220,8 @@ Watch the cluster status:
 kubectl get cluster <cluster-name> -n <namespace> -w
 ```
 
+> **Success condition:** `.status.phase` = `Running` | **Typical:** 1-5min | **If stuck >10min:** `kubectl describe cluster <cluster-name> -n <namespace>`
+
 The cluster status will transition: `Running` → `Updating` → `Running`.
 
 Watch pods being rolling-restarted:
@@ -155,6 +229,8 @@ Watch pods being rolling-restarted:
 ```bash
 kubectl get pods -n <namespace> -l app.kubernetes.io/instance=<cluster-name> -w
 ```
+
+> **Success condition:** `.status.phase` = `Running` | **Typical:** 1-5min | **If stuck >10min:** `kubectl describe pod <pod-name> -n <namespace>`
 
 > **Rolling update order:** KubeBlocks updates secondary/replica pods first, then the primary pod. This minimizes downtime by ensuring at least one instance is always serving.
 
@@ -186,3 +262,5 @@ kubectl get pod <cluster-name>-<component>-0 -n <namespace> -o jsonpath='{.spec.
 **Scaling takes too long:**
 - Rolling updates are sequential. Each pod must be fully ready before the next is updated.
 - For large clusters, this is expected behavior.
+
+For general agent safety conventions (dry-run, status confirmation, production protection), see [safety-patterns.md](../kubeblocks-overview/references/safety-patterns.md).

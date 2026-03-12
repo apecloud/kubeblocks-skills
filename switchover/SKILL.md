@@ -17,6 +17,29 @@ Switchover is only available for addons with primary/secondary replication roles
 
 Official docs: https://kubeblocks.io/docs/preview/user_docs/handle-an-exception/switchover
 
+## Pre-Check
+
+Before proceeding, verify the cluster is healthy and no other operation is running:
+
+```bash
+# Cluster must be Running
+kubectl get cluster <cluster-name> -n <namespace> -o jsonpath='{.status.phase}'
+
+# No pending OpsRequests
+kubectl get opsrequest -n <namespace> -l app.kubernetes.io/instance=<cluster-name> --field-selector=status.phase!=Succeed
+```
+
+If the cluster is not `Running` or has a pending OpsRequest, wait for it to complete before proceeding.
+
+Verify the cluster has 2+ replicas and check current roles:
+
+```bash
+kubectl get pods -n <namespace> -l app.kubernetes.io/instance=<cluster-name> \
+  -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.metadata.labels.kubeblocks\.io/role}{"\n"}{end}'
+```
+
+Switchover requires at least 2 replicas. If only 1 replica exists, scale out first (see [horizontal-scaling](../horizontal-scaling/SKILL.md)).
+
 ## Workflow
 
 ```
@@ -63,12 +86,22 @@ spec:
 - `componentName`: the component name from the Cluster spec (e.g. `mysql`, `postgresql`)
 - `instanceName`: the pod name of the **current primary** that should be demoted
 
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f switchover-ops.yaml --dry-run=server
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
+
 Apply it:
 
 ```bash
 kubectl apply -f switchover-ops.yaml
 kubectl get ops <cluster>-switchover -n <ns> -w
 ```
+
+> **Success condition:** `.status.phase` = `Succeed` | **Typical:** 1-3min | **If stuck >5min:** `kubectl describe ops <cluster>-switchover -n <ns>`
 
 Status will progress: `Pending` → `Running` → `Succeed`
 
@@ -128,3 +161,5 @@ While switchover is designed to be safe, creating a backup beforehand provides a
 ## Additional Reference
 
 For per-engine switchover behaviors, HA middleware details (Orchestrator, Patroni, Sentinel), and complete replication health check commands for MySQL/PostgreSQL/Redis/MongoDB, see [reference.md](references/reference.md).
+
+For general agent safety conventions (dry-run, status confirmation, production protection), see [safety-patterns.md](../kubeblocks-overview/references/safety-patterns.md).

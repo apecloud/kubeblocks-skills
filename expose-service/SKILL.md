@@ -11,6 +11,26 @@ By default, KubeBlocks database clusters are only accessible within the Kubernet
 
 Official docs: https://kubeblocks.io/docs/preview/user_docs/connect-databases/expose-database-service
 
+## Pre-Check
+
+Before proceeding, verify the cluster is healthy and no other operation is running:
+
+```bash
+# Cluster must be Running
+kubectl get cluster <cluster-name> -n <namespace> -o jsonpath='{.status.phase}'
+
+# No pending OpsRequests
+kubectl get opsrequest -n <namespace> -l app.kubernetes.io/instance=<cluster-name> --field-selector=status.phase!=Succeed
+```
+
+If the cluster is not `Running` or has a pending OpsRequest, wait for it to complete before proceeding.
+
+Check current services for the cluster:
+
+```bash
+kubectl get svc -n <namespace> -l app.kubernetes.io/instance=<cluster-name>
+```
+
 ## Workflow
 
 ```
@@ -111,12 +131,22 @@ Add annotations for cloud-specific load balancer configuration:
       serviceType: NodePort
 ```
 
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f expose-ops.yaml --dry-run=server
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
+
 Apply it:
 
 ```bash
 kubectl apply -f expose-ops.yaml
 kubectl get ops <cluster>-expose -n <ns> -w
 ```
+
+> **Success condition:** `.status.phase` = `Succeed` | **Typical:** 1-2min | **If stuck >5min:** `kubectl describe ops <cluster>-expose -n <ns>`
 
 ### Disable External Access
 
@@ -208,3 +238,5 @@ kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP
 ## Additional Resources
 
 For complete cloud provider annotations, exposing read replicas, local development without cloud LB (MetalLB, port-forward), and security considerations, see [reference.md](references/reference.md).
+
+For general agent safety conventions (dry-run, status confirmation, production protection), see [safety-patterns.md](../kubeblocks-overview/references/safety-patterns.md).

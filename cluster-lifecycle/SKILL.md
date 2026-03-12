@@ -51,6 +51,23 @@ spec:
   type: Stop
 ```
 
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f - --dry-run=server <<'EOF'
+apiVersion: apps.kubeblocks.io/v1beta1
+kind: OpsRequest
+metadata:
+  name: stop-<cluster-name>
+  namespace: <namespace>
+spec:
+  clusterName: <cluster-name>
+  type: Stop
+EOF
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
+
 Apply:
 
 ```bash
@@ -91,6 +108,23 @@ spec:
   clusterName: <cluster-name>
   type: Start
 ```
+
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f - --dry-run=server <<'EOF'
+apiVersion: apps.kubeblocks.io/v1beta1
+kind: OpsRequest
+metadata:
+  name: start-<cluster-name>
+  namespace: <namespace>
+spec:
+  clusterName: <cluster-name>
+  type: Start
+EOF
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
 
 Apply:
 
@@ -133,6 +167,25 @@ spec:
     - componentName: <component-name>
 ```
 
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f - --dry-run=server <<'EOF'
+apiVersion: apps.kubeblocks.io/v1beta1
+kind: OpsRequest
+metadata:
+  name: restart-<cluster-name>
+  namespace: <namespace>
+spec:
+  clusterName: <cluster-name>
+  type: Restart
+  restart:
+    - componentName: <component-name>
+EOF
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
+
 Apply:
 
 ```bash
@@ -167,6 +220,8 @@ You can restart multiple components by adding more entries to the `restart` list
 kubectl get ops -n <namespace> -w
 ```
 
+> **Success condition:** `.status.phase` = `Succeed` | **Typical:** 1-3min | **If stuck >5min:** `kubectl describe ops <ops-name> -n <namespace>`
+
 Expected progression: `Pending` → `Running` → `Succeed`.
 
 ### Check Cluster Status
@@ -174,6 +229,8 @@ Expected progression: `Pending` → `Running` → `Succeed`.
 ```bash
 kubectl get cluster <cluster-name> -n <namespace> -w
 ```
+
+> **Success condition:** Stop: `.status.phase` = `Stopped` | Start/Restart: `.status.phase` = `Running` | **Typical:** 1-3min | **If stuck >5min:** `kubectl describe cluster <cluster-name> -n <namespace>`
 
 - After **Stop**: status changes to `Stopped`, all pods terminated.
 - After **Start**: status changes to `Running`, all pods recreated.
@@ -205,3 +262,5 @@ kubectl get pods -n <namespace> -l app.kubernetes.io/instance=<cluster-name>
 ## Additional Resources
 
 For component names by engine, kubectl patch alternatives, cluster status transitions, and cost-saving patterns, see [reference.md](references/reference.md).
+
+For general agent safety conventions (dry-run, status confirmation, production protection), see [safety-patterns.md](../kubeblocks-overview/references/safety-patterns.md).

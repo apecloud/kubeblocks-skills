@@ -162,3 +162,5 @@ kubectl delete configmap -n <namespace> -l app.kubernetes.io/instance=<cluster-n
 
 **PVCs remain after deletion:**
 - This is expected if `terminationPolicy` was `DoNotTerminate`. Clean them up in Step 5.
+
+For general agent safety conventions (dry-run, status confirmation, production protection), see [safety-patterns.md](../kubeblocks-overview/references/safety-patterns.md).

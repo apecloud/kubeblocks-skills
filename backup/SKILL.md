@@ -26,6 +26,20 @@ Official docs: https://kubeblocks.io/docs/preview/user_docs/concepts/backup-and-
 - **Volume snapshot**: Leverages the storage layer's native snapshot capability (via CSI). Extremely fast for large databases since it's a copy-on-write operation, but requires a VolumeSnapshotClass and a CSI driver that supports snapshots — not always available, especially in local/dev environments.
 - **Continuous backup** (archive-binlog, wal-archive): Streams transaction logs in real time to enable Point-in-Time Recovery (PITR). Essential for production workloads where you need to recover to any arbitrary point in time, not just the moment of the last full backup.
 
+## Pre-Check
+
+Before proceeding, verify the cluster is healthy and no other operation is running:
+
+```bash
+# Cluster must be Running
+kubectl get cluster <cluster-name> -n <namespace> -o jsonpath='{.status.phase}'
+
+# No pending OpsRequests
+kubectl get opsrequest -n <namespace> -l app.kubernetes.io/instance=<cluster-name> --field-selector=status.phase!=Succeed
+```
+
+If the cluster is not `Running` or has a pending OpsRequest, wait for it to complete before proceeding.
+
 ## Workflow
 
 ```
@@ -75,12 +89,22 @@ spec:
     retentionPeriod: 7d
 ```
 
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f backup-ops.yaml --dry-run=server
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
+
 Apply it:
 
 ```bash
 kubectl apply -f backup-ops.yaml
 kubectl get ops <cluster>-backup-ops -n <ns> -w
 ```
+
+> **Success condition:** `.status.phase` = `Succeed` | **Typical:** varies | **If stuck >30min:** `kubectl describe ops <cluster>-backup-ops -n <ns>`
 
 ### Option B: On-Demand Backup via Backup CR
 
@@ -96,12 +120,22 @@ spec:
   deletionPolicy: Delete
 ```
 
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f backup.yaml --dry-run=server
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
+
 Apply it:
 
 ```bash
 kubectl apply -f backup.yaml
 kubectl get backup <backup-name> -n <ns> -w
 ```
+
+> **Success condition:** Full backup: `.status.phase` = `Completed` | **Typical:** varies | **If stuck >30min:** `kubectl describe backup <backup-name> -n <ns>` — Continuous backup: `.status.phase` = `Running` | **Typical:** 1min | **If stuck >5min:** `kubectl describe backup <backup-name> -n <ns>`
 
 ### Option C: Scheduled Backup (Cluster CR)
 
@@ -176,3 +210,5 @@ kubectl describe backup <backup-name> -n <ns>
 ## Additional Reference
 
 For BackupRepo setup (S3, OSS, MinIO, GCS), continuous backup configuration, and advanced BackupPolicy customization, see [reference.md](references/reference.md).
+
+For general agent safety conventions (dry-run, status confirmation, production protection), see [safety-patterns.md](../kubeblocks-overview/references/safety-patterns.md).

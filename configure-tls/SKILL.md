@@ -15,6 +15,26 @@ KubeBlocks supports TLS encryption for database connections. Three modes are ava
 
 Official docs: https://kubeblocks.io/docs/preview/user_docs/connect-databases/tls-connection
 
+## Pre-Check
+
+Before proceeding, verify the cluster is healthy and no other operation is running:
+
+```bash
+# Cluster must be Running
+kubectl get cluster <cluster-name> -n <namespace> -o jsonpath='{.status.phase}'
+
+# No pending OpsRequests
+kubectl get opsrequest -n <namespace> -l app.kubernetes.io/instance=<cluster-name> --field-selector=status.phase!=Succeed
+```
+
+If the cluster is not `Running` or has a pending OpsRequest, wait for it to complete before proceeding.
+
+For built-in TLS mode, verify cert-manager is installed:
+
+```bash
+kubectl get pods -n cert-manager
+```
+
 ## Workflow
 
 ```
@@ -211,3 +231,5 @@ kubectl exec -it <pod> -n <ns> -- openssl x509 -in /var/run/secrets/tls/tls.crt 
 ## Additional Resources
 
 For engine-specific TLS configuration details, full certificate generation workflows with SANs, and troubleshooting matrix, see [reference.md](references/reference.md).
+
+For general agent safety conventions (dry-run, status confirmation, production protection), see [safety-patterns.md](../kubeblocks-overview/references/safety-patterns.md).

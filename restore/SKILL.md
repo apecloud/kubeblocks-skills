@@ -16,6 +16,26 @@ Two restore modes are available:
 
 Official docs: https://kubeblocks.io/docs/preview/user_docs/handle-an-exception/recovery
 
+## Pre-Check
+
+Before proceeding, verify the cluster is healthy and no other operation is running:
+
+```bash
+# Cluster must be Running (if restoring to supplement an existing cluster)
+kubectl get cluster <cluster-name> -n <namespace> -o jsonpath='{.status.phase}'
+
+# No pending OpsRequests
+kubectl get opsrequest -n <namespace> -l app.kubernetes.io/instance=<cluster-name> --field-selector=status.phase!=Succeed
+```
+
+If the cluster is not `Running` or has a pending OpsRequest, wait for it to complete before proceeding.
+
+Verify backups are available for restore:
+
+```bash
+kubectl get backup -n <namespace>
+```
+
 ## Workflow
 
 ```
@@ -68,12 +88,22 @@ The `volumeRestorePolicy` options:
 - `Parallel` — restore all volumes simultaneously (faster)
 - `Serial` — restore volumes one at a time
 
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f restored-cluster.yaml --dry-run=server
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
+
 Apply it:
 
 ```bash
 kubectl apply -f restored-cluster.yaml
 kubectl get cluster <new-cluster> -n <ns> -w
 ```
+
+> **Success condition:** `.status.phase` = `Running` | **Typical:** 2-5min | **If stuck >10min:** `kubectl describe cluster <new-cluster> -n <ns>`
 
 ### Option B: Full Restore via OpsRequest
 
@@ -91,12 +121,22 @@ spec:
     backupNamespace: <ns>
 ```
 
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f restore-ops.yaml --dry-run=server
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
+
 Apply it:
 
 ```bash
 kubectl apply -f restore-ops.yaml
 kubectl get ops <new-cluster>-restore-ops -n <ns> -w
 ```
+
+> **Success condition:** `.status.phase` = `Succeed` | **Typical:** 2-5min | **If stuck >10min:** `kubectl describe ops <new-cluster>-restore-ops -n <ns>`
 
 ### Option C: PITR Restore (Point-in-Time Recovery)
 
@@ -134,7 +174,11 @@ Look for `status.timeRange` which shows the recoverable time window.
 ```bash
 # Watch cluster status
 kubectl get cluster <new-cluster> -n <ns> -w
+```
 
+> **Success condition:** `.status.phase` = `Running` | **Typical:** 2-5min | **If stuck >10min:** `kubectl describe cluster <new-cluster> -n <ns>`
+
+```bash
 # Check pods are running
 kubectl get pods -n <ns> -l app.kubernetes.io/instance=<new-cluster>
 ```
@@ -165,3 +209,5 @@ kubectl get secrets -n <ns> <new-cluster>-<component>-account-root -o jsonpath='
 ## Additional Reference
 
 For addon-specific restore behaviors (MySQL/PostgreSQL/Redis/MongoDB), PITR time range calculation details, the full restore annotation schema, and volume restore policy comparison, see [reference.md](references/reference.md).
+
+For general agent safety conventions (dry-run, status confirmation, production protection), see [safety-patterns.md](../kubeblocks-overview/references/safety-patterns.md).

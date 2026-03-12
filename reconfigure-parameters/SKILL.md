@@ -16,6 +16,26 @@ KubeBlocks automatically determines whether a restart is needed based on the par
 
 Official docs: https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mysql/configuration/configure-cluster-parameters
 
+## Pre-Check
+
+Before proceeding, verify the cluster is healthy and no other operation is running:
+
+```bash
+# Cluster must be Running
+kubectl get cluster <cluster-name> -n <namespace> -o jsonpath='{.status.phase}'
+
+# No pending OpsRequests
+kubectl get opsrequest -n <namespace> -l app.kubernetes.io/instance=<cluster-name> --field-selector=status.phase!=Succeed
+```
+
+If the cluster is not `Running` or has a pending OpsRequest, wait for it to complete before proceeding.
+
+Check current parameter values via the relevant ConfigMap:
+
+```bash
+kubectl get configmap -n <namespace> -l app.kubernetes.io/instance=<cluster-name>
+```
+
 ## Workflow
 
 ```
@@ -75,6 +95,14 @@ spec:
       value: "2147483648"
 ```
 
+Before applying, validate with dry-run:
+
+```bash
+kubectl apply -f reconfigure-ops.yaml --dry-run=server
+```
+
+If dry-run reports errors, fix the YAML before proceeding.
+
 Apply it:
 
 ```bash
@@ -88,6 +116,8 @@ kubectl apply -f reconfigure-ops.yaml
 ```bash
 kubectl get ops <cluster>-reconfigure -n <ns> -w
 ```
+
+> **Success condition:** `.status.phase` = `Succeed` | **Typical:** 2-8min | **If stuck >15min:** `kubectl describe ops <cluster>-reconfigure -n <ns>`
 
 Status progression:
 - `Pending` → `Running` → `Succeed` (dynamic parameters)
@@ -132,3 +162,5 @@ KubeBlocks handles the restart automatically for static parameters. Secondary po
 ## Additional Reference
 
 For a list of common tunable parameters per database addon, see [reference.md](references/reference.md).
+
+For general agent safety conventions (dry-run, status confirmation, production protection), see [safety-patterns.md](../kubeblocks-overview/references/safety-patterns.md).
