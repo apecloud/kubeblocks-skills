@@ -1,0 +1,172 @@
+---
+name: backup
+description: Create backups for KubeBlocks database clusters. Supports on-demand full backups, scheduled backups, and continuous backups for PITR. Use when the user wants to backup, snapshot, or protect database data.
+---
+
+# Backup KubeBlocks Database Clusters
+
+## Overview
+
+KubeBlocks provides data protection through full backups, scheduled backups, and continuous backups (for Point-in-Time Recovery). Backups are managed via the `Backup` CR or `OpsRequest` CR, and stored in a configured `BackupRepo`.
+
+Official docs: https://kubeblocks.io/docs/preview/user_docs/concepts/backup-and-restore/introduction
+
+## Backup Methods by Addon
+
+| Addon      | Physical Backup Method | Snapshot Method     | Continuous (PITR)   |
+|------------|----------------------|---------------------|---------------------|
+| MySQL      | xtrabackup           | volume-snapshot     | archive-binlog      |
+| PostgreSQL | pg-basebackup        | volume-snapshot     | wal-archive         |
+| Redis      | datafile             | volume-snapshot     | —                   |
+| MongoDB    | datafile             | volume-snapshot     | —                   |
+
+## Workflow
+
+```
+- [ ] Step 1: Ensure BackupRepo exists
+- [ ] Step 2: Check BackupPolicy for the cluster
+- [ ] Step 3: Create backup (on-demand or scheduled)
+- [ ] Step 4: Verify backup
+```
+
+## Step 1: Ensure BackupRepo Exists
+
+A `BackupRepo` defines where backups are stored (S3, OSS, MinIO, GCS, etc.). At least one must be configured before creating backups.
+
+```bash
+kubectl get backuprepo
+```
+
+If no BackupRepo exists, see [reference.md](reference.md) for setup instructions with various storage providers.
+
+## Step 2: Check BackupPolicy
+
+Each cluster automatically gets a `BackupPolicy` when KubeBlocks creates it. Verify it exists:
+
+```bash
+kubectl get backuppolicy -n <ns>
+```
+
+The default naming convention is `<cluster>-<component>-backup-policy`. The BackupPolicy defines available backup methods and their configurations.
+
+## Step 3: Create a Backup
+
+### Option A: On-Demand Backup via OpsRequest
+
+```yaml
+apiVersion: operations.kubeblocks.io/v1alpha1
+kind: OpsRequest
+metadata:
+  name: <cluster>-backup-ops
+  namespace: <ns>
+spec:
+  clusterName: <cluster>
+  type: Backup
+  backup:
+    backupPolicyName: <cluster>-<component>-backup-policy
+    backupMethod: <method>    # xtrabackup / volume-snapshot / pg-basebackup etc.
+    deletionPolicy: Delete
+    retentionPeriod: 7d
+```
+
+Apply it:
+
+```bash
+kubectl apply -f backup-ops.yaml
+kubectl get ops <cluster>-backup-ops -n <ns> -w
+```
+
+### Option B: On-Demand Backup via Backup CR
+
+```yaml
+apiVersion: dataprotection.kubeblocks.io/v1alpha1
+kind: Backup
+metadata:
+  name: <backup-name>
+  namespace: <ns>
+spec:
+  backupMethod: <method>
+  backupPolicyName: <policy-name>
+  deletionPolicy: Delete
+```
+
+Apply it:
+
+```bash
+kubectl apply -f backup.yaml
+kubectl get backup <backup-name> -n <ns> -w
+```
+
+### Option C: Scheduled Backup (Cluster CR)
+
+Add a `backup` section to the Cluster CR spec:
+
+```yaml
+spec:
+  backup:
+    enabled: true
+    retentionPeriod: 30d
+    method: xtrabackup
+    cronExpression: "0 0 * * *"
+    repoName: <repo-name>
+```
+
+Common cron expressions:
+- `"0 0 * * *"` — daily at midnight
+- `"0 2 * * 0"` — weekly on Sunday at 2 AM
+- `"0 */6 * * *"` — every 6 hours
+
+### Option D: Continuous Backup for PITR
+
+Continuous backups stream transaction logs (binlogs/WAL) to enable point-in-time recovery. Create a Backup CR with the continuous method:
+
+```yaml
+apiVersion: dataprotection.kubeblocks.io/v1alpha1
+kind: Backup
+metadata:
+  name: <cluster>-continuous
+  namespace: <ns>
+spec:
+  backupMethod: archive-binlog    # MySQL; use wal-archive for PostgreSQL
+  backupPolicyName: <cluster>-<component>-backup-policy
+  deletionPolicy: Delete
+```
+
+For PITR to work, you need **both** a completed full backup **and** a running continuous backup.
+
+## Step 4: Verify Backup
+
+```bash
+kubectl get backup -n <ns>
+```
+
+Expected output shows `Completed` status:
+
+```
+NAME              POLICY                              METHOD        STATUS      AGE
+my-backup         mycluster-mysql-backup-policy        xtrabackup   Completed   5m
+```
+
+Check backup details:
+
+```bash
+kubectl describe backup <backup-name> -n <ns>
+```
+
+## Troubleshooting
+
+**Backup stuck in InProgress:**
+- Check BackupRepo connectivity: `kubectl describe backuprepo`
+- Check backup pod logs: `kubectl logs -n <ns> -l app.kubernetes.io/name=backup`
+
+**BackupPolicy not found:**
+- Ensure the cluster is running: `kubectl get cluster -n <ns>`
+- BackupPolicy is auto-created with the cluster; check addon installation
+
+**Volume-snapshot backup fails:**
+- Ensure a VolumeSnapshotClass exists: `kubectl get volumesnapshotclass`
+- CSI driver must support volume snapshots
+
+## Additional Reference
+
+For BackupRepo setup (S3, OSS, MinIO, GCS), continuous backup configuration, and advanced BackupPolicy customization, see [reference.md](reference.md).
