@@ -8,7 +8,8 @@ These skills work with any AI coding agent that supports markdown-based skill fi
 
 | Skill | Description |
 |-------|-------------|
-| [install-kubeblocks](./install-kubeblocks/SKILL.md) | Install the KubeBlocks operator on any Kubernetes cluster. Handles version selection, network environment detection (China/global), image registry configuration, and post-install verification. |
+| [install-kubeblocks](./install-kubeblocks/SKILL.md) | Install the KubeBlocks operator on any Kubernetes cluster. Handles prerequisite tool installation (kubectl, Helm), version selection, network environment detection (China/global), image registry configuration, and post-install verification. |
+| [create-local-k8s-cluster](./create-local-k8s-cluster/SKILL.md) | Create a local Kubernetes test cluster using Kind, Minikube, or k3d. Use when no existing cluster is available for development or testing. |
 
 ## How to Use
 

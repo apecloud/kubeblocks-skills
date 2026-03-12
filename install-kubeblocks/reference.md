@@ -188,34 +188,7 @@ https://kubeblocks.io/docs/preview/user_docs/upgrade/upgrade-to-v10x
 
 ## Creating a Local Test Cluster
 
-If the user has no Kubernetes cluster, these tools create a local one:
-
-### Kind
-
-```bash
-brew install kind          # macOS
-# Or: curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.24.0/kind-$(uname -s)-$(uname -m) && chmod +x ./kind && sudo mv ./kind /usr/local/bin/
-
-kind create cluster --name kubeblocks-test
-```
-
-### Minikube
-
-```bash
-brew install minikube      # macOS
-# Or: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && sudo install minikube-linux-amd64 /usr/local/bin/minikube
-
-minikube start
-```
-
-### k3d
-
-```bash
-brew install k3d           # macOS
-# Or: curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
-
-k3d cluster create kubeblocks-test
-```
+If the user has no Kubernetes cluster, use the [create-local-k8s-cluster](../create-local-k8s-cluster/SKILL.md) skill to create one with Kind, Minikube, or k3d.
 
 ## Version Compatibility Matrix
 

@@ -27,40 +27,60 @@ Copy this checklist and track progress:
 
 ## Step 1: Check Prerequisites
 
-Run these commands to verify the environment:
+This skill requires an **existing Kubernetes cluster**. If the user does not have one, point them to the [create-local-k8s-cluster](../create-local-k8s-cluster/SKILL.md) skill first.
+
+Run these checks and **install any missing tools automatically**:
+
+### 1a: kubectl
 
 ```bash
-# Verify kubectl access
-kubectl version --client
-kubectl get nodes
-
-# Verify Helm is installed (v3+)
-helm version --short
-
-# Check K8s version (must be >= 1.21)
-kubectl version -o json | grep -i gitversion
+kubectl version --client 2>/dev/null
 ```
 
-**If kubectl or Helm is missing**, tell the user to install them first:
-- kubectl: https://kubernetes.io/docs/tasks/tools/
-- Helm: https://helm.sh/docs/intro/install/
+If the command fails (not found), install it:
+
+```bash
+# macOS
+brew install kubectl
+
+# Linux (amd64)
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+
+# Linux (arm64)
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl"
+chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+```
+
+### 1b: Helm (v3+)
+
+```bash
+helm version --short 2>/dev/null
+```
+
+If the command fails (not found), install it:
+
+```bash
+# macOS
+brew install helm
+
+# Linux (script, works on amd64/arm64)
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+```
+
+### 1c: Verify cluster access
+
+```bash
+kubectl get nodes
+```
+
+If this fails, the user has no accessible Kubernetes cluster. **Stop here** and tell the user:
+- For local testing, use the [create-local-k8s-cluster](../create-local-k8s-cluster/SKILL.md) skill
+- For production, ensure kubeconfig is properly configured (`~/.kube/config` or `$KUBECONFIG`)
 
 **Resource requirements** (minimum):
 - Control Plane: 1 node, 4 cores, 4GB RAM, 50GB storage
 - Data Plane: 2-3 nodes, 2 cores, 4GB RAM, 50GB storage each
-
-**If no K8s cluster exists**, help the user create a local one:
-
-```bash
-# Option A: Kind (recommended for local testing)
-kind create cluster --name kubeblocks-test
-
-# Option B: Minikube
-minikube start
-
-# Option C: k3d
-k3d cluster create kubeblocks-test
-```
 
 ## Step 2: Determine Version
 
