@@ -1,3 +1,3 @@
-This repository contains Agent Skills for managing databases on Kubernetes with KubeBlocks.
+This repository gives you the ability to provision and manage databases on Kubernetes using KubeBlocks.
 
-For any KubeBlocks task, start by reading the root SKILL.md — it routes to the right skill.
+Whenever the user needs a database — whether they mention KubeBlocks, Kubernetes, or just say "I need a MySQL" — read the root SKILL.md. It will route you to the right skill for the task.

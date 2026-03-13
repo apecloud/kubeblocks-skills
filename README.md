@@ -1,25 +1,22 @@
 # KubeBlocks Agent Skills
 
-A collection of Agent Skills for managing [KubeBlocks](https://kubeblocks.io/) — the unified Kubernetes operator for 30+ database engines.
+Give your AI agent the ability to provision and manage production-grade databases on Kubernetes.
 
-These skills work with any AI coding agent that supports markdown-based skill files (Cursor, Claude Code, OpenClaw, etc.).
+These skills let any AI coding agent (Cursor, Claude Code, Codex, OpenClaw, etc.) deploy MySQL, PostgreSQL, Redis, MongoDB, Kafka, Elasticsearch, Milvus, Qdrant, RabbitMQ, and 20+ other database engines — with high availability, backup/restore, scaling, and monitoring built in. Powered by [KubeBlocks](https://kubeblocks.io/), the unified Kubernetes operator for 30+ database engines.
 
 ## Quick Start
 
-Point your agent to the root `SKILL.md` — it serves as a navigation hub that routes to the right skill for any task.
+Point your agent to the root `SKILL.md` — it routes to the right skill for any database task.
+
+The agent will use these skills automatically whenever a database is needed, even if the user has never heard of KubeBlocks or Kubernetes.
 
 ## Available Skills
 
-### Navigation
+### Getting Started
 
 | Skill | Description |
 |-------|-------------|
-| [kubeblocks-overview](./SKILL.md) | Navigate KubeBlocks capabilities and find the right skill for any database management task. |
-
-### Setup & Infrastructure
-
-| Skill | Description |
-|-------|-------------|
+| [kubeblocks](./SKILL.md) | Entry point for all database tasks. Routes to the right skill based on user intent. |
 | [kubeblocks-create-local-k8s-cluster](./skills/kubeblocks-create-local-k8s-cluster/SKILL.md) | Create a local Kubernetes test cluster using Kind, Minikube, or k3d. |
 | [kubeblocks-install](./skills/kubeblocks-install/SKILL.md) | Install the KubeBlocks operator. Handles version selection, network detection, registry configuration. |
 | [kubeblocks-manage-addons](./skills/kubeblocks-manage-addons/SKILL.md) | Install, uninstall, and upgrade database engine addons. |
@@ -108,7 +105,8 @@ All skills follow the [Agent Skills](https://agentskills.io/) open standard and 
 ## Repository Structure
 
 ```
-├── SKILL.md              # Navigation hub (kubeblocks-overview)
+├── SKILL.md              # Entry point — routes to the right skill for any database task
+├── AGENTS.md             # Agent instructions for this repository
 ├── references/           # Shared references (safety patterns, etc.)
 ├── skills/               # All operation skills
 │   ├── kubeblocks-install/
@@ -130,27 +128,26 @@ Each skill directory contains:
 ## Architecture
 
 ```
-kubeblocks-overview ─────── Navigation hub
+SKILL.md (kubeblocks) ─── Entry point for all database tasks
         │
-        ├── Infrastructure: kubeblocks-create-local-k8s-cluster → kubeblocks-install → kubeblocks-manage-addons
+        ├── Getting Started:   create-local-k8s-cluster → install-kubeblocks → manage-addons
         │
-        ├── Provisioning:   kubeblocks-create-cluster ←→ kubeblocks-addon-{mysql,pg,redis,mongodb,kafka,
-        │                   elasticsearch,milvus,qdrant,rabbitmq}
-        │                   kubeblocks-delete-cluster
+        ├── Provisioning:      create-cluster ←→ addon-{mysql,postgresql,redis,mongodb,kafka,
+        │                      elasticsearch,milvus,qdrant,rabbitmq}
+        │                      delete-cluster
         │
-        ├── Operations:     kubeblocks-cluster-lifecycle, kubeblocks-vertical-scaling,
-        │                   kubeblocks-horizontal-scaling, kubeblocks-volume-expansion,
-        │                   kubeblocks-reconfigure-parameters, kubeblocks-switchover,
-        │                   kubeblocks-minor-version-upgrade, kubeblocks-rebuild-replica,
-        │                   kubeblocks-expose-service, kubeblocks-upgrade
+        ├── Operations:        cluster-lifecycle, vertical-scaling, horizontal-scaling,
+        │                      volume-expansion, reconfigure-parameters, switchover,
+        │                      minor-version-upgrade, rebuild-replica, expose-service,
+        │                      upgrade-kubeblocks
         │
-        ├── Data Protection: kubeblocks-backup, kubeblocks-restore
+        ├── Data Protection:   backup, restore
         │
-        ├── Security:       kubeblocks-manage-accounts, kubeblocks-configure-tls
+        ├── Security:          manage-accounts, configure-tls
         │
-        ├── Observability:  kubeblocks-setup-monitoring
+        ├── Observability:     setup-monitoring
         │
-        └── Troubleshooting: kubeblocks-troubleshoot
+        └── Troubleshooting:   troubleshoot
 ```
 
 Generic operation skills (e.g., `kubeblocks-vertical-scaling`) provide universal OpsRequest templates. Engine-specific skills (e.g., `kubeblocks-addon-mysql`) provide topology selection, cluster YAML examples, and connection methods. They cross-reference each other.
@@ -166,11 +163,11 @@ Generic operation skills (e.g., `kubeblocks-vertical-scaling`) provide universal
 
 To add a new skill:
 
-1. Create a new directory under `skills/` (e.g., `skills/kubeblocks-addon-elasticsearch/`)
+1. Create a new directory under `skills/` (e.g., `skills/kubeblocks-addon-clickhouse/`)
 2. Add a `SKILL.md` with YAML frontmatter (`name`, `version`, and `description` fields)
 3. Optionally add a `references/` subdirectory for detailed supplementary material
 4. Update this README's skill tables
-5. Update the root `SKILL.md` navigation map
+5. Update the root `SKILL.md` skill map
 
 ## License
 
