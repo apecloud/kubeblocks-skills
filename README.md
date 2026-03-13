@@ -20,59 +20,59 @@ Point your agent to `kubeblocks-overview/SKILL.md` — it serves as a navigation
 
 | Skill | Description |
 |-------|-------------|
-| [create-local-k8s-cluster](./create-local-k8s-cluster/SKILL.md) | Create a local Kubernetes test cluster using Kind, Minikube, or k3d. |
-| [install-kubeblocks](./install-kubeblocks/SKILL.md) | Install the KubeBlocks operator. Handles version selection, network detection, registry configuration. |
-| [manage-addons](./manage-addons/SKILL.md) | Install, uninstall, and upgrade database engine addons. |
+| [kubeblocks-create-local-k8s-cluster](./kubeblocks-create-local-k8s-cluster/SKILL.md) | Create a local Kubernetes test cluster using Kind, Minikube, or k3d. |
+| [kubeblocks-install](./kubeblocks-install/SKILL.md) | Install the KubeBlocks operator. Handles version selection, network detection, registry configuration. |
+| [kubeblocks-manage-addons](./kubeblocks-manage-addons/SKILL.md) | Install, uninstall, and upgrade database engine addons. |
 
 ### Cluster Provisioning & Deletion
 
 | Skill | Description |
 |-------|-------------|
-| [create-cluster](./create-cluster/SKILL.md) | Create a database cluster (generic entry point for all addons). |
-| [delete-cluster](./delete-cluster/SKILL.md) | Safely delete a database cluster with pre-deletion checks. |
+| [kubeblocks-create-cluster](./kubeblocks-create-cluster/SKILL.md) | Create a database cluster (generic entry point for all addons). |
+| [kubeblocks-delete-cluster](./kubeblocks-delete-cluster/SKILL.md) | Safely delete a database cluster with pre-deletion checks. |
 
 ### Day-2 Operations
 
 | Skill | Description |
 |-------|-------------|
-| [cluster-lifecycle](./cluster-lifecycle/SKILL.md) | Stop, start, and restart database clusters. |
-| [vertical-scaling](./vertical-scaling/SKILL.md) | Scale CPU and memory resources. |
-| [horizontal-scaling](./horizontal-scaling/SKILL.md) | Add/remove replicas or shards. |
-| [volume-expansion](./volume-expansion/SKILL.md) | Expand persistent volume storage. |
-| [reconfigure-parameters](./reconfigure-parameters/SKILL.md) | Modify database configuration parameters. |
-| [minor-version-upgrade](./minor-version-upgrade/SKILL.md) | Upgrade database engine minor versions. |
-| [switchover](./switchover/SKILL.md) | Perform planned primary-secondary switchover. |
-| [expose-service](./expose-service/SKILL.md) | Expose databases externally via LoadBalancer or NodePort. |
+| [kubeblocks-cluster-lifecycle](./kubeblocks-cluster-lifecycle/SKILL.md) | Stop, start, and restart database clusters. |
+| [kubeblocks-vertical-scaling](./kubeblocks-vertical-scaling/SKILL.md) | Scale CPU and memory resources. |
+| [kubeblocks-horizontal-scaling](./kubeblocks-horizontal-scaling/SKILL.md) | Add/remove replicas or shards. |
+| [kubeblocks-volume-expansion](./kubeblocks-volume-expansion/SKILL.md) | Expand persistent volume storage. |
+| [kubeblocks-reconfigure-parameters](./kubeblocks-reconfigure-parameters/SKILL.md) | Modify database configuration parameters. |
+| [kubeblocks-minor-version-upgrade](./kubeblocks-minor-version-upgrade/SKILL.md) | Upgrade database engine minor versions. |
+| [kubeblocks-switchover](./kubeblocks-switchover/SKILL.md) | Perform planned primary-secondary switchover. |
+| [kubeblocks-expose-service](./kubeblocks-expose-service/SKILL.md) | Expose databases externally via LoadBalancer or NodePort. |
 
 ### Data Protection
 
 | Skill | Description |
 |-------|-------------|
-| [backup](./backup/SKILL.md) | Create on-demand, scheduled, and continuous backups. |
-| [restore](./restore/SKILL.md) | Restore from backups with full restore or Point-in-Time Recovery. |
+| [kubeblocks-backup](./kubeblocks-backup/SKILL.md) | Create on-demand, scheduled, and continuous backups. |
+| [kubeblocks-restore](./kubeblocks-restore/SKILL.md) | Restore from backups with full restore or Point-in-Time Recovery. |
 
 ### Security
 
 | Skill | Description |
 |-------|-------------|
-| [manage-accounts](./manage-accounts/SKILL.md) | Manage database passwords and password policies. |
-| [configure-tls](./configure-tls/SKILL.md) | Configure TLS, custom certificates, and mTLS. |
+| [kubeblocks-manage-accounts](./kubeblocks-manage-accounts/SKILL.md) | Manage database passwords and password policies. |
+| [kubeblocks-configure-tls](./kubeblocks-configure-tls/SKILL.md) | Configure TLS, custom certificates, and mTLS. |
 
 ### Observability
 
 | Skill | Description |
 |-------|-------------|
-| [setup-monitoring](./setup-monitoring/SKILL.md) | Set up Prometheus monitoring and Grafana dashboards. |
+| [kubeblocks-setup-monitoring](./kubeblocks-setup-monitoring/SKILL.md) | Set up Prometheus monitoring and Grafana dashboards. |
 
 ### Engine-Specific Skills
 
 | Skill | Description |
 |-------|-------------|
-| [addon-mysql](./addon-mysql/SKILL.md) | MySQL topologies (semi-sync, MGR, Orchestrator, ProxySQL variants). |
-| [addon-postgresql](./addon-postgresql/SKILL.md) | PostgreSQL with Patroni-based HA replication. |
-| [addon-redis](./addon-redis/SKILL.md) | Redis standalone, replication with Sentinel, and Redis Cluster sharding. |
-| [addon-mongodb](./addon-mongodb/SKILL.md) | MongoDB ReplicaSet and Sharding topologies. |
-| [addon-kafka](./addon-kafka/SKILL.md) | Apache Kafka combined and separated broker/controller modes. |
+| [kubeblocks-addon-mysql](./kubeblocks-addon-mysql/SKILL.md) | MySQL topologies (semi-sync, MGR, Orchestrator, ProxySQL variants). |
+| [kubeblocks-addon-postgresql](./kubeblocks-addon-postgresql/SKILL.md) | PostgreSQL with Patroni-based HA replication. |
+| [kubeblocks-addon-redis](./kubeblocks-addon-redis/SKILL.md) | Redis standalone, replication with Sentinel, and Redis Cluster sharding. |
+| [kubeblocks-addon-mongodb](./kubeblocks-addon-mongodb/SKILL.md) | MongoDB ReplicaSet and Sharding topologies. |
+| [kubeblocks-addon-kafka](./kubeblocks-addon-kafka/SKILL.md) | Apache Kafka combined and separated broker/controller modes. |
 
 ## Install
 
@@ -101,23 +101,24 @@ skill-name/
 ```
 kubeblocks-overview ─────── Navigation hub
         │
-        ├── Infrastructure: create-local-k8s-cluster → install-kubeblocks → manage-addons
+        ├── Infrastructure: kubeblocks-create-local-k8s-cluster → kubeblocks-install → kubeblocks-manage-addons
         │
-        ├── Provisioning:   create-cluster ←→ addon-{mysql,pg,redis,mongodb,kafka}
-        │                   delete-cluster
+        ├── Provisioning:   kubeblocks-create-cluster ←→ kubeblocks-addon-{mysql,pg,redis,mongodb,kafka}
+        │                   kubeblocks-delete-cluster
         │
-        ├── Operations:     cluster-lifecycle, vertical-scaling, horizontal-scaling,
-        │                   volume-expansion, reconfigure-parameters, switchover,
-        │                   minor-version-upgrade, expose-service
+        ├── Operations:     kubeblocks-cluster-lifecycle, kubeblocks-vertical-scaling,
+        │                   kubeblocks-horizontal-scaling, kubeblocks-volume-expansion,
+        │                   kubeblocks-reconfigure-parameters, kubeblocks-switchover,
+        │                   kubeblocks-minor-version-upgrade, kubeblocks-expose-service
         │
-        ├── Data Protection: backup, restore
+        ├── Data Protection: kubeblocks-backup, kubeblocks-restore
         │
-        ├── Security:       manage-accounts, configure-tls
+        ├── Security:       kubeblocks-manage-accounts, kubeblocks-configure-tls
         │
-        └── Observability:  setup-monitoring
+        └── Observability:  kubeblocks-setup-monitoring
 ```
 
-Generic operation skills (e.g., `vertical-scaling`) provide universal OpsRequest templates. Engine-specific skills (e.g., `addon-mysql`) provide topology selection, cluster YAML examples, and connection methods. They cross-reference each other.
+Generic operation skills (e.g., `kubeblocks-vertical-scaling`) provide universal OpsRequest templates. Engine-specific skills (e.g., `kubeblocks-addon-mysql`) provide topology selection, cluster YAML examples, and connection methods. They cross-reference each other.
 
 ## Documentation
 
@@ -130,7 +131,7 @@ Generic operation skills (e.g., `vertical-scaling`) provide universal OpsRequest
 
 To add a new skill:
 
-1. Create a new directory under the repository root (e.g., `addon-elasticsearch/`)
+1. Create a new directory under the repository root (e.g., `kubeblocks-addon-elasticsearch/`)
 2. Add a `SKILL.md` with YAML frontmatter (`name` and `description` fields)
 3. Optionally add `reference.md` for detailed supplementary material
 4. Update this README's skill tables

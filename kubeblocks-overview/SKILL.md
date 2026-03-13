@@ -1,5 +1,6 @@
 ---
 name: kubeblocks-overview
+version: "0.1.0"
 description: Navigate KubeBlocks capabilities and route to the right skill for any database management task. Use when the user asks about KubeBlocks features, wants to manage databases on Kubernetes, or needs guidance on which operation to perform. Also use as an entry point when the intent is unclear. NOT a skill that performs actions itself — it identifies and delegates to the appropriate skill.
 ---
 
@@ -36,66 +37,66 @@ Use the table below to find the right skill for any task.
 
 | User Intent | Skill | Path |
 |---|---|---|
-| Install KubeBlocks operator | [install-kubeblocks](../install-kubeblocks/SKILL.md) | `install-kubeblocks/SKILL.md` |
-| Create a local K8s test cluster | [create-local-k8s-cluster](../create-local-k8s-cluster/SKILL.md) | `create-local-k8s-cluster/SKILL.md` |
-| Install/manage database addons | [manage-addons](../manage-addons/SKILL.md) | `manage-addons/SKILL.md` |
+| Install KubeBlocks operator | [install-kubeblocks](../kubeblocks-install/SKILL.md) | `kubeblocks-install/SKILL.md` |
+| Create a local K8s test cluster | [create-local-k8s-cluster](../kubeblocks-create-local-k8s-cluster/SKILL.md) | `kubeblocks-create-local-k8s-cluster/SKILL.md` |
+| Install/manage database addons | [manage-addons](../kubeblocks-manage-addons/SKILL.md) | `kubeblocks-manage-addons/SKILL.md` |
 
 ### Cluster Provisioning & Deletion
 
 | User Intent | Skill | Path |
 |---|---|---|
-| Create a database cluster (generic) | [create-cluster](../create-cluster/SKILL.md) | `create-cluster/SKILL.md` |
-| Create a MySQL cluster | [addon-mysql](../addon-mysql/SKILL.md) | `addon-mysql/SKILL.md` |
-| Create a PostgreSQL cluster | [addon-postgresql](../addon-postgresql/SKILL.md) | `addon-postgresql/SKILL.md` |
-| Create a Redis cluster | [addon-redis](../addon-redis/SKILL.md) | `addon-redis/SKILL.md` |
-| Create a MongoDB cluster | [addon-mongodb](../addon-mongodb/SKILL.md) | `addon-mongodb/SKILL.md` |
-| Create a Kafka cluster | [addon-kafka](../addon-kafka/SKILL.md) | `addon-kafka/SKILL.md` |
-| Create an Elasticsearch cluster | [addon-elasticsearch](../addon-elasticsearch/SKILL.md) | `addon-elasticsearch/SKILL.md` |
-| Create a Milvus (vector DB) cluster | [addon-milvus](../addon-milvus/SKILL.md) | `addon-milvus/SKILL.md` |
-| Create a Qdrant (vector DB) cluster | [addon-qdrant](../addon-qdrant/SKILL.md) | `addon-qdrant/SKILL.md` |
-| Create a RabbitMQ cluster | [addon-rabbitmq](../addon-rabbitmq/SKILL.md) | `addon-rabbitmq/SKILL.md` |
-| Delete a database cluster | [delete-cluster](../delete-cluster/SKILL.md) | `delete-cluster/SKILL.md` |
+| Create a database cluster (generic) | [create-cluster](../kubeblocks-create-cluster/SKILL.md) | `kubeblocks-create-cluster/SKILL.md` |
+| Create a MySQL cluster | [addon-mysql](../kubeblocks-addon-mysql/SKILL.md) | `kubeblocks-addon-mysql/SKILL.md` |
+| Create a PostgreSQL cluster | [addon-postgresql](../kubeblocks-addon-postgresql/SKILL.md) | `kubeblocks-addon-postgresql/SKILL.md` |
+| Create a Redis cluster | [addon-redis](../kubeblocks-addon-redis/SKILL.md) | `kubeblocks-addon-redis/SKILL.md` |
+| Create a MongoDB cluster | [addon-mongodb](../kubeblocks-addon-mongodb/SKILL.md) | `kubeblocks-addon-mongodb/SKILL.md` |
+| Create a Kafka cluster | [addon-kafka](../kubeblocks-addon-kafka/SKILL.md) | `kubeblocks-addon-kafka/SKILL.md` |
+| Create an Elasticsearch cluster | [addon-elasticsearch](../kubeblocks-addon-elasticsearch/SKILL.md) | `kubeblocks-addon-elasticsearch/SKILL.md` |
+| Create a Milvus (vector DB) cluster | [addon-milvus](../kubeblocks-addon-milvus/SKILL.md) | `kubeblocks-addon-milvus/SKILL.md` |
+| Create a Qdrant (vector DB) cluster | [addon-qdrant](../kubeblocks-addon-qdrant/SKILL.md) | `kubeblocks-addon-qdrant/SKILL.md` |
+| Create a RabbitMQ cluster | [addon-rabbitmq](../kubeblocks-addon-rabbitmq/SKILL.md) | `kubeblocks-addon-rabbitmq/SKILL.md` |
+| Delete a database cluster | [delete-cluster](../kubeblocks-delete-cluster/SKILL.md) | `kubeblocks-delete-cluster/SKILL.md` |
 
 ### Day-2 Operations
 
 | User Intent | Skill | Path |
 |---|---|---|
-| Stop / Start / Restart a cluster | [cluster-lifecycle](../cluster-lifecycle/SKILL.md) | `cluster-lifecycle/SKILL.md` |
-| Scale CPU / Memory (vertical) | [vertical-scaling](../vertical-scaling/SKILL.md) | `vertical-scaling/SKILL.md` |
-| Add / remove replicas or shards | [horizontal-scaling](../horizontal-scaling/SKILL.md) | `horizontal-scaling/SKILL.md` |
-| Expand storage volume | [volume-expansion](../volume-expansion/SKILL.md) | `volume-expansion/SKILL.md` |
-| Change database parameters | [reconfigure-parameters](../reconfigure-parameters/SKILL.md) | `reconfigure-parameters/SKILL.md` |
-| Primary / secondary switchover | [switchover](../switchover/SKILL.md) | `switchover/SKILL.md` |
-| Upgrade database engine version | [minor-version-upgrade](../minor-version-upgrade/SKILL.md) | `minor-version-upgrade/SKILL.md` |
-| Rebuild a failed replica | [rebuild-replica](../rebuild-replica/SKILL.md) | `rebuild-replica/SKILL.md` |
-| Upgrade KubeBlocks operator | [upgrade-kubeblocks](../upgrade-kubeblocks/SKILL.md) | `upgrade-kubeblocks/SKILL.md` |
+| Stop / Start / Restart a cluster | [cluster-lifecycle](../kubeblocks-cluster-lifecycle/SKILL.md) | `kubeblocks-cluster-lifecycle/SKILL.md` |
+| Scale CPU / Memory (vertical) | [vertical-scaling](../kubeblocks-vertical-scaling/SKILL.md) | `kubeblocks-vertical-scaling/SKILL.md` |
+| Add / remove replicas or shards | [horizontal-scaling](../kubeblocks-horizontal-scaling/SKILL.md) | `kubeblocks-horizontal-scaling/SKILL.md` |
+| Expand storage volume | [volume-expansion](../kubeblocks-volume-expansion/SKILL.md) | `kubeblocks-volume-expansion/SKILL.md` |
+| Change database parameters | [reconfigure-parameters](../kubeblocks-reconfigure-parameters/SKILL.md) | `kubeblocks-reconfigure-parameters/SKILL.md` |
+| Primary / secondary switchover | [switchover](../kubeblocks-switchover/SKILL.md) | `kubeblocks-switchover/SKILL.md` |
+| Upgrade database engine version | [minor-version-upgrade](../kubeblocks-minor-version-upgrade/SKILL.md) | `kubeblocks-minor-version-upgrade/SKILL.md` |
+| Rebuild a failed replica | [rebuild-replica](../kubeblocks-rebuild-replica/SKILL.md) | `kubeblocks-rebuild-replica/SKILL.md` |
+| Upgrade KubeBlocks operator | [upgrade-kubeblocks](../kubeblocks-upgrade/SKILL.md) | `kubeblocks-upgrade/SKILL.md` |
 
 ### Data Protection
 
 | User Intent | Skill | Path |
 |---|---|---|
-| Backup cluster data | [backup](../backup/SKILL.md) | `backup/SKILL.md` |
-| Restore from backup / PITR | [restore](../restore/SKILL.md) | `restore/SKILL.md` |
+| Backup cluster data | [backup](../kubeblocks-backup/SKILL.md) | `kubeblocks-backup/SKILL.md` |
+| Restore from backup / PITR | [restore](../kubeblocks-restore/SKILL.md) | `kubeblocks-restore/SKILL.md` |
 
 ### Security & Networking
 
 | User Intent | Skill | Path |
 |---|---|---|
-| Manage database passwords / accounts | [manage-accounts](../manage-accounts/SKILL.md) | `manage-accounts/SKILL.md` |
-| Configure TLS / mTLS encryption | [configure-tls](../configure-tls/SKILL.md) | `configure-tls/SKILL.md` |
-| Expose service externally (LoadBalancer/NodePort) | [expose-service](../expose-service/SKILL.md) | `expose-service/SKILL.md` |
+| Manage database passwords / accounts | [manage-accounts](../kubeblocks-manage-accounts/SKILL.md) | `kubeblocks-manage-accounts/SKILL.md` |
+| Configure TLS / mTLS encryption | [configure-tls](../kubeblocks-configure-tls/SKILL.md) | `kubeblocks-configure-tls/SKILL.md` |
+| Expose service externally (LoadBalancer/NodePort) | [expose-service](../kubeblocks-expose-service/SKILL.md) | `kubeblocks-expose-service/SKILL.md` |
 
 ### Observability
 
 | User Intent | Skill | Path |
 |---|---|---|
-| Setup monitoring (Prometheus/Grafana) | [setup-monitoring](../setup-monitoring/SKILL.md) | `setup-monitoring/SKILL.md` |
+| Setup monitoring (Prometheus/Grafana) | [setup-monitoring](../kubeblocks-setup-monitoring/SKILL.md) | `kubeblocks-setup-monitoring/SKILL.md` |
 
 ### Troubleshooting
 
 | User Intent | Skill | Path |
 |---|---|---|
-| Cluster not working, error, failed, stuck, CrashLoopBackOff, diagnose | [troubleshoot](../troubleshoot/SKILL.md) | `troubleshoot/SKILL.md` |
+| Cluster not working, error, failed, stuck, CrashLoopBackOff, diagnose | [troubleshoot](../kubeblocks-troubleshoot/SKILL.md) | `kubeblocks-troubleshoot/SKILL.md` |
 
 ## Decision Tree
 
