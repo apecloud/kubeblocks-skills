@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-install
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Install the KubeBlocks operator on any Kubernetes cluster via Helm. Handles version selection, environment detection (local dev vs production, China mainland vs global network), image registry configuration, prerequisite checks, and post-install verification. Use when the user asks to install, deploy, or set up KubeBlocks. NOT for upgrading an existing KubeBlocks installation (see KubeBlocks official upgrade docs), uninstalling KubeBlocks (see the Uninstall section in this skill), or creating database clusters after installation (see kubeblocks-create-cluster or kubeblocks-addon-* skills).
 ---
 

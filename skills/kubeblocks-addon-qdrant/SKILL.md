@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-addon-qdrant
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Deploy and manage Qdrant vector database clusters on KubeBlocks for vector search, similarity search, and embedding storage. Use when the user mentions Qdrant, vector database, vector search, similarity search, embedding, RAG, or explicitly wants to create a Qdrant cluster. Provides cluster creation, connection via REST API, and Day-2 operations. For generic cluster creation across all engines, see kubeblocks-create-cluster. For Day-2 operations (scaling, etc.), use the corresponding operation skill.
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-addon-redis
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Deploy and manage Redis clusters on KubeBlocks with topology selection guidance. Supports standalone (dev/test), replication with Sentinel (HA), and Redis Cluster sharding (horizontal scaling) topologies. Use when the user mentions Redis, cache, in-memory store, or explicitly wants to create a Redis cluster. Provides topology comparison, best-practice defaults, and connection methods. For generic cluster creation across all engines, see kubeblocks-create-cluster. For Day-2 operations (scaling, backup, etc.), use the corresponding operation skill.
 ---
 

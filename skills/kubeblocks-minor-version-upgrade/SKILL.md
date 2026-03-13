@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-minor-version-upgrade
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Upgrade the database engine minor version for KubeBlocks clusters via OpsRequest. Performs a rolling upgrade with minimal downtime. Use when the user wants to upgrade, update, or patch the database engine version (e.g. MySQL 8.0.33 to 8.0.35, PostgreSQL 14.7 to 14.10). NOT for upgrading the KubeBlocks operator itself (see KubeBlocks official upgrade docs) or for major version upgrades (e.g. MySQL 5.7 to 8.0, which requires data migration).
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-delete-cluster
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Safely delete a KubeBlocks database cluster with pre-deletion checks for backups, PVCs, and dependent resources. Use when the user wants to remove, delete, destroy, tear down, or clean up a database cluster. NOT for stopping a cluster temporarily (see kubeblocks-cluster-lifecycle) or uninstalling the KubeBlocks operator (see kubeblocks-install skill).
 ---
 

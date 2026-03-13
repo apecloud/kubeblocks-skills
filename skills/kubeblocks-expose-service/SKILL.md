@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-expose-service
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Expose KubeBlocks database clusters externally via LoadBalancer or NodePort services using the Expose OpsRequest. Includes cloud-specific annotations for AWS NLB, Azure LB, GCP, and Alibaba Cloud. Use when the user wants to access the database from outside the Kubernetes cluster, expose a service externally, set up external connectivity, or create a public endpoint. NOT for configuring internal ClusterIP services (default behavior) or setting up TLS for connections (see configure-tls).
 ---
 

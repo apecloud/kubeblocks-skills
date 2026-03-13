@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-backup
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Create backups for KubeBlocks database clusters. Supports on-demand full backups, scheduled (cron-based) backups, and continuous backups for Point-in-Time Recovery (PITR). Covers BackupRepo configuration for S3, GCS, Azure Blob, and MinIO. Use when the user wants to backup, snapshot, protect, or archive database data. NOT for restoring from backups (see restore skill) or managing backup storage infrastructure (see BackupRepo docs).
 ---
 

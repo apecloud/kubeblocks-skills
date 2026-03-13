@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-upgrade
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Upgrade the KubeBlocks operator itself via Helm. Covers update operator, upgrade to v1.0, update kubeblocks version, and CRD updates. Use when the user wants to upgrade KubeBlocks, update the operator, or upgrade to a new KubeBlocks release. NOT for upgrading database engine versions (see minor-version-upgrade).
 ---
 

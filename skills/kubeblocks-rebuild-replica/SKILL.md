@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-rebuild-replica
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Rebuild a failed replica in MySQL or PostgreSQL clusters managed by KubeBlocks. Use when a replica's data is corrupted, the pod is in CrashLoopBackOff, replication is broken, or you need to recover or repair a secondary instance. NOT for planned switchover (see switchover) or full cluster restore (see restore).
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-horizontal-scaling
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Scale database cluster replicas or shards horizontally with KubeBlocks via OpsRequest. Supports scale-out (add replicas), scale-in (remove replicas), decommissioning specific instances, and shard scaling for Redis Cluster and MongoDB sharded topologies. Use when the user wants to add or remove replicas, nodes, instances, or shards. NOT for changing CPU/memory (see vertical-scaling) or expanding disk (see volume-expansion).
 ---
 

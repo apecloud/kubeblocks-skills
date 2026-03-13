@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-configure-tls
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Configure TLS encryption for KubeBlocks database clusters. Supports built-in certificates (auto-managed via cert-manager), user-provided certificates (bring your own CA/PKI), and mTLS (mutual TLS with client certificates). Use when the user wants to enable TLS, SSL, encryption, HTTPS, or secure database connections with certificates. NOT for managing database passwords (see manage-accounts) or exposing services externally (see expose-service).
 ---
 

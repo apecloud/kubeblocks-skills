@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-addon-mongodb
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Deploy and manage MongoDB clusters on KubeBlocks with topology selection guidance. Supports ReplicaSet (HA) and Sharding (mongos + config servers + shards) topologies. Use when the user mentions MongoDB, Mongo, document database, or explicitly wants to create a MongoDB cluster. Provides topology comparison, best-practice defaults, and connection methods. For generic cluster creation across all engines, see kubeblocks-create-cluster. For Day-2 operations (scaling, backup, etc.), use the corresponding operation skill.
 ---
 

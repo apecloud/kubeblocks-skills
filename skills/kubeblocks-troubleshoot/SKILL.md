@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-troubleshoot
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: "Diagnostic guide for KubeBlocks-managed database clusters. Use when the user reports troubleshoot, debug, diagnose, not working, error, failed, stuck, CrashLoopBackOff, cluster exception, or similar problems with their database cluster. This skill guides the agent through diagnostic steps — it does NOT perform actions."
 ---
 

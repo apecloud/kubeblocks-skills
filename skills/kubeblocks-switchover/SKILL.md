@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-switchover
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Perform planned primary-secondary switchover for KubeBlocks database clusters via OpsRequest. Promotes a replica to primary with minimal downtime. Use when the user wants to promote a replica, switch primary, change leader, perform a planned failover, or do maintenance on the current primary node. NOT for unplanned failover recovery (handled automatically by HA middleware like Patroni, Orchestrator, or Sentinel) or restarting all pods (see kubeblocks-cluster-lifecycle).
 ---
 

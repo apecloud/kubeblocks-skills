@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-addon-elasticsearch
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Deploy and manage Elasticsearch clusters on KubeBlocks for full-text search, log analytics, and observability. Use when the user mentions Elasticsearch, ELK stack, search engine, log analytics, Kibana, full-text search, or explicitly wants to create an Elasticsearch cluster. Provides single-node (dev/test) and multi-node cluster creation with connection methods. No backup/restore support in KubeBlocks currently. For generic cluster creation across all engines, see kubeblocks-create-cluster. For Day-2 operations (scaling, volume expansion, etc.), use the corresponding operation skill.
 ---
 

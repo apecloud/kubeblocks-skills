@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-addon-postgresql
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Deploy and manage PostgreSQL clusters on KubeBlocks with Patroni-based high availability and automatic failover. Provides Spilo image configuration, replication topology, and connection methods. Use when the user mentions PostgreSQL, Postgres, PG, or explicitly wants to create a PostgreSQL database cluster. For generic cluster creation across all engines, see kubeblocks-create-cluster. For Day-2 operations (scaling, backup, parameter tuning, etc.), use the corresponding operation skill.
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-addon-rabbitmq
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Deploy and manage RabbitMQ clusters on KubeBlocks. RabbitMQ is an open-source message broker supporting AMQP, MQTT, and STOMP protocols. Use when the user mentions RabbitMQ, message broker, AMQP, message queue, or explicitly wants to create a RabbitMQ cluster. Provides cluster creation, connection methods (Management UI, rabbitmqctl), and Day-2 operations. For generic cluster creation across all engines, see kubeblocks-create-cluster. For Day-2 operations (scaling, etc.), use the corresponding operation skill.
 ---
 

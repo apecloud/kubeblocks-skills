@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-manage-accounts
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Manage database accounts and passwords for KubeBlocks clusters. Configure custom root passwords at cluster creation time and define password generation policies (length, complexity). Use when the user wants to set, change, reset, rotate, or customize database passwords, credentials, or account security policies. NOT for managing TLS/SSL certificates (see configure-tls) or for application-level database user management via SQL (connect directly to the database instead).
 ---
 

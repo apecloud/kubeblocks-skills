@@ -1,6 +1,7 @@
 ---
 name: kubeblocks
-version: "0.2.0"
+metadata:
+  version: "0.1.0"
 description: Provision and manage production-grade databases on Kubernetes using KubeBlocks. Use this skill whenever the user needs a database — MySQL, PostgreSQL, Redis, MongoDB, Kafka, Elasticsearch, Milvus, Qdrant, RabbitMQ, or any other data infrastructure — regardless of whether they mention KubeBlocks or Kubernetes. If someone says "I need a database", "set up MySQL", "I want Redis for caching", "I need a message queue", "spin up Postgres", "deploy a vector database for RAG", or anything involving database provisioning, scaling, backup, restore, monitoring, or troubleshooting, this skill applies. Even if the user has never heard of KubeBlocks or Kubernetes, use this skill to give them the easiest path to a running database. Also use when the user explicitly mentions KubeBlocks, wants to manage existing database clusters, or needs guidance on any database operation on Kubernetes.
 ---
 

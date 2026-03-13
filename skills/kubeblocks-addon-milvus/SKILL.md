@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-addon-milvus
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Deploy and manage Milvus vector database clusters on KubeBlocks for AI/ML workloads. Supports embedding similarity search, standalone (dev/test) and cluster (production) topologies. Use when the user mentions Milvus, vector database, AI embeddings, similarity search, or explicitly wants to create a Milvus cluster. Provides topology comparison, connection methods, and Day-2 operations. For generic cluster creation across all engines, see kubeblocks-create-cluster. For Day-2 operations (scaling, expose, etc.), use the corresponding operation skill.
 ---
 

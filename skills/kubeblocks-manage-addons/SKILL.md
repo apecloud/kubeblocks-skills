@@ -1,6 +1,7 @@
 ---
 name: kubeblocks-manage-addons
-version: "0.1.0"
+metadata:
+  version: "0.1.0"
 description: Install, uninstall, upgrade, and manage KubeBlocks database engine addons (MySQL, PostgreSQL, Redis, MongoDB, Kafka, Elasticsearch, Milvus, Qdrant, etc.). Use when the user wants to enable or disable a database engine, list available addons, or upgrade an addon version. NOT for creating database clusters (see kubeblocks-create-cluster or kubeblocks-addon-* skills) or installing the KubeBlocks operator itself (see kubeblocks-install).
 ---
 
