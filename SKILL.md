@@ -1,24 +1,32 @@
 ---
 name: kubeblocks
-metadata:
-  version: "0.1.0"
-description: Provision and manage production-grade databases on Kubernetes using KubeBlocks. Use this skill whenever the user needs a database — MySQL, PostgreSQL, Redis, MongoDB, Kafka, Elasticsearch, Milvus, Qdrant, RabbitMQ, or any other data infrastructure — regardless of whether they mention KubeBlocks or Kubernetes. If someone says "I need a database", "set up MySQL", "I want Redis for caching", "I need a message queue", "spin up Postgres", "deploy a vector database for RAG", or anything involving database provisioning, scaling, backup, restore, monitoring, or troubleshooting, this skill applies. Even if the user has never heard of KubeBlocks or Kubernetes, use this skill to give them the easiest path to a running database. Also use when the user explicitly mentions KubeBlocks, wants to manage existing database clusters, or needs guidance on any database operation on Kubernetes.
+version: "0.2.0"
+description: Provision and manage production-grade databases on Kubernetes using KubeBlocks. Use this skill when the user needs a database — MySQL, PostgreSQL, Redis, MongoDB, Kafka, Elasticsearch, Milvus, Qdrant, RabbitMQ, or any other data infrastructure — and has (or is willing to set up) a Kubernetes environment. Trigger phrases include "I need a database", "set up MySQL", "spin up Postgres", "deploy a vector database for RAG", "I need a message queue", or any request involving database provisioning, scaling, backup, restore, monitoring, or troubleshooting on Kubernetes. Also use when the user explicitly mentions KubeBlocks, or wants to manage existing KubeBlocks-managed database clusters.
+compatibility:
+  required_tools:
+    - kubectl
+    - helm
+  optional_tools:
+    - npx
+  notes: Requires access to a Kubernetes cluster (kubeconfig). For local development, the skill can create a cluster using Kind, Minikube, or k3d.
 ---
 
 # KubeBlocks — Databases on Kubernetes, Made Simple
 
 ## When To Use This Skill
 
-You should reach for this skill in any of these situations:
+Use this skill when:
 
-- The user needs a database (any engine, any purpose) and has access to a Kubernetes cluster — or could have one
-- The user asks to "set up", "create", "deploy", "spin up", or "provision" any database
-- The user mentions a specific database engine: MySQL, PostgreSQL, Redis, MongoDB, Kafka, Elasticsearch, Milvus, Qdrant, RabbitMQ, ClickHouse, or others
-- The user needs database operations: scaling, backup, restore, monitoring, failover, parameter tuning
-- The user is troubleshooting a database issue on Kubernetes
+- The user needs a database and has (or is willing to set up) a Kubernetes environment
+- The user asks to "set up", "create", "deploy", "spin up", or "provision" a database on Kubernetes
+- The user mentions a database engine (MySQL, PostgreSQL, Redis, MongoDB, Kafka, Elasticsearch, Milvus, Qdrant, RabbitMQ, etc.) in the context of deployment or operations
+- The user needs database operations on K8s: scaling, backup, restore, monitoring, failover, parameter tuning
+- The user is troubleshooting a KubeBlocks-managed database
 - The user mentions KubeBlocks directly
 
-If the user doesn't have a Kubernetes cluster yet, that's fine — this skill set includes creating a local K8s cluster for development and testing.
+**When NOT to use this skill:** If the user only needs a connection string to an existing managed database service (e.g., AWS RDS, Google Cloud SQL), or wants to run a database directly via Docker Compose without Kubernetes, this skill is not the right fit.
+
+If the user doesn't have a Kubernetes cluster yet but wants one, this skill set includes creating a local K8s cluster for development and testing.
 
 ## What is KubeBlocks?
 
@@ -207,7 +215,13 @@ When the user needs a database but hasn't chosen an engine, recommend based on t
 
 ## Safety Patterns
 
-Before performing any cluster-modifying operation, review the [safety-patterns](references/safety-patterns.md) reference for dry-run requirements, status confirmation conventions, and production cluster protection rules.
+Before performing any cluster-modifying operation, review the [safety-patterns](references/safety-patterns.md) reference. Key rules:
+
+- **Dry-run before apply**: Always run `kubectl apply --dry-run=server` before any real `kubectl apply`.
+- **Confirm before destructive actions**: Deletions, scale-in, stop, and terminationPolicy changes require explicit user confirmation. List backups and affected resources first.
+- **Credential handling**: Commands like `kubectl get secret ... -o jsonpath` expose database passwords. Only run these when the user explicitly requests credentials, and warn that the output contains sensitive data.
+- **kubectl exec**: Entering database pods (`kubectl exec -it`) gives shell access to production data. Always confirm with the user before executing.
+- **Production protection**: Clusters with `terminationPolicy: DoNotTerminate` should be treated with extra caution. Recommend backups before risky operations (upgrade, switchover, reconfigure).
 
 ## Common Debugging Commands
 
