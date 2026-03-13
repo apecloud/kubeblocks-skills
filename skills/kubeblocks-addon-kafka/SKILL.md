@@ -298,10 +298,18 @@ kubectl -n demo logs <broker-pod>
 
 ## Day-2 Operations
 
-For scaling, volume expansion, restart, stop/start, and configuration changes, refer to:
-https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-kafka/cluster-management/scale-for-a-kafka-cluster
+| Operation | Skill | External Docs |
+|---|---|---|
+| Stop / Start / Restart | [cluster-lifecycle](../kubeblocks-cluster-lifecycle/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-kafka/cluster-management/stop-start-restart-a-kafka-cluster) |
+| Scale CPU / Memory | [vertical-scaling](../kubeblocks-vertical-scaling/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-kafka/cluster-management/scale-for-a-kafka-cluster) |
+| Add / Remove replicas | [horizontal-scaling](../kubeblocks-horizontal-scaling/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-kafka/cluster-management/scale-for-a-kafka-cluster) |
+| Expand storage | [volume-expansion](../kubeblocks-volume-expansion/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-kafka/cluster-management/expand-volume-of-a-kafka-cluster) |
+| Change parameters | [reconfigure-parameters](../kubeblocks-reconfigure-parameters/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-kafka/configuration/configure-cluster-parameters) |
+
+## Safety Patterns
+
+Follow [safety-patterns.md](../../references/safety-patterns.md) for dry-run before apply, status confirmation after watch, and pre-deletion checklist.
 
 ## Next Steps
 
 - For full YAML examples of all topologies (combined_monitor, separated_monitor with production sizing), environment variable reference, and component/volume matrix, see [reference.md](references/reference.md)
-- For cluster operations, see the KubeBlocks operations docs

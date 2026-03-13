@@ -196,10 +196,12 @@ kubectl -n demo logs <milvus-pod>
 
 ## Day-2 Operations
 
-Supported operations: stop/start/restart, vertical scaling, horizontal scaling, expose service, decommission specific replica, monitoring. See:
-- https://kubeblocks.io/docs/preview/kubeblocks-for-milvus/04-operations/01-stop-start-restart
-- https://kubeblocks.io/docs/preview/kubeblocks-for-milvus/04-operations/02-vertical-scaling
-- https://kubeblocks.io/docs/preview/kubeblocks-for-milvus/04-operations/03-horizontal-scaling
+| Operation | Skill | External Docs |
+|---|---|---|
+| Stop / Start / Restart | [cluster-lifecycle](../kubeblocks-cluster-lifecycle/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-milvus/04-operations/01-stop-start-restart) |
+| Scale CPU / Memory | [vertical-scaling](../kubeblocks-vertical-scaling/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-milvus/04-operations/02-vertical-scaling) |
+| Add / Remove replicas | [horizontal-scaling](../kubeblocks-horizontal-scaling/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-milvus/04-operations/03-horizontal-scaling) |
+| Expose externally | [expose-service](../kubeblocks-expose-service/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-milvus/04-operations/) |
 
 ## Safety Patterns
 

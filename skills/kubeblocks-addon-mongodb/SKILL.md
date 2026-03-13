@@ -236,10 +236,20 @@ kubectl -n demo exec -it mongo-sharded-mongos-0 -- mongosh --eval "sh.status()"
 
 ## Day-2 Operations
 
-For scaling, volume expansion, restart, stop/start, and configuration changes, refer to:
-https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mongodb/cluster-management/scale-for-a-mongodb-cluster
+| Operation | Skill | External Docs |
+|---|---|---|
+| Stop / Start / Restart | [cluster-lifecycle](../kubeblocks-cluster-lifecycle/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mongodb/cluster-management/stop-start-restart-a-mongodb-cluster) |
+| Scale CPU / Memory | [vertical-scaling](../kubeblocks-vertical-scaling/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mongodb/cluster-management/scale-for-a-mongodb-cluster) |
+| Add / Remove replicas | [horizontal-scaling](../kubeblocks-horizontal-scaling/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mongodb/cluster-management/scale-for-a-mongodb-cluster) |
+| Expand storage | [volume-expansion](../kubeblocks-volume-expansion/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mongodb/cluster-management/expand-volume-of-a-mongodb-cluster) |
+| Change parameters | [reconfigure-parameters](../kubeblocks-reconfigure-parameters/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mongodb/configuration/configure-cluster-parameters) |
+| Backup | [backup](../kubeblocks-backup/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mongodb/backup-and-restore/backup) |
+| Restore | [restore](../kubeblocks-restore/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mongodb/backup-and-restore/restore) |
+
+## Safety Patterns
+
+Follow [safety-patterns.md](../../references/safety-patterns.md) for dry-run before apply, status confirmation after watch, and pre-deletion checklist.
 
 ## Next Steps
 
 - For detailed sharding YAML examples, see [reference.md](references/reference.md)
-- For cluster operations, see the KubeBlocks operations docs

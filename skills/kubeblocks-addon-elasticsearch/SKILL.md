@@ -219,8 +219,15 @@ kubectl -n demo describe pod <elasticsearch-pod>
 
 ## Day-2 Operations
 
-For stop/start/restart, vertical scaling, horizontal scaling, volume expansion, expose service, decommission replica, and monitoring:
-https://kubeblocks.io/docs/preview/kubeblocks-for-elasticsearch/04-operations/
+**Note:** Backup and restore are not supported for Elasticsearch in KubeBlocks currently.
+
+| Operation | Skill | External Docs |
+|---|---|---|
+| Stop / Start / Restart | [cluster-lifecycle](../kubeblocks-cluster-lifecycle/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-elasticsearch/04-operations/) |
+| Scale CPU / Memory | [vertical-scaling](../kubeblocks-vertical-scaling/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-elasticsearch/04-operations/) |
+| Add / Remove replicas | [horizontal-scaling](../kubeblocks-horizontal-scaling/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-elasticsearch/04-operations/) |
+| Expand storage | [volume-expansion](../kubeblocks-volume-expansion/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-elasticsearch/04-operations/) |
+| Expose externally | [expose-service](../kubeblocks-expose-service/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-elasticsearch/04-operations/) |
 
 ## Safety Patterns
 

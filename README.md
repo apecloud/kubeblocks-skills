@@ -42,7 +42,9 @@ Point your agent to the root `SKILL.md` — it serves as a navigation hub that r
 | [kubeblocks-reconfigure-parameters](./skills/kubeblocks-reconfigure-parameters/SKILL.md) | Modify database configuration parameters. |
 | [kubeblocks-minor-version-upgrade](./skills/kubeblocks-minor-version-upgrade/SKILL.md) | Upgrade database engine minor versions. |
 | [kubeblocks-switchover](./skills/kubeblocks-switchover/SKILL.md) | Perform planned primary-secondary switchover. |
+| [kubeblocks-rebuild-replica](./skills/kubeblocks-rebuild-replica/SKILL.md) | Rebuild a failed replica in MySQL or PostgreSQL clusters. |
 | [kubeblocks-expose-service](./skills/kubeblocks-expose-service/SKILL.md) | Expose databases externally via LoadBalancer or NodePort. |
+| [kubeblocks-upgrade](./skills/kubeblocks-upgrade/SKILL.md) | Upgrade the KubeBlocks operator itself via Helm. |
 
 ### Data Protection
 
@@ -73,6 +75,16 @@ Point your agent to the root `SKILL.md` — it serves as a navigation hub that r
 | [kubeblocks-addon-redis](./skills/kubeblocks-addon-redis/SKILL.md) | Redis standalone, replication with Sentinel, and Redis Cluster sharding. |
 | [kubeblocks-addon-mongodb](./skills/kubeblocks-addon-mongodb/SKILL.md) | MongoDB ReplicaSet and Sharding topologies. |
 | [kubeblocks-addon-kafka](./skills/kubeblocks-addon-kafka/SKILL.md) | Apache Kafka combined and separated broker/controller modes. |
+| [kubeblocks-addon-elasticsearch](./skills/kubeblocks-addon-elasticsearch/SKILL.md) | Elasticsearch single-node and multi-node clusters for search and log analytics. |
+| [kubeblocks-addon-milvus](./skills/kubeblocks-addon-milvus/SKILL.md) | Milvus vector database for AI/ML embedding similarity search. |
+| [kubeblocks-addon-qdrant](./skills/kubeblocks-addon-qdrant/SKILL.md) | Qdrant vector database for vector search and RAG workloads. |
+| [kubeblocks-addon-rabbitmq](./skills/kubeblocks-addon-rabbitmq/SKILL.md) | RabbitMQ message broker with AMQP, MQTT, and STOMP support. |
+
+### Troubleshooting
+
+| Skill | Description |
+|-------|-------------|
+| [kubeblocks-troubleshoot](./skills/kubeblocks-troubleshoot/SKILL.md) | Diagnostic guide for cluster errors, CrashLoopBackOff, stuck operations, and other failures. |
 
 ## Install
 
@@ -122,19 +134,23 @@ kubeblocks-overview ─────── Navigation hub
         │
         ├── Infrastructure: kubeblocks-create-local-k8s-cluster → kubeblocks-install → kubeblocks-manage-addons
         │
-        ├── Provisioning:   kubeblocks-create-cluster ←→ kubeblocks-addon-{mysql,pg,redis,mongodb,kafka}
+        ├── Provisioning:   kubeblocks-create-cluster ←→ kubeblocks-addon-{mysql,pg,redis,mongodb,kafka,
+        │                   elasticsearch,milvus,qdrant,rabbitmq}
         │                   kubeblocks-delete-cluster
         │
         ├── Operations:     kubeblocks-cluster-lifecycle, kubeblocks-vertical-scaling,
         │                   kubeblocks-horizontal-scaling, kubeblocks-volume-expansion,
         │                   kubeblocks-reconfigure-parameters, kubeblocks-switchover,
-        │                   kubeblocks-minor-version-upgrade, kubeblocks-expose-service
+        │                   kubeblocks-minor-version-upgrade, kubeblocks-rebuild-replica,
+        │                   kubeblocks-expose-service, kubeblocks-upgrade
         │
         ├── Data Protection: kubeblocks-backup, kubeblocks-restore
         │
         ├── Security:       kubeblocks-manage-accounts, kubeblocks-configure-tls
         │
-        └── Observability:  kubeblocks-setup-monitoring
+        ├── Observability:  kubeblocks-setup-monitoring
+        │
+        └── Troubleshooting: kubeblocks-troubleshoot
 ```
 
 Generic operation skills (e.g., `kubeblocks-vertical-scaling`) provide universal OpsRequest templates. Engine-specific skills (e.g., `kubeblocks-addon-mysql`) provide topology selection, cluster YAML examples, and connection methods. They cross-reference each other.

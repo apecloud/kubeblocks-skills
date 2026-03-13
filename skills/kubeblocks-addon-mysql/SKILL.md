@@ -222,10 +222,23 @@ kubectl -n demo logs mysql-cluster-mysql-0
 
 ## Day-2 Operations
 
-For scaling, volume expansion, restart, stop/start, switchover, and configuration changes, refer to the KubeBlocks operations documentation:
-https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mysql/cluster-management/scale-for-a-mysql-cluster
+| Operation | Skill | External Docs |
+|---|---|---|
+| Stop / Start / Restart | [cluster-lifecycle](../kubeblocks-cluster-lifecycle/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mysql/cluster-management/stop-start-restart-a-mysql-cluster) |
+| Scale CPU / Memory | [vertical-scaling](../kubeblocks-vertical-scaling/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mysql/cluster-management/scale-for-a-mysql-cluster) |
+| Add / Remove replicas | [horizontal-scaling](../kubeblocks-horizontal-scaling/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mysql/cluster-management/scale-for-a-mysql-cluster) |
+| Expand storage | [volume-expansion](../kubeblocks-volume-expansion/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mysql/cluster-management/expand-volume-of-a-mysql-cluster) |
+| Change parameters | [reconfigure-parameters](../kubeblocks-reconfigure-parameters/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mysql/configuration/configure-cluster-parameters) |
+| Switchover primary | [switchover](../kubeblocks-switchover/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mysql/cluster-management/switchover) |
+| Upgrade engine version | [minor-version-upgrade](../kubeblocks-minor-version-upgrade/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mysql/cluster-management/upgrade) |
+| Expose externally | [expose-service](../kubeblocks-expose-service/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mysql/cluster-management/expose-mysql) |
+| Backup | [backup](../kubeblocks-backup/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mysql/backup-and-restore/backup) |
+| Restore | [restore](../kubeblocks-restore/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-mysql/backup-and-restore/restore) |
+
+## Safety Patterns
+
+Follow [safety-patterns.md](../../references/safety-patterns.md) for dry-run before apply, status confirmation after watch, and pre-deletion checklist.
 
 ## Next Steps
 
 - For detailed YAML examples of all topologies, see [reference.md](references/reference.md)
-- For cluster operations, see the KubeBlocks operations docs

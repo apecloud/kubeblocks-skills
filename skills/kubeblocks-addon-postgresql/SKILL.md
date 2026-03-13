@@ -225,10 +225,23 @@ kubectl -n demo exec -it pg-cluster-postgresql-0 -- psql -U postgres -c "SELECT 
 
 ## Day-2 Operations
 
-For scaling, volume expansion, restart, stop/start, switchover, and configuration changes, refer to:
-https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-postgresql/cluster-management/scale-for-a-postgresql-cluster
+| Operation | Skill | External Docs |
+|---|---|---|
+| Stop / Start / Restart | [cluster-lifecycle](../kubeblocks-cluster-lifecycle/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-postgresql/cluster-management/stop-start-restart-a-postgresql-cluster) |
+| Scale CPU / Memory | [vertical-scaling](../kubeblocks-vertical-scaling/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-postgresql/cluster-management/scale-for-a-postgresql-cluster) |
+| Add / Remove replicas | [horizontal-scaling](../kubeblocks-horizontal-scaling/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-postgresql/cluster-management/scale-for-a-postgresql-cluster) |
+| Expand storage | [volume-expansion](../kubeblocks-volume-expansion/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-postgresql/cluster-management/expand-volume-of-a-postgresql-cluster) |
+| Change parameters | [reconfigure-parameters](../kubeblocks-reconfigure-parameters/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-postgresql/configuration/configure-cluster-parameters) |
+| Switchover primary | [switchover](../kubeblocks-switchover/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-postgresql/cluster-management/switchover) |
+| Upgrade engine version | [minor-version-upgrade](../kubeblocks-minor-version-upgrade/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-postgresql/cluster-management/upgrade) |
+| Expose externally | [expose-service](../kubeblocks-expose-service/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-postgresql/cluster-management/expose-postgresql) |
+| Backup | [backup](../kubeblocks-backup/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-postgresql/backup-and-restore/backup) |
+| Restore | [restore](../kubeblocks-restore/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/user_docs/kubeblocks-for-postgresql/backup-and-restore/restore) |
+
+## Safety Patterns
+
+Follow [safety-patterns.md](../../references/safety-patterns.md) for dry-run before apply, status confirmation after watch, and pre-deletion checklist.
 
 ## Next Steps
 
 - For detailed YAML examples and the vanilla-postgresql variant, see [reference.md](references/reference.md)
-- For cluster operations, see the KubeBlocks operations docs

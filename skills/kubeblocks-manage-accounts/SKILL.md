@@ -171,3 +171,7 @@ kubectl exec -it <cluster>-<component>-0 -n <ns> -- \
 **Custom password not applied on new cluster:**
 - Ensure the Secret exists **before** creating the Cluster CR
 - Verify the `secretRef` namespace and name are correct
+
+## Safety Patterns
+
+Follow [safety-patterns.md](../../references/safety-patterns.md) for dry-run before apply, status confirmation after watch, and pre-deletion checklist.

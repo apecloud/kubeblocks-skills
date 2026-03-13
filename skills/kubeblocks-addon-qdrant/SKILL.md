@@ -171,9 +171,16 @@ kubectl -n demo describe pod qdrant-cluster-qdrant-0
 
 ## Day-2 Operations
 
-Supported: stop/start/restart, vertical scaling, horizontal scaling, volume expansion, minor version upgrade, expose service, decommission specific replica, backup/restore, monitoring.
-
-https://kubeblocks.io/docs/preview/kubeblocks-for-qdrant/04-operations/01-stop-start-restart
+| Operation | Skill | External Docs |
+|---|---|---|
+| Stop / Start / Restart | [cluster-lifecycle](../kubeblocks-cluster-lifecycle/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-qdrant/04-operations/01-stop-start-restart) |
+| Scale CPU / Memory | [vertical-scaling](../kubeblocks-vertical-scaling/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-qdrant/04-operations/) |
+| Add / Remove replicas | [horizontal-scaling](../kubeblocks-horizontal-scaling/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-qdrant/04-operations/) |
+| Expand storage | [volume-expansion](../kubeblocks-volume-expansion/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-qdrant/04-operations/) |
+| Upgrade engine version | [minor-version-upgrade](../kubeblocks-minor-version-upgrade/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-qdrant/04-operations/) |
+| Expose externally | [expose-service](../kubeblocks-expose-service/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-qdrant/04-operations/) |
+| Backup | [backup](../kubeblocks-backup/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-qdrant/05-backup-restore/02-create-full-backup) |
+| Restore | [restore](../kubeblocks-restore/SKILL.md) | [Docs](https://kubeblocks.io/docs/preview/kubeblocks-for-qdrant/05-backup-restore/) |
 
 ## Safety Patterns
 
