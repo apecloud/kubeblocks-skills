@@ -207,6 +207,18 @@ kubectl -n kb-system describe pods
 kubectl -n kb-system get events --sort-by='.lastTimestamp'
 ```
 
+## Next Step After Install
+
+Installation success does **not** mean the environment is ready for database rollout.
+
+Before creating the first MySQL / PostgreSQL / Redis / MongoDB / Kafka cluster, run [kubeblocks-preflight](../kubeblocks-preflight/SKILL.md) to decide:
+
+- storage class
+- topology risk
+- recommended engine-entry path
+- observability path
+- demo vs production sizing defaults
+
 ## Troubleshooting
 
 **CRD install fails with `x-kubernetes-validations` error:**
