@@ -17,6 +17,7 @@ Full doc index: https://kubeblocks.io/llms-full.txt
 ## Prerequisites
 
 - A running Kubernetes cluster with KubeBlocks installed (see [install-kubeblocks](../kubeblocks-install/SKILL.md))
+- For first-time rollout or unknown environment readiness, run [kubeblocks-preflight](../kubeblocks-preflight/SKILL.md) first and carry its recommendation bundle into this skill.
 - The MySQL addon must be enabled:
 
 ```bash
@@ -39,6 +40,13 @@ helm install kb-addon-mysql kubeblocks/mysql --namespace kb-system --version 1.0
 | Orc + ProxySQL | `orc-proxysql` | mysql + orc + proxysql | Full HA stack |
 
 **Default recommendation:** `semisync` — simplest, most widely deployed.
+
+Keep these decisions visible in this engine-entry skill:
+
+- topology
+- serviceVersion
+- `storageClassName` from preflight
+- demo vs production sizing
 
 ## Supported Versions
 
@@ -103,6 +111,7 @@ spec:
         - name: data
           spec:
             accessModes: [ReadWriteOnce]
+            storageClassName: <storageClassName-from-preflight>
             resources: {requests: {storage: 20Gi}}
 ```
 
@@ -137,6 +146,7 @@ spec:
         - name: data
           spec:
             accessModes: [ReadWriteOnce]
+            storageClassName: <storageClassName-from-preflight>
             resources: {requests: {storage: 20Gi}}
 ```
 

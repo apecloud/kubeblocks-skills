@@ -1,0 +1,27 @@
+[
+  {
+    "id": "ack-multi-az-postgresql",
+    "input": "ACK multi-AZ cluster, KubeBlocks already installed, user wants PostgreSQL, storage readiness unknown",
+    "expected_route": "skills/kubeblocks-preflight/SKILL.md",
+    "prohibited_routes": [
+      "skills/kubeblocks-create-cluster/SKILL.md"
+    ]
+  },
+  {
+    "id": "existing-prometheus",
+    "input": "Grafana and Prometheus already exist; user wants database monitoring",
+    "expected_route": "skills/kubeblocks-observability-existing-stack/SKILL.md",
+    "prohibited_routes": [
+      "skills/kubeblocks-observability-bootstrap-stack/SKILL.md"
+    ]
+  },
+  {
+    "id": "other-addons-fallback",
+    "input": "User wants an engine without a dedicated addon entry skill",
+    "expected_route": "skills/kubeblocks-create-cluster/SKILL.md",
+    "prohibited_routes": [
+      "skills/kubeblocks-addon-mysql/SKILL.md",
+      "skills/kubeblocks-addon-postgresql/SKILL.md"
+    ]
+  }
+]
