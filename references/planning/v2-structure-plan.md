@@ -9,6 +9,21 @@ This document fixes the V2 rewrite direction before large-scale content edits be
 3. Make route drift, addon coverage drift, and ops coverage drift machine-detectable.
 4. Keep V1 skill names alive as shims until V2 routing is stable.
 
+## Final Acceptance Standard
+
+The target is not "a prettier directory tree." The target is:
+
+> A single agent with only `kubeblocks-skills` should be able to safely choose
+> the next step, provision the right engine path, and operate supported Day-2
+> actions without hidden tribal knowledge.
+
+That standard forces four first-principles constraints:
+
+1. Routing must be deterministic.
+2. Preflight must resolve environment risk before create-time guidance.
+3. Engine entry must close the create-time decision loop for that engine.
+4. Supported Day-2 and observability actions must come from data truth, not prose.
+
 ## Hard Rules
 
 - Real executable skills live only under `skills/`.
@@ -85,9 +100,15 @@ This document fixes the V2 rewrite direction before large-scale content edits be
 ## Four Single Sources Of Truth
 
 1. `references/coverage/engine-tier-map.yaml`
-2. `references/coverage/addon-capability-matrix.schema.yaml`
-3. `references/coverage/ops-capability-matrix.schema.yaml`
-4. `references/routing/route-matrix.schema.yaml`
+2. `references/coverage/addon-capability-matrix.yaml`
+3. `references/coverage/ops-capability-matrix.yaml`
+4. `references/routing/route-matrix.yaml`
+
+Schema files define the contract, but they are not the data truth:
+
+- `references/coverage/addon-capability-matrix.schema.yaml`
+- `references/coverage/ops-capability-matrix.schema.yaml`
+- `references/routing/route-matrix.schema.yaml`
 
 The human-readable routing and migration guidance then hangs off:
 
@@ -113,4 +134,5 @@ Examples:
 2. Tier-1 engine map
 3. Shim mapping fixtures
 4. Tier-1 routing/coverage fixtures
-5. Drift-check skeletons for addon coverage, ops coverage, and routing
+5. Starter data-truth files for addon, ops, and routing matrices
+6. Drift-check skeletons for addon coverage, ops coverage, and routing

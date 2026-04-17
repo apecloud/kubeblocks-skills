@@ -3,7 +3,7 @@ tier: tier1-dedicated
 entry_skill: kubeblocks-engine-kafka
 required_profiles: [kubeblocks-preflight]
 allowed_routes: [kubeblocks-engine-kafka]
-forbidden_routes: [kubeblocks-engine-generic]
+forbidden_routes: [kubeblocks-engine-generic, kubeblocks-create-cluster, kubeblocks-family-streaming, kubeblocks-addon-kafka, kubeblocks-engine-pulsar, kubeblocks-engine-rabbitmq]
 required_followups:
   ops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-op-vertical-scale, kubeblocks-op-volume-expansion]
   observability: [kubeblocks-observability-router]

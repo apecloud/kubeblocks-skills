@@ -11,7 +11,7 @@ required_fields:
   - entry_skill
   - family
   - addon_repo_path
-  - example_dir
+  - example_refs
   - docs_refs
   - supported_ops
   - supported_observability
@@ -19,6 +19,8 @@ required_fields:
 field_notes:
   tier: "tier1-dedicated | tier2-family | tier3-generic"
   docs_refs: "repo-relative doc keys or URLs"
+  example_refs: "repo-relative example file paths that establish engine/create/ops evidence"
+  example_dir: "optional coarse locator for human navigation; cannot replace example_refs"
   supported_ops: "logical capability families, not raw OpsRequest names"
   supported_observability: "minimum exporter / pod-monitor support hints"
 
@@ -29,7 +31,9 @@ example:
   entry_skill: kubeblocks-engine-mysql
   family: sql
   addon_repo_path: addons/mysql
-  example_dir: examples/mysql
+  example_refs:
+    - examples/mysql/cluster.yaml
+    - examples/mysql/opsrequest.yaml
   docs_refs:
     - kubeblocks-docs:mysql
   supported_ops:
@@ -45,4 +49,5 @@ example:
   supported_observability:
     exporter: true
     pod_monitor_example: true
+  example_dir: examples/mysql
   notes: ""
