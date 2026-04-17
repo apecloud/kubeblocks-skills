@@ -1,0 +1,45 @@
+shims:
+  - legacy_skill: kubeblocks-addon-mysql
+    new_skill: kubeblocks-engine-mysql
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-addon-postgresql
+    new_skill: kubeblocks-engine-postgresql
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-addon-redis
+    new_skill: kubeblocks-engine-redis
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-addon-mongodb
+    new_skill: kubeblocks-engine-mongodb
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-addon-kafka
+    new_skill: kubeblocks-engine-kafka
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-addon-elasticsearch
+    new_skill: kubeblocks-engine-elasticsearch
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-addon-milvus
+    new_skill: kubeblocks-engine-milvus
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-addon-qdrant
+    new_skill: kubeblocks-engine-qdrant
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-addon-rabbitmq
+    new_skill: kubeblocks-engine-rabbitmq
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-create-cluster
+    new_skill: kubeblocks-engine-generic
+    visibility: customer-visible
+    shim: true
+  - legacy_skill: kubeblocks-setup-monitoring
+    new_skill: kubeblocks-observability-router
+    visibility: customer-visible
+    shim: true

@@ -1,0 +1,57 @@
+schema_version: v1alpha1
+description: >
+  Engine x operation capability matrix. Tier-1 engines must populate the minimum
+  required columns before the V2 routing is considered stable.
+
+required_fields:
+  - engine
+  - start
+  - stop
+  - restart
+  - horizontal_scale
+  - vertical_scale
+  - volume_expansion
+  - monitoring_exporter
+  - reconfigure
+  - switchover
+  - expose
+  - backup
+  - restore
+  - evidence_refs
+
+allowed_status_values:
+  - supported
+  - partial
+  - unsupported
+  - unknown
+
+tier1_minimum_required:
+  - start
+  - stop
+  - restart
+  - horizontal_scale
+  - vertical_scale
+  - volume_expansion
+  - monitoring_exporter
+
+example:
+  engine: mysql
+  start: supported
+  stop: supported
+  restart: supported
+  horizontal_scale: supported
+  vertical_scale: supported
+  volume_expansion: supported
+  monitoring_exporter: supported
+  reconfigure: supported
+  switchover: supported
+  expose: supported
+  backup: supported
+  restore: supported
+  evidence_refs:
+    - examples/mysql/start.yaml
+    - examples/mysql/stop.yaml
+    - examples/mysql/restart.yaml
+    - examples/mysql/scale-out.yaml
+    - examples/mysql/verticalscale.yaml
+    - examples/mysql/volumeexpand.yaml

@@ -1,0 +1,21 @@
+required_columns:
+  - start
+  - stop
+  - restart
+  - horizontal_scale
+  - vertical_scale
+  - volume_expansion
+  - monitoring_exporter
+
+required_status_columns:
+  - reconfigure
+  - switchover
+  - expose
+  - backup
+  - restore
+
+allowed_status_values:
+  - supported
+  - partial
+  - unsupported
+  - unknown

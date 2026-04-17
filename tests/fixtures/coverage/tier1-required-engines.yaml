@@ -1,0 +1,16 @@
+required_tier1_engines:
+  - mysql
+  - postgresql
+  - redis
+  - mongodb
+  - kafka
+  - elasticsearch
+  - milvus
+  - qdrant
+  - rabbitmq
+  - clickhouse
+  - mariadb
+  - minio
+  - opensearch
+  - pulsar
+  - tidb

@@ -1,0 +1,9 @@
+engine: mariadb
+tier: tier1-dedicated
+entry_skill: kubeblocks-engine-mariadb
+required_profiles: [kubeblocks-preflight]
+allowed_routes: [kubeblocks-engine-mariadb]
+forbidden_routes: [kubeblocks-engine-generic]
+required_followups:
+  ops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-op-vertical-scale, kubeblocks-op-volume-expansion]
+  observability: [kubeblocks-observability-router]

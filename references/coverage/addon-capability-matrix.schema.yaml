@@ -1,0 +1,48 @@
+schema_version: v1alpha1
+description: >
+  Single source of truth for addon-to-engine mapping, tier assignment, evidence,
+  and high-level feature coverage. Real data should eventually include one record
+  for every addon found in kubeblocks-addons.
+
+required_fields:
+  - addon
+  - engine
+  - tier
+  - entry_skill
+  - family
+  - addon_repo_path
+  - example_dir
+  - docs_refs
+  - supported_ops
+  - supported_observability
+
+field_notes:
+  tier: "tier1-dedicated | tier2-family | tier3-generic"
+  docs_refs: "repo-relative doc keys or URLs"
+  supported_ops: "logical capability families, not raw OpsRequest names"
+  supported_observability: "minimum exporter / pod-monitor support hints"
+
+example:
+  addon: mysql
+  engine: mysql
+  tier: tier1-dedicated
+  entry_skill: kubeblocks-engine-mysql
+  family: sql
+  addon_repo_path: addons/mysql
+  example_dir: examples/mysql
+  docs_refs:
+    - kubeblocks-docs:mysql
+  supported_ops:
+    - lifecycle
+    - horizontal_scale
+    - vertical_scale
+    - volume_expansion
+    - reconfigure
+    - switchover
+    - backup
+    - restore
+    - expose
+  supported_observability:
+    exporter: true
+    pod_monitor_example: true
+  notes: ""

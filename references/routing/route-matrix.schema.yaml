@@ -1,0 +1,33 @@
+schema_version: v1alpha1
+description: >
+  Formal routing contract from user intent to required profiles, engine entry,
+  ops, and observability hops.
+
+required_fields:
+  - intent
+  - conditions
+  - required_profiles
+  - next_hop
+  - follow_up_routes
+  - forbidden_routes
+
+field_notes:
+  conditions: "high-level predicates such as cluster_ready, kubeblocks_installed, environment_known"
+  required_profiles: "usually kubeblocks-preflight or profile-* skills"
+  follow_up_routes: "allowed engine/op/observability follow-up skills after the next hop"
+  forbidden_routes: "paths that must not be recommended for this intent"
+
+example:
+  intent: create-postgresql-on-ack
+  conditions:
+    cluster_ready: true
+    kubeblocks_installed: true
+    environment_known: false
+  required_profiles:
+    - kubeblocks-preflight
+  next_hop: kubeblocks-preflight
+  follow_up_routes:
+    - kubeblocks-engine-postgresql
+    - kubeblocks-observability-router
+  forbidden_routes:
+    - kubeblocks-engine-generic
