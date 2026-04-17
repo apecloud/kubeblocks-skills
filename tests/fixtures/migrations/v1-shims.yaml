@@ -1,0 +1,85 @@
+shims:
+  - legacy_skill: kubeblocks-addon-mysql
+    new_skill: kubeblocks-engine-mysql
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-addon-postgresql
+    new_skill: kubeblocks-engine-postgresql
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-addon-redis
+    new_skill: kubeblocks-engine-redis
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-addon-mongodb
+    new_skill: kubeblocks-engine-mongodb
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-addon-kafka
+    new_skill: kubeblocks-engine-kafka
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-addon-elasticsearch
+    new_skill: kubeblocks-engine-elasticsearch
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-addon-milvus
+    new_skill: kubeblocks-engine-milvus
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-addon-qdrant
+    new_skill: kubeblocks-engine-qdrant
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-addon-rabbitmq
+    new_skill: kubeblocks-engine-rabbitmq
+    visibility: internal-only
+    shim: true
+  - legacy_skill: kubeblocks-create-cluster
+    new_skill: kubeblocks-engine-generic
+    visibility: customer-visible
+    shim: true
+  - legacy_skill: kubeblocks-setup-monitoring
+    new_skill: kubeblocks-observability-router
+    visibility: customer-visible
+    shim: true
+  - legacy_skill: kubeblocks-cluster-lifecycle
+    new_skill: kubeblocks-op-lifecycle
+    visibility: customer-visible
+    shim: true
+  - legacy_skill: kubeblocks-horizontal-scaling
+    new_skill: kubeblocks-op-horizontal-scale
+    visibility: customer-visible
+    shim: true
+  - legacy_skill: kubeblocks-vertical-scaling
+    new_skill: kubeblocks-op-vertical-scale
+    visibility: customer-visible
+    shim: true
+  - legacy_skill: kubeblocks-volume-expansion
+    new_skill: kubeblocks-op-volume-expansion
+    visibility: customer-visible
+    shim: true
+  - legacy_skill: kubeblocks-reconfigure-parameters
+    new_skill: kubeblocks-op-reconfigure
+    visibility: customer-visible
+    shim: true
+  - legacy_skill: kubeblocks-backup
+    new_skill: kubeblocks-op-backup
+    visibility: customer-visible
+    shim: true
+  - legacy_skill: kubeblocks-restore
+    new_skill: kubeblocks-op-restore
+    visibility: customer-visible
+    shim: true
+  - legacy_skill: kubeblocks-expose-service
+    new_skill: kubeblocks-op-expose
+    visibility: customer-visible
+    shim: true
+  - legacy_skill: kubeblocks-switchover
+    new_skill: kubeblocks-op-switchover
+    visibility: customer-visible
+    shim: true
+  - legacy_skill: kubeblocks-minor-version-upgrade
+    new_skill: kubeblocks-op-upgrade
+    visibility: internal-only
+    shim: true
