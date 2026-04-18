@@ -15,6 +15,12 @@ This skill belongs to the **access-security capability layer** for already-creat
 - Keep this skill focused on system accounts, Secrets, and password policy. Do **not** treat it as SQL-level user management for arbitrary application users.
 - Route TLS / mTLS requests to [kubeblocks-configure-tls](../kubeblocks-configure-tls/SKILL.md), and broken-state credential recovery to [kubeblocks-troubleshoot](../kubeblocks-troubleshoot/SKILL.md).
 
+## Engine-Aware Boundaries
+
+- **Safe default path:** `mysql`, `postgresql`, `redis`, and `mongodb` currently show `account: supported` in the ops truth, so root/admin credential retrieval and Secret-based preconfiguration are normal follow-ups.
+- **Confirm before promising:** `kafka`, `elasticsearch`, `milvus`, `qdrant`, `rabbitmq`, `clickhouse`, `mariadb`, `minio`, `opensearch`, `pulsar`, and `tidb` do not all expose the same first-class account story. Check the matrix before claiming this skill is supported.
+- **Do not confuse system accounts with application users:** creating arbitrary application users inside the database still belongs to engine-native SQL or admin tooling after initial connection.
+
 ## Overview
 
 KubeBlocks automatically creates database accounts (e.g., root, admin) when provisioning a cluster. Credentials are stored in Kubernetes Secrets. You can:
@@ -22,6 +28,7 @@ KubeBlocks automatically creates database accounts (e.g., root, admin) when prov
 - Retrieve current credentials
 - Set a custom password via Secret reference
 - Configure password generation policies (length, complexity)
+- Preconfigure `systemAccounts` for engines that actually expose this contract
 
 Official docs: https://kubeblocks.io/docs/preview/user_docs/connect-databases/overview
 
