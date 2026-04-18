@@ -84,5 +84,5 @@ spec:
 
 ## Evidence Anchors
 
-- Use the evidence anchors below only for maintainer-side parity checks after the manifest is already drafted here. A cold-start runtime should not need these files.
+- Use the evidence anchors below only as optional secondary evidence and parity checks after the manifest is already drafted here. A cold-start runtime should not need these files, but a stronger agent may inspect them when available.
 - Current addon evidence: `examples/pulsar/cluster-basic.yaml`, `examples/pulsar/cluster-enhanced.yaml`, `examples/pulsar/cluster-service-refer.yaml`.

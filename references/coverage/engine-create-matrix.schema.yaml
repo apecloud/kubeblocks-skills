@@ -41,8 +41,8 @@ field_notes:
   next_hops: "Shared capability-layer or observability-layer routes that should be suggested after successful create."
   forbidden_routes: "Cold-start routes that must not be used for this engine."
   docs_refs: "Official public docs references or stable doc keys that a cold-start agent may use at runtime."
-  example_refs: "Maintainer-only provenance from kubeblocks-addons examples. These are evidence anchors, not runtime prerequisites."
-  core_refs: "Maintainer-only provenance from KubeBlocks core API/controller code. These justify the control-plane model but are not runtime prerequisites."
+  example_refs: "Provenance from kubeblocks-addons examples. These are optional secondary evidence anchors, not runtime prerequisites and not primary truth."
+  core_refs: "Provenance from KubeBlocks core API/controller code. These justify the control-plane model but are optional secondary evidence, not runtime prerequisites."
 
 example:
   engine: mysql
