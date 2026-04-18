@@ -1,10 +1,10 @@
-# v0 contract: per-step (or batched) executor report consumed by Oracle grading.
-# Human + agent readable; validators/scripts are v1+.
-schema_version: eval-step-report-schema/v0
+schema_version: v1alpha1
+name: eval-step-report
+description: >
+  Machine-readable schema for one live-eval step result. This captures both the
+  executor's observed result and Oracle's final judgement for the step.
 
-document: step_report
-
-required_fields:
+required:
   - case_id
   - step_id
   - chosen_path
@@ -15,28 +15,52 @@ required_fields:
   - executor_result
   - oracle_judgement
 
-field_notes:
-  case_id: Matches scenario id (eval-case.id).
-  step_id: Matches eval-case step id.
-  chosen_path: Primary skills/docs/tools the executor used for this step.
-  artifacts_used: Repo paths, manifests, command transcripts references, etc.
-  external_secondary_evidence_used: >-
-    Optional cluster/UI evidence pointers (allowed only if scenario permits).
-  actions: Structured or listed actions taken.
-  observed_state: kubectl/cluster facts after the step (summaries OK).
-  executor_result: pass | fail | blocked | skipped (executor self-assessment).
-  oracle_judgement: >-
-    Grader verdict; MUST include at least status and labels.
-    status: pass | fail | conditional_pass | needs_followup
-    labels: list of rubric label keys (see live-eval-rubric.yaml)
-    Optional: evidence, severity (per-label or aggregate), notes, issue_id
+executor_result_enum:
+  - pass
+  - fail
 
-oracle_judgement_minimum:
-  required:
-    - status
-    - labels
-  optional:
-    - evidence
-    - severity
-    - notes
-    - issue_id
+external_secondary_evidence_enum:
+  - none
+  - docs-only
+  - addons
+  - core
+  - any-open-source
+
+oracle_judgement_required:
+  - status
+  - labels
+
+oracle_judgement_status_enum:
+  - pass
+  - hard-fail
+  - observation
+
+label_enum:
+  - route-error
+  - preflight-miss
+  - runtime-dependency-leak
+  - unsupported-action-hallucination
+  - observability-overclaim
+  - live-compatibility-drift
+  - verification-gap
+  - report-order-deviation
+  - conservative-underclaim
+  - self-healed-infra-warning
+
+recommended_optional_fields:
+  - oracle_judgement.severity
+  - oracle_judgement.notes
+  - oracle_judgement.issue_id
+  - evidence
+  - issues
+
+evidence_examples:
+  - command_output_excerpt
+  - resource_name
+  - file_path
+  - event_snippet
+
+notes:
+  - labels may be empty when the step is a clean pass.
+  - conditional labels such as live-compatibility-drift and verification-gap require Oracle judgement to resolve final severity.
+  - evidence is optional but strongly recommended for any issue-bearing step.

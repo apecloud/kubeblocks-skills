@@ -1,10 +1,11 @@
-# v0 contract: live-eval scenario documents under tests/evals/scenarios/*.yaml
-# Human + agent readable; validators/scripts are v1+.
-schema_version: eval-case-schema/v0
+schema_version: v1alpha1
+name: eval-case
+description: >
+  Machine-readable schema for a live-eval scenario. This schema defines how a
+  cold-start agent should be evaluated against a concrete KubeBlocks workflow
+  without relying on ad hoc thread instructions.
 
-document: scenario
-
-required_root_fields:
+required:
   - id
   - title
   - intent
@@ -17,25 +18,29 @@ required_root_fields:
   - stop_rules
   - rubric_labels
 
-root_field_notes:
-  id: Stable identifier for the case (often matches filename stem).
-  title: Short human title.
-  intent: Natural-language goal for the executor agent.
-  mode: >-
-    Execution posture, e.g. write-sandbox (non-destructive eval namespace),
-    destructive-demo (explicit demo namespace only), read-only.
-  target: >-
-    Structured binding: cluster context, namespaces, optional cluster name hints,
-    addon/engine hints. Free-form YAML object; scenarios SHOULD document eval_namespace
-    and any demo_enumeration_namespace separately.
-  expected_path: Ordered primary path (skill ids, doc anchors, or route labels).
-  forbidden_paths: Primary routes or skills that must not be used for the main outcome.
-  allowed_secondary_evidence: Optional evidence classes permitted (not runtime prerequisites).
-  steps: Non-empty list of step objects (see required_step_fields).
-  stop_rules: Early-exit rules (timeout, leak detection, abort conditions).
-  rubric_labels: Label keys from live-eval-rubric that are in scope for this scenario.
+mode_enum:
+  - read-only
+  - dry-run-only
+  - write-sandbox
+  - destructive-demo
 
-required_step_fields:
+allowed_secondary_evidence_enum:
+  - none
+  - docs-only
+  - addons
+  - core
+  - any-open-source
+
+target_required:
+  - cluster_context
+  - namespace_policy
+
+namespace_policy_examples:
+  - dedicated-test-namespace
+  - existing-demo-namespace
+  - cluster-wide-read-only
+
+steps_required:
   - id
   - kind
   - instruction
@@ -43,10 +48,29 @@ required_step_fields:
   - forbidden_actions
   - expected_outcome
 
-step_field_notes:
-  id: Step id (e.g. COMMON-0, A-3).
-  kind: Step category (e.g. preflight, create, lifecycle, observability, route-only).
-  instruction: What the executor must do in this step.
-  allowed_actions: Verbs and object types permitted (strings or structured entries).
-  forbidden_actions: Actions that must not occur in this step.
-  expected_outcome: Observable success criteria (cluster state, artifacts, routing).
+step_kind_enum:
+  - route
+  - preflight
+  - dry-run
+  - apply
+  - day2
+  - observability
+  - delete-plan
+
+rubric_label_enum:
+  - route-error
+  - preflight-miss
+  - runtime-dependency-leak
+  - unsupported-action-hallucination
+  - observability-overclaim
+  - live-compatibility-drift
+  - verification-gap
+  - report-order-deviation
+  - conservative-underclaim
+  - self-healed-infra-warning
+
+notes:
+  - expected_path should list the intended primary skill path in execution order.
+  - forbidden_paths should list the fallbacks or legacy paths that must not become the main route.
+  - stop_rules should make timeout, failure, and no-self-heal expectations explicit.
+  - This schema defines scenario truth only; it does not require a fully automated runner.
