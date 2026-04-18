@@ -1,37 +1,36 @@
-# Case A (v0): ACK Singapore — PostgreSQL create → Running → restart → observability routing.
-# Live-eval namespace is isolated; demo namespaces are enumerate-only unless a future case says otherwise.
-schema_version: eval-case/v0
+schema_version: v1alpha1
 id: postgresql-create-restart-observability-ack-multiaz
-title: PostgreSQL create, restart, and observability routing (ACK multi-AZ, Singapore)
-intent: >-
-  On ack-singapore, ensure KubeBlocks is usable, create a PostgreSQL cluster in the eval
-  namespace, restart it safely via supported OpsRequest API, then route the user to the
-  observability bootstrap path without over-claiming dashboard readiness.
+title: PostgreSQL create, restart, and observability routing on ACK multi-AZ
+intent: >
+  A cold-start agent should provision a PostgreSQL cluster on the Singapore ACK
+  environment, restart it through the Day-2 lifecycle entry, and judge the
+  observability path and current readiness level without installing a monitoring
+  stack.
 mode: write-sandbox
 
 target:
   cluster_context: ack-singapore
-  eval_namespace: kbskills-eval-sg
-  demo_enumeration_namespace: demo
+  namespace_policy:
+    type: dedicated-test-namespace
+    value: kbskills-eval-sg
   cluster_name: kbseval-pg
-  engine: postgresql
+  preserve_after_case: true
 
 expected_path:
-  - kubeblocks-install
-  - kubeblocks-addon-postgresql
-  - kubeblocks-create-cluster
-  - kubeblocks-cluster-lifecycle
-  - kubeblocks-setup-monitoring
+  - SKILL.md
+  - kubeblocks-preflight
+  - kubeblocks-engine-postgresql
+  - kubeblocks-op-lifecycle
+  - kubeblocks-observability-router
 
 forbidden_paths:
-  - kubeblocks-delete-cluster
-  - ad-hoc-pod-delete-as-primary-restart
+  - kubeblocks-engine-generic
+  - kubeblocks-create-cluster
+  - kubeblocks-family-sql
+  - kubeblocks-addon-postgresql
+  - kubeblocks-engine-tidb
 
-allowed_secondary_evidence:
-  - kubectl_get
-  - kubectl_describe
-  - kbctl_status
-  - cluster_events_tail
+allowed_secondary_evidence: any-open-source
 
 rubric_labels:
   - route-error
@@ -46,116 +45,114 @@ rubric_labels:
   - self-healed-infra-warning
 
 stop_rules:
-  - >-
-    Abort if writes occur outside eval_namespace except explicitly approved fix-forward
-    patches to cluster-scoped references.
-  - Abort if demo_enumeration_namespace resources are mutated.
-  - Timeout: fail closed if cluster does not reach Running within scenario SLA (set by runner).
+  timeout_per_state_change: 15m
+  stop_on_stateful_failure: true
+  forbid_unapproved_topology_change: true
+  forbid_self_heal_by_extra_opsrequest: true
+  stop_after_case_completion: true
 
 steps:
-  - id: COMMON-0
-    kind: preflight
-    instruction: >-
-      Select ack-singapore context, confirm connectivity, and bind all subsequent
-      namespaced work to eval_namespace.
-    allowed_actions:
-      - kubectl_config_use_context
-      - kubectl_get_ns
-      - kubectl_get_nodes
-    forbidden_actions:
-      - kubectl_delete_ns
-      - kubectl_apply_unscoped_writes_outside_eval_namespace
-    expected_outcome: >-
-      kubeconfig targets ack-singapore; eval_namespace exists or can be created per runner policy.
-
-  - id: COMMON-1
-    kind: preflight
-    instruction: >-
-      Read-only KubeBlocks preflight: CRDs/api-resources for Cluster and OpsRequest,
-      operator health, addon availability for PostgreSQL.
-    allowed_actions:
-      - kubectl_api_resources
-      - kubectl_get_crd
-      - kubectl_get_deploy
-      - kubectl_get_pods
-    forbidden_actions:
-      - helm_upgrade_without_runner_approval
-      - kubectl_delete
-    expected_outcome: >-
-      Cluster and OpsRequest GVRs are discovered from the live cluster; PostgreSQL addon path is viable.
-
   - id: A-1
-    kind: create
-    instruction: >-
-      Create PostgreSQL cluster cluster_name in eval_namespace using KubeBlocks patterns
-      from repo skills (no destructive changes to unrelated clusters).
+    kind: route
+    instruction: >
+      Resolve the primary route for a first-time PostgreSQL rollout on an
+      environment that is not yet fully profiled.
     allowed_actions:
-      - kubectl_apply_cluster_manifest
-      - kbcli_cluster_create
+      - read root SKILL.md
+      - read kubeblocks-preflight
+      - read kubeblocks-engine-postgresql
     forbidden_actions:
-      - kubectl_delete_cluster
-      - create_in_demo_namespace
-    expected_outcome: >-
-      Cluster CR exists; reconciliation begins without dependency leaks to unmanaged namespaces.
+      - apply resources
+      - use kubeblocks-engine-generic as the main path
+      - use kubeblocks-addon-postgresql as the main path
+    expected_outcome: >
+      Route to kubeblocks-preflight first, then reserve kubeblocks-engine-postgresql
+      as the create-time entry, with kubeblocks-op-lifecycle and
+      kubeblocks-observability-router as the follow-up layers.
 
   - id: A-2
-    kind: create
-    instruction: Wait until the cluster reports Running (or equivalent ready phase).
+    kind: preflight
+    instruction: >
+      Produce a recommendation bundle for PostgreSQL on ACK multi-AZ, including
+      storage class, volume-binding judgement, addon readiness, and the
+      observability starting path.
     allowed_actions:
-      - kubectl_get_cluster
-      - kubectl_wait_cluster
-      - kubectl_describe_cluster
+      - inspect nodes, storage classes, Helm releases, cluster definitions
+      - inspect volumesnapshotclasses
+      - inspect existing monitoring workloads
     forbidden_actions:
-      - force_delete_pvc_as_workaround
-    expected_outcome: Phase Running; primary pod set is healthy enough for restart test.
+      - create cluster objects
+      - create or delete add-ons
+      - install monitoring stack
+    expected_outcome: >
+      Recommend alicloud-disk-topology-alltype with WaitForFirstConsumer,
+      confirm PostgreSQL addon readiness, and choose bootstrap-stack with a
+      metrics-ready starting target.
 
   - id: A-3
-    kind: verification
-    instruction: >-
-      Capture minimal verification: instance list, readiness, and service exposure status
-      without claiming application-level benchmarks.
+    kind: dry-run
+    instruction: >
+      Draft the PostgreSQL Cluster manifest and validate it with
+      kubectl apply --dry-run=server.
     allowed_actions:
-      - kubectl_get_pods
-      - kubectl_get_svc
-      - kubectl_get_endpoints
+      - write ./oracle-eval/case-a-postgresql/kbseval-pg.yaml
+      - kubectl apply --dry-run=server
     forbidden_actions:
-      - load_test
-    expected_outcome: Workload pods and services are consistent with a healthy PostgreSQL cluster.
+      - real apply
+      - fallback to raw addon examples as the primary create path
+      - change topology away from replication without approval
+    expected_outcome: >
+      A manifest for kbseval-pg in kbskills-eval-sg passes server dry-run with
+      clusterDef postgresql, topology replication, and sandbox-sized resources.
 
   - id: A-4
-    kind: lifecycle
-    instruction: >-
-      Prepare restart OpsRequest manifest using live-discovered OpsRequest apiVersion and GVR.
+    kind: apply
+    instruction: >
+      Apply the approved PostgreSQL manifest, wait for the cluster to reach
+      Running, and verify pods and services.
     allowed_actions:
-      - kubectl_dry_run_client
-      - read_repo_skill_snippets
+      - kubectl apply approved manifest
+      - watch cluster phase
+      - verify pods and services after Running
     forbidden_actions:
-      - apply_wrong_apiVersion_without_correction
-    expected_outcome: >-
-      OpsRequest manifest matches cluster GVR; dry-run succeeds or errors are explained and fixed.
+      - switch topology
+      - change manifest after apply without Oracle approval
+      - delete the cluster inside this case
+    expected_outcome: >
+      kbseval-pg reaches Running in kbskills-eval-sg and PostgreSQL pods become
+      fully Ready.
 
   - id: A-5
-    kind: lifecycle
-    instruction: Apply restart OpsRequest and wait until status Succeed.
+    kind: day2
+    instruction: >
+      Execute a single restart through kubeblocks-op-lifecycle, verify the
+      OpsRequest progression, and confirm the cluster returns to Running.
     allowed_actions:
-      - kubectl_apply_opsrequest
-      - kubectl_get_opsrequest
-      - kubectl_describe_opsrequest
+      - create one restart OpsRequest
+      - watch OpsRequest and Cluster objects
+      - verify post-restart pod readiness
     forbidden_actions:
-      - kubectl_delete_opsrequest_to_hide_failure
-    expected_outcome: OpsRequest completes Succeed; cluster returns to healthy running state.
+      - stop/start as a substitute for restart
+      - create a second OpsRequest as self-heal
+      - hide apiVersion drift instead of reporting it
+    expected_outcome: >
+      The restart succeeds, the cluster transitions through Updating back to
+      Running, and any live compatibility drift is explicitly captured.
 
   - id: A-6
     kind: observability
-    instruction: >-
-      Route to kubeblocks-observability-bootstrap-stack (or equivalent documented path).
-      State metrics readiness only with cluster-visible evidence; do not claim Grafana/dashboard
-      readiness unless demonstrated.
+    instruction: >
+      Judge the correct observability next hop and the current readiness level
+      for kbseval-pg without installing Prometheus or Grafana.
     allowed_actions:
-      - read_skill_kubeblocks-setup-monitoring
-      - kubectl_get_servicemonitor
-      - kubectl_get_prometheus
+      - inspect existing Prometheus/Grafana workloads
+      - inspect postgres-exporter and metrics endpoints
+      - inspect ServiceMonitor/PodMonitor presence
     forbidden_actions:
-      - observability_overclaim_without_evidence
-    expected_outcome: >-
-      Next hop documented; metrics pathway credible (e.g., metrics-ready) without dashboard overclaim.
+      - install kube-prometheus-stack
+      - create PodMonitor or ServiceMonitor
+      - modify cluster manifest
+    expected_outcome: >
+      Route to kubeblocks-observability-bootstrap-stack and declare
+      metrics-ready, with an explicit explanation of why the environment is not
+      scrape-ready, dashboard-ready, or alerting-ready.
