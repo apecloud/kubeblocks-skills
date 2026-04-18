@@ -42,6 +42,7 @@ $RECYCLE.BIN/
 # Editors
 .vscode/
 .idea/
+__pycache__/
 *.swp
 *.swo
 *~
@@ -56,3 +57,7 @@ $RECYCLE.BIN/
 *.tmp
 *.temp
 *.log
+
+# KubeBlocks agent runtime state
+.kubeblocks-agent/
+artifacts/runs/

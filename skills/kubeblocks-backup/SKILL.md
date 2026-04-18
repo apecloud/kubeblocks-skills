@@ -2,10 +2,13 @@
 name: kubeblocks-backup
 metadata:
   version: "0.1.0"
-description: Create backups for KubeBlocks database clusters. Supports on-demand full backups, scheduled (cron-based) backups, and continuous backups for Point-in-Time Recovery (PITR). Covers BackupRepo configuration for S3, GCS, Azure Blob, and MinIO. Use when the user wants to backup, snapshot, protect, or archive database data. NOT for restoring from backups (see restore skill) or managing backup storage infrastructure (see BackupRepo docs).
+description: "Legacy compatibility shim for backup workflows. The primary Day-2 entry is kubeblocks-op-backup. Keep this skill callable for older references, but do not recommend it as the main path for cold-start agents."
 ---
 
 # Backup KubeBlocks Database Clusters
+
+> Legacy compatibility shim. Primary entry: [kubeblocks-op-backup](../kubeblocks-op-backup/SKILL.md). Keep the preserved workflow below for detailed reference, but do not recommend this skill as the main path for cold-start agents.
+
 
 ## Overview
 

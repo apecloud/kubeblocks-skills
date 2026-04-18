@@ -1,0 +1,15 @@
+required_fields:
+  - ts
+  - skill
+  - action
+  - target
+  - result
+  - rollback_hint
+
+example:
+  ts: "2026-04-18T01:00:00Z"
+  skill: kubeblocks-engine-postgresql
+  action: apply-cluster
+  target: demo/pg-demo
+  result: running
+  rollback_hint: delete cluster only if no user data has been written

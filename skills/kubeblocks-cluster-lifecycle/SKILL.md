@@ -2,10 +2,13 @@
 name: kubeblocks-cluster-lifecycle
 metadata:
   version: "0.1.0"
-description: "Manage KubeBlocks cluster lifecycle: stop, start, and restart database clusters via OpsRequest. Stopping terminates pods while retaining PVCs for cost savings. Use when the user wants to stop, start, restart, pause, resume, or shut down a database cluster temporarily. NOT for deleting a cluster permanently (see delete-cluster) or for scaling operations (see vertical-scaling, horizontal-scaling)."
+description: "Legacy compatibility shim for cluster lifecycle actions. The primary Day-2 entry is kubeblocks-op-lifecycle. Keep this skill callable for older references, but do not recommend it as the main path for cold-start agents."
 ---
 
 # Manage Cluster Lifecycle: Stop, Start, Restart
+
+> Legacy compatibility shim. Primary entry: [kubeblocks-op-lifecycle](../kubeblocks-op-lifecycle/SKILL.md). Keep the preserved workflow below for detailed reference, but do not recommend this skill as the main path for cold-start agents.
+
 
 ## Overview
 

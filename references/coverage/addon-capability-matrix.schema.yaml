@@ -9,7 +9,6 @@ required_fields:
   - engine
   - tier
   - entry_skill
-  - family
   - addon_repo_path
   - example_refs
   - docs_refs
@@ -18,6 +17,7 @@ required_fields:
 
 field_notes:
   tier: "tier1-dedicated | tier2-family | tier3-generic"
+  family: "optional reference-only taxonomy value; must be one of sql, streaming, vector, search, ts-analytics, coordination, graph, or null"
   docs_refs: "repo-relative doc keys or URLs"
   example_refs: "repo-relative example file paths that establish engine/create/ops evidence"
   example_dir: "optional coarse locator for human navigation; cannot replace example_refs"

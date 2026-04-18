@@ -2,10 +2,13 @@
 name: kubeblocks-addon-mysql
 metadata:
   version: "0.1.0"
-description: Deploy and manage MySQL clusters on KubeBlocks with topology selection guidance. Covers semi-synchronous replication, MySQL Group Replication (MGR), Orchestrator-managed HA, and optional ProxySQL load balancing. Use when the user mentions MySQL, MariaDB, or explicitly wants to create a MySQL database cluster. Provides engine-specific topology comparison, best-practice defaults, and connection methods. For generic cluster creation across all engines, see kubeblocks-create-cluster. For Day-2 operations (scaling, backup, etc.), use the corresponding operation skill.
+description: "Legacy compatibility shim for MySQL provisioning on KubeBlocks. The primary create-time entry is kubeblocks-engine-mysql. Keep this skill callable for older references, but do not recommend it as the main path for cold-start agents."
 ---
 
 # Deploy MySQL on KubeBlocks
+
+> Legacy compatibility shim. Primary entry: [kubeblocks-engine-mysql](../kubeblocks-engine-mysql/SKILL.md). Keep the preserved workflow below for detailed reference, but do not recommend this skill as the main path for cold-start agents.
+
 
 ## Overview
 

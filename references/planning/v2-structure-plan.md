@@ -35,14 +35,13 @@ That standard forces four first-principles constraints:
 ## V2 Skill Taxonomy
 
 - Root router: `kubeblocks`
-- Router skills: `kubeblocks-router-*`
-- Profile skills: `kubeblocks-profile-*`
-- Preflight aggregator: `kubeblocks-preflight`
+- Environment gate: `kubeblocks-install`, `kubeblocks-create-local-k8s-cluster`, `kubeblocks-preflight`
 - Dedicated engine entry: `kubeblocks-engine-*`
-- Family-backed guidance: `kubeblocks-family-*`
+- Family-backed guidance: reference-only taxonomy in coverage and routing facts
 - Generic fallback: `kubeblocks-engine-generic`
 - Day-2 operations: `kubeblocks-op-*`
 - Observability: `kubeblocks-observability-*`
+- Troubleshoot / recovery: `kubeblocks-troubleshoot`, `kubeblocks-rebuild-replica`
 
 ## Coverage Model
 

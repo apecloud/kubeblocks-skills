@@ -2,10 +2,13 @@
 name: kubeblocks-addon-postgresql
 metadata:
   version: "0.1.0"
-description: Deploy and manage PostgreSQL clusters on KubeBlocks with Patroni-based high availability and automatic failover. Provides Spilo image configuration, replication topology, and connection methods. Use when the user mentions PostgreSQL, Postgres, PG, or explicitly wants to create a PostgreSQL database cluster. For generic cluster creation across all engines, see kubeblocks-create-cluster. For Day-2 operations (scaling, backup, parameter tuning, etc.), use the corresponding operation skill.
+description: "Legacy compatibility shim for PostgreSQL provisioning on KubeBlocks. The primary create-time entry is kubeblocks-engine-postgresql. Keep this skill callable for older references, but do not recommend it as the main path for cold-start agents."
 ---
 
 # Deploy PostgreSQL on KubeBlocks
+
+> Legacy compatibility shim. Primary entry: [kubeblocks-engine-postgresql](../kubeblocks-engine-postgresql/SKILL.md). Keep the preserved workflow below for detailed reference, but do not recommend this skill as the main path for cold-start agents.
+
 
 ## Overview
 

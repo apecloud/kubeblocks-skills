@@ -2,10 +2,13 @@
 name: kubeblocks-addon-elasticsearch
 metadata:
   version: "0.1.0"
-description: Deploy and manage Elasticsearch clusters on KubeBlocks for full-text search, log analytics, and observability. Use when the user mentions Elasticsearch, ELK stack, search engine, log analytics, Kibana, full-text search, or explicitly wants to create an Elasticsearch cluster. Provides single-node (dev/test) and multi-node cluster creation with connection methods. No backup/restore support in KubeBlocks currently. For generic cluster creation across all engines, see kubeblocks-create-cluster. For Day-2 operations (scaling, volume expansion, etc.), use the corresponding operation skill.
+description: "Legacy compatibility shim for Elasticsearch provisioning on KubeBlocks. The primary create-time entry is kubeblocks-engine-elasticsearch. Keep this skill callable for older references, but do not recommend it as the main path for cold-start agents."
 ---
 
 # Deploy Elasticsearch on KubeBlocks
+
+> Legacy compatibility shim. Primary entry: [kubeblocks-engine-elasticsearch](../kubeblocks-engine-elasticsearch/SKILL.md). Keep the preserved workflow below for detailed reference, but do not recommend this skill as the main path for cold-start agents.
+
 
 ## Overview
 

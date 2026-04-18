@@ -2,10 +2,13 @@
 name: kubeblocks-addon-rabbitmq
 metadata:
   version: "0.1.0"
-description: Deploy and manage RabbitMQ clusters on KubeBlocks. RabbitMQ is an open-source message broker supporting AMQP, MQTT, and STOMP protocols. Use when the user mentions RabbitMQ, message broker, AMQP, message queue, or explicitly wants to create a RabbitMQ cluster. Provides cluster creation, connection methods (Management UI, rabbitmqctl), and Day-2 operations. For generic cluster creation across all engines, see kubeblocks-create-cluster. For Day-2 operations (scaling, etc.), use the corresponding operation skill.
+description: "Legacy compatibility shim for RabbitMQ provisioning on KubeBlocks. The primary create-time entry is kubeblocks-engine-rabbitmq. Keep this skill callable for older references, but do not recommend it as the main path for cold-start agents."
 ---
 
 # Deploy RabbitMQ on KubeBlocks
+
+> Legacy compatibility shim. Primary entry: [kubeblocks-engine-rabbitmq](../kubeblocks-engine-rabbitmq/SKILL.md). Keep the preserved workflow below for detailed reference, but do not recommend this skill as the main path for cold-start agents.
+
 
 ## Overview
 

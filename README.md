@@ -15,7 +15,7 @@ This repository is being shaped for three goals:
 
 - Use [SKILL.md](SKILL.md) as the top-level router.
 - Use the leaf skills under [skills/](skills/) for concrete workflows.
-- Use [references/testing/scenario-matrix.md](references/testing/scenario-matrix.md) and [tests/fixtures/routes.json](tests/fixtures/routes.json) as the initial routing regression baseline.
+- Use [references/testing/scenario-matrix.md](references/testing/scenario-matrix.md), [references/routing/shim-map.yaml](references/routing/shim-map.yaml), and the Tier-1 routing fixtures under [tests/fixtures/routing/tier1/](tests/fixtures/routing/tier1/) as the initial regression baseline.
 
 ## Install
 
@@ -38,18 +38,17 @@ For local installs, prefer a **stable user-level path** such as `~/.agents/skill
 
 ## Architecture
 
-This repository is being organized into **five layers**:
+The target structure is not "one addon = one primary entry." The target is:
 
-1. **Router**
-   Root [SKILL.md](SKILL.md) decides the next hop only.
-2. **Preflight**
-   Environment readiness and recommendation bundle generation before first-time provisioning.
-3. **Engine Entry**
-   High-frequency engines keep their own entry skills and only retain engine-specific decisions.
-4. **Ops**
-   Day-2 operations for existing clusters.
-5. **Observability**
-   Separate paths for integrating with an existing monitoring stack vs bootstrapping a new one.
+`root router -> environment gate(cluster/install/preflight) -> create path(dedicated engine | generic fallback) -> capability layers(ops/security/backup/observability) -> troubleshoot/recovery`
+
+Key rules:
+
+- `skills/` contains executable entries only.
+- `references/coverage|routing|testing` contains static truths and human-readable contracts.
+- `tests/fixtures/` contains machine-runnable cases only.
+- `scripts/` validates drift between router, truths, fixtures, and docs.
+- `family` stays a taxonomy/reference layer, not a cold-start create-time primary entry.
 
 ## Skill Catalog
 
@@ -66,50 +65,56 @@ This repository is being organized into **five layers**:
 | [kubeblocks-create-local-k8s-cluster](./skills/kubeblocks-create-local-k8s-cluster/SKILL.md) | Create a local Kubernetes test cluster using Kind, Minikube, or k3d. |
 | [kubeblocks-install](./skills/kubeblocks-install/SKILL.md) | Install the KubeBlocks operator. |
 | [kubeblocks-preflight](./skills/kubeblocks-preflight/SKILL.md) | Check rollout readiness and emit an environment profile / recommendation bundle. |
-| [kubeblocks-manage-addons](./skills/kubeblocks-manage-addons/SKILL.md) | Install, uninstall, and upgrade database engine addons. |
 
 ### Engine Entry
 
 | Skill | Purpose |
 |-------|---------|
-| [kubeblocks-addon-mysql](./skills/kubeblocks-addon-mysql/SKILL.md) | MySQL entry with topology, version, storage, and sizing decisions. |
-| [kubeblocks-addon-postgresql](./skills/kubeblocks-addon-postgresql/SKILL.md) | PostgreSQL entry with topology, version, storage, and sizing decisions. |
-| [kubeblocks-addon-redis](./skills/kubeblocks-addon-redis/SKILL.md) | Redis entry. |
-| [kubeblocks-addon-mongodb](./skills/kubeblocks-addon-mongodb/SKILL.md) | MongoDB entry. |
-| [kubeblocks-addon-kafka](./skills/kubeblocks-addon-kafka/SKILL.md) | Kafka entry. |
-| [kubeblocks-addon-elasticsearch](./skills/kubeblocks-addon-elasticsearch/SKILL.md) | Elasticsearch entry. |
-| [kubeblocks-addon-milvus](./skills/kubeblocks-addon-milvus/SKILL.md) | Milvus entry. |
-| [kubeblocks-addon-qdrant](./skills/kubeblocks-addon-qdrant/SKILL.md) | Qdrant entry. |
-| [kubeblocks-addon-rabbitmq](./skills/kubeblocks-addon-rabbitmq/SKILL.md) | RabbitMQ entry. |
-| [kubeblocks-create-cluster](./skills/kubeblocks-create-cluster/SKILL.md) | `other-addons` fallback only. Not for high-frequency engines. |
-| [kubeblocks-delete-cluster](./skills/kubeblocks-delete-cluster/SKILL.md) | Safe deletion path. |
+| [kubeblocks-engine-mysql](./skills/kubeblocks-engine-mysql/SKILL.md) | Primary MySQL create-time entry. |
+| [kubeblocks-engine-postgresql](./skills/kubeblocks-engine-postgresql/SKILL.md) | Primary PostgreSQL create-time entry. |
+| [kubeblocks-engine-redis](./skills/kubeblocks-engine-redis/SKILL.md) | Primary Redis create-time entry. |
+| [kubeblocks-engine-mongodb](./skills/kubeblocks-engine-mongodb/SKILL.md) | Primary MongoDB create-time entry. |
+| [kubeblocks-engine-kafka](./skills/kubeblocks-engine-kafka/SKILL.md) | Primary Kafka create-time entry. |
+| [kubeblocks-engine-elasticsearch](./skills/kubeblocks-engine-elasticsearch/SKILL.md) | Primary Elasticsearch create-time entry. |
+| [kubeblocks-engine-milvus](./skills/kubeblocks-engine-milvus/SKILL.md) | Primary Milvus create-time entry. |
+| [kubeblocks-engine-qdrant](./skills/kubeblocks-engine-qdrant/SKILL.md) | Primary Qdrant create-time entry. |
+| [kubeblocks-engine-rabbitmq](./skills/kubeblocks-engine-rabbitmq/SKILL.md) | Primary RabbitMQ create-time entry. |
+| [kubeblocks-engine-clickhouse](./skills/kubeblocks-engine-clickhouse/SKILL.md) | Dedicated ClickHouse entry placeholder. |
+| [kubeblocks-engine-mariadb](./skills/kubeblocks-engine-mariadb/SKILL.md) | Dedicated MariaDB entry placeholder. |
+| [kubeblocks-engine-minio](./skills/kubeblocks-engine-minio/SKILL.md) | Dedicated MinIO entry placeholder. |
+| [kubeblocks-engine-opensearch](./skills/kubeblocks-engine-opensearch/SKILL.md) | Dedicated OpenSearch entry placeholder. |
+| [kubeblocks-engine-pulsar](./skills/kubeblocks-engine-pulsar/SKILL.md) | Dedicated Pulsar entry placeholder. |
+| [kubeblocks-engine-tidb](./skills/kubeblocks-engine-tidb/SKILL.md) | Dedicated TiDB entry placeholder. |
+| [kubeblocks-engine-generic](./skills/kubeblocks-engine-generic/SKILL.md) | `other-addons` fallback only. Not for the Tier-1 dedicated set. |
 
 ### Ops
 
 | Skill | Purpose |
 |-------|---------|
-| [kubeblocks-cluster-lifecycle](./skills/kubeblocks-cluster-lifecycle/SKILL.md) | Stop, start, and restart clusters. |
-| [kubeblocks-vertical-scaling](./skills/kubeblocks-vertical-scaling/SKILL.md) | Scale CPU and memory. |
-| [kubeblocks-horizontal-scaling](./skills/kubeblocks-horizontal-scaling/SKILL.md) | Add or remove replicas or shards. |
-| [kubeblocks-volume-expansion](./skills/kubeblocks-volume-expansion/SKILL.md) | Expand storage. |
-| [kubeblocks-reconfigure-parameters](./skills/kubeblocks-reconfigure-parameters/SKILL.md) | Change database parameters. |
-| [kubeblocks-minor-version-upgrade](./skills/kubeblocks-minor-version-upgrade/SKILL.md) | Upgrade engine versions. |
-| [kubeblocks-switchover](./skills/kubeblocks-switchover/SKILL.md) | Planned primary-secondary switchover. |
-| [kubeblocks-rebuild-replica](./skills/kubeblocks-rebuild-replica/SKILL.md) | Rebuild failed replicas. |
-| [kubeblocks-backup](./skills/kubeblocks-backup/SKILL.md) | Backup workflows. |
-| [kubeblocks-restore](./skills/kubeblocks-restore/SKILL.md) | Restore workflows. |
+| [kubeblocks-op-lifecycle](./skills/kubeblocks-op-lifecycle/SKILL.md) | Primary lifecycle entry for stop, start, and restart. |
+| [kubeblocks-op-vertical-scale](./skills/kubeblocks-op-vertical-scale/SKILL.md) | Primary CPU and memory scale entry. |
+| [kubeblocks-op-horizontal-scale](./skills/kubeblocks-op-horizontal-scale/SKILL.md) | Primary replica or shard scale entry. |
+| [kubeblocks-op-volume-expansion](./skills/kubeblocks-op-volume-expansion/SKILL.md) | Primary storage expansion entry. |
+| [kubeblocks-op-reconfigure](./skills/kubeblocks-op-reconfigure/SKILL.md) | Primary parameter-change entry. |
+| [kubeblocks-op-upgrade](./skills/kubeblocks-op-upgrade/SKILL.md) | Primary engine-upgrade entry. |
+| [kubeblocks-op-switchover](./skills/kubeblocks-op-switchover/SKILL.md) | Primary planned switchover entry. |
+| [kubeblocks-op-backup](./skills/kubeblocks-op-backup/SKILL.md) | Primary backup entry. |
+| [kubeblocks-op-restore](./skills/kubeblocks-op-restore/SKILL.md) | Primary restore entry. |
+| [kubeblocks-op-expose](./skills/kubeblocks-op-expose/SKILL.md) | Primary external service exposure entry. |
+| [kubeblocks-delete-cluster](./skills/kubeblocks-delete-cluster/SKILL.md) | Safe deletion path. |
+| [kubeblocks-upgrade](./skills/kubeblocks-upgrade/SKILL.md) | KubeBlocks operator upgrade. |
 | [kubeblocks-configure-tls](./skills/kubeblocks-configure-tls/SKILL.md) | TLS and mTLS. |
 | [kubeblocks-manage-accounts](./skills/kubeblocks-manage-accounts/SKILL.md) | Accounts and passwords. |
-| [kubeblocks-expose-service](./skills/kubeblocks-expose-service/SKILL.md) | External service exposure. |
-| [kubeblocks-upgrade](./skills/kubeblocks-upgrade/SKILL.md) | Upgrade KubeBlocks itself. |
+| [kubeblocks-rebuild-replica](./skills/kubeblocks-rebuild-replica/SKILL.md) | Replica rebuild / recovery support. |
 
 ### Observability
 
 | Skill | Purpose |
 |-------|---------|
-| [kubeblocks-setup-monitoring](./skills/kubeblocks-setup-monitoring/SKILL.md) | Compatibility shim / observability router. |
+| [kubeblocks-observability-router](./skills/kubeblocks-observability-router/SKILL.md) | Primary observability router. |
 | [kubeblocks-observability-existing-stack](./skills/kubeblocks-observability-existing-stack/SKILL.md) | Integrate database metrics into an existing Prometheus/Grafana stack. |
 | [kubeblocks-observability-bootstrap-stack](./skills/kubeblocks-observability-bootstrap-stack/SKILL.md) | Bootstrap a new monitoring stack when none exists. |
+| [kubeblocks-setup-monitoring](./skills/kubeblocks-setup-monitoring/SKILL.md) | Legacy compatibility shim. |
 
 ### Troubleshooting
 
@@ -127,6 +132,7 @@ The repository keeps shared references under [references/](references/):
 - [references/testing/scenario-matrix.md](references/testing/scenario-matrix.md)
 - [references/testing/smoke-checklist.md](references/testing/smoke-checklist.md)
 - [references/testing/path-migrations.md](references/testing/path-migrations.md)
+- [references/routing/shim-map.yaml](references/routing/shim-map.yaml)
 
 ## Testing & Iteration Hooks
 
@@ -138,22 +144,26 @@ Run:
 
 ```bash
 python3 scripts/validate_skills.py
+python3 scripts/check_addon_coverage.py
+python3 scripts/check_ops_coverage.py
+python3 scripts/check_route_drift.py
 ```
 
 It checks:
 
 - frontmatter presence and version fields
-- relative Markdown links in the root README/router and touched skill files
-- route fixtures point to existing skills
-- route fixtures declare both expected and prohibited next hops
+- relative Markdown links in the router, README, skill files, and routing/testing references
+- Tier-1 routing fixtures point to existing skills or approved reference-only families
+- shim fixtures stay aligned with `references/routing/shim-map.yaml`
+- addon, ops, and routing truth stay consistent with the Tier-1 baseline
 
 ### Initial Routing Fixtures
 
-See [tests/fixtures/routes.json](tests/fixtures/routes.json) for the first regression cases:
+See the machine-runnable fixtures under [tests/fixtures/](tests/fixtures/):
 
-- ACK multi-AZ + PostgreSQL/MySQL must go through `preflight`
-- existing Prometheus/Grafana must route to `observability-existing-stack`
-- unknown engines may use the `other-addons` fallback
+- [tests/fixtures/routing/tier1/](tests/fixtures/routing/tier1/) for allowed and forbidden Tier-1 create-time routes
+- [tests/fixtures/migrations/v1-shims.yaml](tests/fixtures/migrations/v1-shims.yaml) for legacy-name shim coverage
+- [tests/fixtures/coverage/tier1-required-engines.yaml](tests/fixtures/coverage/tier1-required-engines.yaml) and [tests/fixtures/coverage/tier1-min-ops.yaml](tests/fixtures/coverage/tier1-min-ops.yaml) for Tier-1 coverage minimums
 
 ### Path Migrations
 
@@ -164,15 +174,32 @@ See [tests/fixtures/routes.json](tests/fixtures/routes.json) for the first regre
 - shim / fallback behavior
 - optional one-liner and do-not-say guidance
 
+## Runtime State Protocol
+
+Cold-start agents should not depend on pre-existing memory files, but long-running tasks benefit from structured runtime state outside the repo. Recommended workspace-local layout:
+
+- `.kubeblocks-agent/state/environment-profile.yaml`
+- `.kubeblocks-agent/state/cluster-<name>.yaml`
+- `.kubeblocks-agent/state/route-context.yaml`
+- `.kubeblocks-agent/logs/<timestamp>.jsonl`
+- `.kubeblocks-agent/HANDOFF.md`
+
+These files are runtime artifacts, not static truths. Keep them out of the skill repo and refresh them when the environment changes.
+
 ## Contributing
 
 When changing routing or skill boundaries:
 
 1. Update [SKILL.md](SKILL.md) if the next-hop logic changes.
 2. Update the affected leaf skills.
-3. Update [references/testing/scenario-matrix.md](references/testing/scenario-matrix.md) and [tests/fixtures/routes.json](tests/fixtures/routes.json).
-4. Update [references/testing/path-migrations.md](references/testing/path-migrations.md) if a path or recommendation changed.
-5. Run `python3 scripts/validate_skills.py`.
+3. Update the relevant truth files under `references/coverage/` and `references/routing/`.
+4. Update [references/testing/path-migrations.md](references/testing/path-migrations.md) and `references/routing/shim-map.yaml` if a path or recommendation changed.
+5. Update the relevant fixtures under `tests/fixtures/`.
+6. Run all four checks:
+   - `python3 scripts/validate_skills.py`
+   - `python3 scripts/check_addon_coverage.py`
+   - `python3 scripts/check_ops_coverage.py`
+   - `python3 scripts/check_route_drift.py`
 
 ## License
 

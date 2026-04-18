@@ -1,2 +1,343 @@
 schema_version: v1alpha1
-records: []
+records:
+  - engine: mysql
+    start: supported
+    stop: supported
+    restart: supported
+    horizontal_scale: supported
+    vertical_scale: supported
+    volume_expansion: supported
+    monitoring_exporter: supported
+    reconfigure: supported
+    switchover: supported
+    expose: supported
+    backup: supported
+    restore: supported
+    evidence_refs:
+      - examples/mysql/start.yaml
+      - examples/mysql/stop.yaml
+      - examples/mysql/restart.yaml
+      - examples/mysql/scale-out.yaml
+      - examples/mysql/verticalscale.yaml
+      - examples/mysql/volumeexpand.yaml
+      - examples/mysql/pod-monitor.yaml
+      - examples/mysql/configure.yaml
+      - examples/mysql/switchover.yaml
+      - examples/mysql/expose-enable.yaml
+      - examples/mysql/backup.yaml
+      - examples/mysql/restore.yaml
+  - engine: postgresql
+    start: supported
+    stop: supported
+    restart: supported
+    horizontal_scale: supported
+    vertical_scale: supported
+    volume_expansion: supported
+    monitoring_exporter: supported
+    reconfigure: supported
+    switchover: supported
+    expose: supported
+    backup: supported
+    restore: supported
+    evidence_refs:
+      - examples/postgresql/start.yaml
+      - examples/postgresql/stop.yaml
+      - examples/postgresql/restart.yaml
+      - examples/postgresql/scale-out.yaml
+      - examples/postgresql/verticalscale.yaml
+      - examples/postgresql/volumeexpand.yaml
+      - examples/postgresql/pod-monitor.yaml
+      - examples/postgresql/configure.yaml
+      - examples/postgresql/switchover.yaml
+      - examples/postgresql/expose-enable.yaml
+      - examples/postgresql/backup-pg-basebasekup.yaml
+      - examples/postgresql/restore.yaml
+  - engine: redis
+    start: supported
+    stop: supported
+    restart: supported
+    horizontal_scale: supported
+    vertical_scale: supported
+    volume_expansion: supported
+    monitoring_exporter: supported
+    reconfigure: supported
+    switchover: supported
+    expose: supported
+    backup: supported
+    restore: supported
+    evidence_refs:
+      - examples/redis/start.yaml
+      - examples/redis/stop.yaml
+      - examples/redis/restart.yaml
+      - examples/redis/scale-out.yaml
+      - examples/redis/verticalscale.yaml
+      - examples/redis/volumeexpand.yaml
+      - examples/redis/pod-monitor.yaml
+      - examples/redis/configure.yaml
+      - examples/redis/switchover.yaml
+      - examples/redis/expose-enable.yaml
+      - examples/redis/backup.yaml
+      - examples/redis/restore.yaml
+  - engine: mongodb
+    start: supported
+    stop: supported
+    restart: supported
+    horizontal_scale: supported
+    vertical_scale: supported
+    volume_expansion: supported
+    monitoring_exporter: unsupported
+    reconfigure: supported
+    switchover: supported
+    expose: supported
+    backup: supported
+    restore: supported
+    evidence_refs:
+      - examples/mongodb/start.yaml
+      - examples/mongodb/stop.yaml
+      - examples/mongodb/restart.yaml
+      - examples/mongodb/scale-out.yaml
+      - examples/mongodb/verticalscale.yaml
+      - examples/mongodb/volumeexpand.yaml
+      - examples/mongodb/configure.yaml
+      - examples/mongodb/switchover.yaml
+      - examples/mongodb/expose-enable.yaml
+      - examples/mongodb/backup.yaml
+      - examples/mongodb/restore.yaml
+  - engine: kafka
+    start: supported
+    stop: supported
+    restart: supported
+    horizontal_scale: supported
+    vertical_scale: supported
+    volume_expansion: supported
+    monitoring_exporter: supported
+    reconfigure: supported
+    switchover: unsupported
+    expose: partial
+    backup: unsupported
+    restore: unsupported
+    evidence_refs:
+      - examples/kafka/start.yaml
+      - examples/kafka/stop.yaml
+      - examples/kafka/restart.yaml
+      - examples/kafka/scale-out.yaml
+      - examples/kafka/verticalscale.yaml
+      - examples/kafka/volumeexpand.yaml
+      - examples/kafka/exporter-pod-monitor.yaml
+      - examples/kafka/configure.yaml
+      - examples/kafka/cluster-combined-nodeport.yaml
+  - engine: elasticsearch
+    start: supported
+    stop: supported
+    restart: supported
+    horizontal_scale: supported
+    vertical_scale: supported
+    volume_expansion: supported
+    monitoring_exporter: supported
+    reconfigure: unsupported
+    switchover: unsupported
+    expose: supported
+    backup: unsupported
+    restore: unsupported
+    evidence_refs:
+      - examples/elasticsearch/start.yaml
+      - examples/elasticsearch/stop.yaml
+      - examples/elasticsearch/restart.yaml
+      - examples/elasticsearch/scale-out.yaml
+      - examples/elasticsearch/verticalscale.yaml
+      - examples/elasticsearch/volumeexpand.yaml
+      - examples/elasticsearch/pod-monitor.yaml
+      - examples/elasticsearch/expose-enable.yaml
+  - engine: milvus
+    start: supported
+    stop: supported
+    restart: supported
+    horizontal_scale: supported
+    vertical_scale: supported
+    volume_expansion: unsupported
+    monitoring_exporter: supported
+    reconfigure: unsupported
+    switchover: unsupported
+    expose: unsupported
+    backup: unsupported
+    restore: unsupported
+    evidence_refs:
+      - examples/milvus/start.yaml
+      - examples/milvus/stop.yaml
+      - examples/milvus/restart.yaml
+      - examples/milvus/scale-out.yaml
+      - examples/milvus/verticalscale.yaml
+      - examples/milvus/pod-monitor.yaml
+  - engine: qdrant
+    start: supported
+    stop: supported
+    restart: supported
+    horizontal_scale: supported
+    vertical_scale: supported
+    volume_expansion: supported
+    monitoring_exporter: supported
+    reconfigure: unsupported
+    switchover: unsupported
+    expose: unsupported
+    backup: supported
+    restore: supported
+    evidence_refs:
+      - examples/qdrant/start.yaml
+      - examples/qdrant/stop.yaml
+      - examples/qdrant/restart.yaml
+      - examples/qdrant/scale-out.yaml
+      - examples/qdrant/verticalscale.yaml
+      - examples/qdrant/volumeexpand.yaml
+      - examples/qdrant/pod-monitor.yaml
+      - examples/qdrant/backup.yaml
+      - examples/qdrant/restore.yaml
+  - engine: rabbitmq
+    start: supported
+    stop: supported
+    restart: supported
+    horizontal_scale: supported
+    vertical_scale: supported
+    volume_expansion: supported
+    monitoring_exporter: supported
+    reconfigure: supported
+    switchover: unsupported
+    expose: supported
+    backup: unsupported
+    restore: unsupported
+    evidence_refs:
+      - examples/rabbitmq/start.yaml
+      - examples/rabbitmq/stop.yaml
+      - examples/rabbitmq/restart.yaml
+      - examples/rabbitmq/scale-out.yaml
+      - examples/rabbitmq/verticalscale.yaml
+      - examples/rabbitmq/volumeexpand.yaml
+      - examples/rabbitmq/pod-monitor.yaml
+      - examples/rabbitmq/reconfigure.yaml
+      - examples/rabbitmq/expose-enable.yaml
+  - engine: clickhouse
+    start: supported
+    stop: supported
+    restart: supported
+    horizontal_scale: supported
+    vertical_scale: supported
+    volume_expansion: supported
+    monitoring_exporter: supported
+    reconfigure: supported
+    switchover: supported
+    expose: supported
+    backup: supported
+    restore: supported
+    evidence_refs:
+      - examples/clickhouse/start.yaml
+      - examples/clickhouse/stop.yaml
+      - examples/clickhouse/restart.yaml
+      - examples/clickhouse/scale-out.yaml
+      - examples/clickhouse/verticalscale.yaml
+      - examples/clickhouse/volumeexpand.yaml
+      - examples/clickhouse/pod-monitor.yaml
+      - examples/clickhouse/configure.yaml
+      - examples/clickhouse/keeper-switchover.yaml
+      - examples/clickhouse/expose-enable.yaml
+      - examples/clickhouse/backup.yaml
+      - examples/clickhouse/restore.yaml
+  - engine: mariadb
+    start: supported
+    stop: supported
+    restart: supported
+    horizontal_scale: unsupported
+    vertical_scale: supported
+    volume_expansion: supported
+    monitoring_exporter: unsupported
+    reconfigure: unsupported
+    switchover: unsupported
+    expose: unsupported
+    backup: unsupported
+    restore: unsupported
+    evidence_refs:
+      - examples/mariadb/start.yaml
+      - examples/mariadb/stop.yaml
+      - examples/mariadb/restart.yaml
+      - examples/mariadb/verticalscale.yaml
+      - examples/mariadb/volumeexpand.yaml
+  - engine: minio
+    start: supported
+    stop: supported
+    restart: supported
+    horizontal_scale: partial
+    vertical_scale: supported
+    volume_expansion: unsupported
+    monitoring_exporter: unsupported
+    reconfigure: unsupported
+    switchover: unsupported
+    expose: unsupported
+    backup: unsupported
+    restore: unsupported
+    evidence_refs:
+      - examples/minio/start.yaml
+      - examples/minio/stop.yaml
+      - examples/minio/restart.yaml
+      - examples/minio/scale-out.yaml
+      - examples/minio/verticalscale.yaml
+  - engine: opensearch
+    start: supported
+    stop: supported
+    restart: supported
+    horizontal_scale: supported
+    vertical_scale: supported
+    volume_expansion: supported
+    monitoring_exporter: unsupported
+    reconfigure: unsupported
+    switchover: unsupported
+    expose: unsupported
+    backup: unsupported
+    restore: unsupported
+    evidence_refs:
+      - examples/opensearch/start.yaml
+      - examples/opensearch/stop.yaml
+      - examples/opensearch/restart.yaml
+      - examples/opensearch/scale-out.yaml
+      - examples/opensearch/verticalscale.yaml
+      - examples/opensearch/volumeexpand.yaml
+  - engine: pulsar
+    start: supported
+    stop: supported
+    restart: supported
+    horizontal_scale: supported
+    vertical_scale: supported
+    volume_expansion: supported
+    monitoring_exporter: unsupported
+    reconfigure: supported
+    switchover: unsupported
+    expose: partial
+    backup: unsupported
+    restore: unsupported
+    evidence_refs:
+      - examples/pulsar/start.yaml
+      - examples/pulsar/stop.yaml
+      - examples/pulsar/restart.yaml
+      - examples/pulsar/scale-out.yaml
+      - examples/pulsar/verticalscale.yaml
+      - examples/pulsar/volumeexpand.yaml
+      - examples/pulsar/reconfigure-broker.yaml
+      - examples/pulsar/cluster-node-port.yaml
+  - engine: tidb
+    start: supported
+    stop: supported
+    restart: supported
+    horizontal_scale: supported
+    vertical_scale: supported
+    volume_expansion: supported
+    monitoring_exporter: supported
+    reconfigure: unsupported
+    switchover: unsupported
+    expose: unsupported
+    backup: unsupported
+    restore: unsupported
+    evidence_refs:
+      - examples/tidb/start.yaml
+      - examples/tidb/stop.yaml
+      - examples/tidb/restart.yaml
+      - examples/tidb/scale-out.yaml
+      - examples/tidb/verticalscale.yaml
+      - examples/tidb/volumeexpand.yaml
+      - examples/tidb/pod-monitor.yaml
