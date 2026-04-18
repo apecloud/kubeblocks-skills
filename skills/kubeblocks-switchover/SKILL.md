@@ -2,10 +2,13 @@
 name: kubeblocks-switchover
 metadata:
   version: "0.1.0"
-description: Perform planned primary-secondary switchover for KubeBlocks database clusters via OpsRequest. Promotes a replica to primary with minimal downtime. Use when the user wants to promote a replica, switch primary, change leader, perform a planned failover, or do maintenance on the current primary node. NOT for unplanned failover recovery (handled automatically by HA middleware like Patroni, Orchestrator, or Sentinel) or restarting all pods (see kubeblocks-cluster-lifecycle).
+description: "Legacy compatibility shim for planned switchover. The primary Day-2 entry is kubeblocks-op-switchover. Keep this skill callable for older references, but do not recommend it as the main path for cold-start agents."
 ---
 
 # Switchover Primary-Secondary
+
+> Legacy compatibility shim. Primary entry: [kubeblocks-op-switchover](../kubeblocks-op-switchover/SKILL.md). Keep the preserved workflow below for detailed reference, but do not recommend this skill as the main path for cold-start agents.
+
 
 ## Overview
 

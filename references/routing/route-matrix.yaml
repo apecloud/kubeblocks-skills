@@ -1,2 +1,250 @@
 schema_version: v1alpha1
-routes: []
+routes:
+  - intent: create-mysql
+    conditions:
+      kubeblocks_installed: true
+      environment_known: false
+    required_profiles:
+      - kubeblocks-preflight
+    next_hop: kubeblocks-preflight
+    follow_up_routes:
+      - kubeblocks-engine-mysql
+      - kubeblocks-observability-router
+    forbidden_routes:
+      - kubeblocks-engine-generic
+      - kubeblocks-create-cluster
+      - kubeblocks-family-sql
+      - kubeblocks-addon-mysql
+      - kubeblocks-engine-mariadb
+      - kubeblocks-engine-tidb
+  - intent: create-postgresql
+    conditions:
+      kubeblocks_installed: true
+      environment_known: false
+    required_profiles:
+      - kubeblocks-preflight
+    next_hop: kubeblocks-preflight
+    follow_up_routes:
+      - kubeblocks-engine-postgresql
+      - kubeblocks-observability-router
+    forbidden_routes:
+      - kubeblocks-engine-generic
+      - kubeblocks-create-cluster
+      - kubeblocks-family-sql
+      - kubeblocks-addon-postgresql
+      - kubeblocks-engine-tidb
+  - intent: create-redis
+    conditions:
+      kubeblocks_installed: true
+      environment_known: false
+    required_profiles:
+      - kubeblocks-preflight
+    next_hop: kubeblocks-preflight
+    follow_up_routes:
+      - kubeblocks-engine-redis
+      - kubeblocks-observability-router
+    forbidden_routes:
+      - kubeblocks-engine-generic
+      - kubeblocks-create-cluster
+      - kubeblocks-addon-redis
+  - intent: create-mongodb
+    conditions:
+      kubeblocks_installed: true
+      environment_known: false
+    required_profiles:
+      - kubeblocks-preflight
+    next_hop: kubeblocks-preflight
+    follow_up_routes:
+      - kubeblocks-engine-mongodb
+      - kubeblocks-observability-router
+    forbidden_routes:
+      - kubeblocks-engine-generic
+      - kubeblocks-create-cluster
+      - kubeblocks-addon-mongodb
+  - intent: create-kafka
+    conditions:
+      kubeblocks_installed: true
+      environment_known: false
+    required_profiles:
+      - kubeblocks-preflight
+    next_hop: kubeblocks-preflight
+    follow_up_routes:
+      - kubeblocks-engine-kafka
+      - kubeblocks-observability-router
+    forbidden_routes:
+      - kubeblocks-engine-generic
+      - kubeblocks-create-cluster
+      - kubeblocks-family-streaming
+      - kubeblocks-addon-kafka
+      - kubeblocks-engine-pulsar
+      - kubeblocks-engine-rabbitmq
+  - intent: create-elasticsearch
+    conditions:
+      kubeblocks_installed: true
+      environment_known: false
+    required_profiles:
+      - kubeblocks-preflight
+    next_hop: kubeblocks-preflight
+    follow_up_routes:
+      - kubeblocks-engine-elasticsearch
+      - kubeblocks-observability-router
+    forbidden_routes:
+      - kubeblocks-engine-generic
+      - kubeblocks-create-cluster
+      - kubeblocks-family-search
+      - kubeblocks-addon-elasticsearch
+      - kubeblocks-engine-opensearch
+  - intent: create-milvus
+    conditions:
+      kubeblocks_installed: true
+      environment_known: false
+    required_profiles:
+      - kubeblocks-preflight
+    next_hop: kubeblocks-preflight
+    follow_up_routes:
+      - kubeblocks-engine-milvus
+      - kubeblocks-observability-router
+    forbidden_routes:
+      - kubeblocks-engine-generic
+      - kubeblocks-create-cluster
+      - kubeblocks-family-vector
+      - kubeblocks-addon-milvus
+      - kubeblocks-engine-qdrant
+  - intent: create-qdrant
+    conditions:
+      kubeblocks_installed: true
+      environment_known: false
+    required_profiles:
+      - kubeblocks-preflight
+    next_hop: kubeblocks-preflight
+    follow_up_routes:
+      - kubeblocks-engine-qdrant
+      - kubeblocks-observability-router
+    forbidden_routes:
+      - kubeblocks-engine-generic
+      - kubeblocks-create-cluster
+      - kubeblocks-family-vector
+      - kubeblocks-addon-qdrant
+      - kubeblocks-engine-milvus
+  - intent: create-rabbitmq
+    conditions:
+      kubeblocks_installed: true
+      environment_known: false
+    required_profiles:
+      - kubeblocks-preflight
+    next_hop: kubeblocks-preflight
+    follow_up_routes:
+      - kubeblocks-engine-rabbitmq
+      - kubeblocks-observability-router
+    forbidden_routes:
+      - kubeblocks-engine-generic
+      - kubeblocks-create-cluster
+      - kubeblocks-family-streaming
+      - kubeblocks-addon-rabbitmq
+      - kubeblocks-engine-kafka
+      - kubeblocks-engine-pulsar
+  - intent: create-clickhouse
+    conditions:
+      kubeblocks_installed: true
+      environment_known: false
+    required_profiles:
+      - kubeblocks-preflight
+    next_hop: kubeblocks-preflight
+    follow_up_routes:
+      - kubeblocks-engine-clickhouse
+      - kubeblocks-observability-router
+    forbidden_routes:
+      - kubeblocks-engine-generic
+      - kubeblocks-create-cluster
+      - kubeblocks-family-ts-analytics
+  - intent: create-mariadb
+    conditions:
+      kubeblocks_installed: true
+      environment_known: false
+    required_profiles:
+      - kubeblocks-preflight
+    next_hop: kubeblocks-preflight
+    follow_up_routes:
+      - kubeblocks-engine-mariadb
+      - kubeblocks-observability-router
+    forbidden_routes:
+      - kubeblocks-engine-generic
+      - kubeblocks-create-cluster
+      - kubeblocks-family-sql
+      - kubeblocks-engine-mysql
+  - intent: create-minio
+    conditions:
+      kubeblocks_installed: true
+      environment_known: false
+    required_profiles:
+      - kubeblocks-preflight
+    next_hop: kubeblocks-preflight
+    follow_up_routes:
+      - kubeblocks-engine-minio
+      - kubeblocks-observability-router
+    forbidden_routes:
+      - kubeblocks-engine-generic
+      - kubeblocks-create-cluster
+  - intent: create-opensearch
+    conditions:
+      kubeblocks_installed: true
+      environment_known: false
+    required_profiles:
+      - kubeblocks-preflight
+    next_hop: kubeblocks-preflight
+    follow_up_routes:
+      - kubeblocks-engine-opensearch
+      - kubeblocks-observability-router
+    forbidden_routes:
+      - kubeblocks-engine-generic
+      - kubeblocks-create-cluster
+      - kubeblocks-family-search
+      - kubeblocks-engine-elasticsearch
+  - intent: create-pulsar
+    conditions:
+      kubeblocks_installed: true
+      environment_known: false
+    required_profiles:
+      - kubeblocks-preflight
+    next_hop: kubeblocks-preflight
+    follow_up_routes:
+      - kubeblocks-engine-pulsar
+      - kubeblocks-observability-router
+    forbidden_routes:
+      - kubeblocks-engine-generic
+      - kubeblocks-create-cluster
+      - kubeblocks-family-streaming
+      - kubeblocks-engine-kafka
+      - kubeblocks-engine-rabbitmq
+  - intent: create-tidb
+    conditions:
+      kubeblocks_installed: true
+      environment_known: false
+    required_profiles:
+      - kubeblocks-preflight
+    next_hop: kubeblocks-preflight
+    follow_up_routes:
+      - kubeblocks-engine-tidb
+      - kubeblocks-observability-router
+    forbidden_routes:
+      - kubeblocks-engine-generic
+      - kubeblocks-create-cluster
+      - kubeblocks-family-sql
+      - kubeblocks-engine-mysql
+      - kubeblocks-engine-postgresql
+  - intent: create-other-engine
+    conditions:
+      kubeblocks_installed: true
+      environment_known: false
+      tier1_entry_missing: true
+    required_profiles:
+      - kubeblocks-preflight
+    next_hop: kubeblocks-preflight
+    follow_up_routes:
+      - kubeblocks-engine-generic
+    forbidden_routes:
+      - kubeblocks-addon-mysql
+      - kubeblocks-addon-postgresql
+      - kubeblocks-addon-redis
+      - kubeblocks-addon-mongodb
+      - kubeblocks-addon-kafka

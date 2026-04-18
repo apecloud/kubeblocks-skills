@@ -2,10 +2,13 @@
 name: kubeblocks-reconfigure-parameters
 metadata:
   version: "0.1.0"
-description: Modify database configuration parameters for KubeBlocks clusters via OpsRequest. Supports dynamic parameters (applied without restart) and static parameters (require pod restart). Use when the user wants to change, tune, modify, optimize, or adjust database settings, config, or parameters (e.g. max_connections, innodb_buffer_pool_size, shared_buffers). NOT for changing cluster resource limits (see vertical-scaling) or managing database user accounts (see manage-accounts).
+description: "Legacy compatibility shim for parameter reconfiguration. The primary Day-2 entry is kubeblocks-op-reconfigure. Keep this skill callable for older references, but do not recommend it as the main path for cold-start agents."
 ---
 
 # Reconfigure Database Parameters
+
+> Legacy compatibility shim. Primary entry: [kubeblocks-op-reconfigure](../kubeblocks-op-reconfigure/SKILL.md). Keep the preserved workflow below for detailed reference, but do not recommend this skill as the main path for cold-start agents.
+
 
 ## Overview
 

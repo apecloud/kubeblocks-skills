@@ -2,10 +2,13 @@
 name: kubeblocks-addon-redis
 metadata:
   version: "0.1.0"
-description: Deploy and manage Redis clusters on KubeBlocks with topology selection guidance. Supports standalone (dev/test), replication with Sentinel (HA), and Redis Cluster sharding (horizontal scaling) topologies. Use when the user mentions Redis, cache, in-memory store, or explicitly wants to create a Redis cluster. Provides topology comparison, best-practice defaults, and connection methods. For generic cluster creation across all engines, see kubeblocks-create-cluster. For Day-2 operations (scaling, backup, etc.), use the corresponding operation skill.
+description: "Legacy compatibility shim for Redis provisioning on KubeBlocks. The primary create-time entry is kubeblocks-engine-redis. Keep this skill callable for older references, but do not recommend it as the main path for cold-start agents."
 ---
 
 # Deploy Redis on KubeBlocks
+
+> Legacy compatibility shim. Primary entry: [kubeblocks-engine-redis](../kubeblocks-engine-redis/SKILL.md). Keep the preserved workflow below for detailed reference, but do not recommend this skill as the main path for cold-start agents.
+
 
 ## Overview
 

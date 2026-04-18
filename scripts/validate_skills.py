@@ -1,54 +1,33 @@
 #!/usr/bin/env python3
-import json
 import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent / "lib"))
 
-ROOT = Path(__file__).resolve().parents[1]
-SKILL_FILES = sorted(ROOT.rglob("SKILL.md"))
-LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
-
-
-def extract_frontmatter(text: str):
-    if not text.startswith("---\n"):
-        return None
-    parts = text.split("\n---\n", 1)
-    if len(parts) != 2:
-        return None
-    return parts[0][4:]
-
-
-def has_version(frontmatter: str) -> bool:
-    if re.search(r"^version:\s*['\"]?[^'\"]+['\"]?\s*$", frontmatter, re.M):
-        return True
-    if re.search(r"^metadata:\s*$", frontmatter, re.M) and re.search(
-        r"^\s+version:\s*['\"]?[^'\"]+['\"]?\s*$", frontmatter, re.M
-    ):
-        return True
-    return False
-
-
-def check_markdown_links(path: Path, text: str, errors: list[str], warnings: list[str]):
-    for match in LINK_PATTERN.finditer(text):
-        target = match.group(1)
-        if target.startswith("http://") or target.startswith("https://") or target.startswith("#"):
-            continue
-        if target.startswith("mailto:"):
-            continue
-        file_part = target.split("#", 1)[0]
-        if not file_part:
-            continue
-        resolved = (path.parent / file_part).resolve()
-        if not resolved.exists():
-            errors.append(f"{path.relative_to(ROOT)}: broken link -> {target}")
+from repo_checks import (
+    ROOT,
+    check_markdown_links,
+    extract_frontmatter,
+    has_version,
+    load_shim_pairs,
+    load_yaml,
+    load_yaml_rel,
+    markdown_files,
+    reference_only_family_routes,
+    skill_files,
+    skill_name_map,
+    valid_route_target,
+)
 
 
 def main():
     errors: list[str] = []
     warnings: list[str] = []
+    skill_names = set(skill_name_map())
+    family_routes = reference_only_family_routes()
 
-    for path in SKILL_FILES:
+    for path in skill_files():
         text = path.read_text(encoding="utf-8")
         frontmatter = extract_frontmatter(text)
         if frontmatter is None:
@@ -61,30 +40,63 @@ def main():
         if not re.search(r"^description:\s*", frontmatter, re.M):
             warnings.append(f"{path.relative_to(ROOT)}: missing description in frontmatter")
 
-    for rel in ["README.md", "SKILL.md"]:
-        path = ROOT / rel
-        check_markdown_links(path, path.read_text(encoding="utf-8"), errors, warnings)
+    for path in sorted(set(markdown_files() + skill_files())):
+        check_markdown_links(path, path.read_text(encoding="utf-8"), errors)
 
-    fixtures_path = ROOT / "tests/fixtures/routes.json"
-    if not fixtures_path.exists():
-        errors.append("tests/fixtures/routes.json: missing route fixtures file")
-    else:
-        fixtures = json.loads(fixtures_path.read_text(encoding="utf-8"))
-        for fixture in fixtures:
-            expected = ROOT / fixture["expected_route"]
-            if not expected.exists():
-                errors.append(f"routes.json:{fixture['id']}: missing expected_route target {fixture['expected_route']}")
-            prohibited = fixture.get("prohibited_routes", [])
-            if not prohibited:
-                errors.append(f"routes.json:{fixture['id']}: prohibited_routes must not be empty")
-            for route in prohibited:
-                if not (ROOT / route).exists():
-                    errors.append(f"routes.json:{fixture['id']}: missing prohibited route target {route}")
+    routing_dir = ROOT / "tests/fixtures/routing/tier1"
+    routing_fixtures = sorted(routing_dir.glob("*.yaml"))
+    if not routing_fixtures:
+        errors.append("tests/fixtures/routing/tier1: missing Tier-1 routing fixtures")
+    for path in routing_fixtures:
+        fixture = load_yaml(path) or {}
+        for key in ["engine", "tier", "entry_skill", "required_profiles", "allowed_routes", "forbidden_routes", "required_followups"]:
+            if key not in fixture:
+                errors.append(f"{path.relative_to(ROOT)}: missing key `{key}`")
+        entry_skill = fixture.get("entry_skill")
+        if entry_skill and entry_skill not in skill_names:
+            errors.append(f"{path.relative_to(ROOT)}: unknown entry_skill `{entry_skill}`")
+        for target in fixture.get("required_profiles", []) + fixture.get("allowed_routes", []):
+            if not valid_route_target(target, skill_names, family_routes):
+                errors.append(f"{path.relative_to(ROOT)}: unknown route target `{target}`")
+        if not fixture.get("forbidden_routes"):
+            errors.append(f"{path.relative_to(ROOT)}: forbidden_routes must not be empty")
+        for target in fixture.get("forbidden_routes", []):
+            if not valid_route_target(target, skill_names, family_routes):
+                errors.append(f"{path.relative_to(ROOT)}: unknown forbidden target `{target}`")
+        followups = fixture.get("required_followups", {})
+        for targets in followups.values():
+            for target in targets:
+                if not valid_route_target(target, skill_names, family_routes):
+                    errors.append(f"{path.relative_to(ROOT)}: unknown follow-up target `{target}`")
+
+    coverage_fixture = load_yaml_rel("tests/fixtures/coverage/tier1-required-engines.yaml") or {}
+    if not coverage_fixture.get("required_tier1_engines"):
+        errors.append("tests/fixtures/coverage/tier1-required-engines.yaml: missing required_tier1_engines")
+    min_ops = load_yaml_rel("tests/fixtures/coverage/tier1-min-ops.yaml") or {}
+    for key in ["required_columns", "required_status_columns", "allowed_status_values"]:
+        if not min_ops.get(key):
+            errors.append(f"tests/fixtures/coverage/tier1-min-ops.yaml: missing `{key}`")
+
+    route_matrix = load_yaml_rel("references/routing/route-matrix.yaml") or {}
+    for record in route_matrix.get("routes", []):
+        for target in record.get("required_profiles", []) + record.get("follow_up_routes", []) + record.get("forbidden_routes", []):
+            if not valid_route_target(target, skill_names, family_routes):
+                errors.append(f"references/routing/route-matrix.yaml:{record.get('intent')}: unknown target `{target}`")
+
+    shim_pairs = load_shim_pairs()
+    shim_fixture_pairs = load_shim_pairs("tests/fixtures/migrations/v1-shims.yaml")
+    if shim_pairs != shim_fixture_pairs:
+        errors.append("tests/fixtures/migrations/v1-shims.yaml: must stay aligned with references/routing/shim-map.yaml")
 
     for rel in [
         "references/testing/scenario-matrix.md",
         "references/testing/smoke-checklist.md",
         "references/testing/path-migrations.md",
+        "references/routing/shim-map.yaml",
+        "references/coverage/engine-tier-map.yaml",
+        "references/coverage/addon-capability-matrix.yaml",
+        "references/coverage/ops-capability-matrix.yaml",
+        "references/routing/route-matrix.yaml",
     ]:
         if not (ROOT / rel).exists():
             errors.append(f"{rel}: missing")
@@ -95,7 +107,7 @@ def main():
         print(f"WARNING: {item}")
 
     print(
-        f"Validated {len(SKILL_FILES)} SKILL.md file(s), errors={len(errors)}, warnings={len(warnings)}"
+        f"Validated {len(skill_files())} SKILL.md file(s), errors={len(errors)}, warnings={len(warnings)}"
     )
     return 1 if errors else 0
 

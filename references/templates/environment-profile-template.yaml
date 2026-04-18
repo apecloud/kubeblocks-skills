@@ -1,0 +1,18 @@
+generated_at: ""
+refresh_after: ""
+kube_context: ""
+kubeblocks_version: ""
+storage_summary:
+  storage_class_name: ""
+  volume_binding_mode: ""
+  topology_aware_required: false
+  snapshot_capable: false
+observability_summary:
+  existing_stack: false
+  readiness: ""
+risk_flags: []
+recommendation_bundle:
+  engine_path: ""
+  generic_forbidden: true
+  sizing_profile: ""
+  next_step: ""

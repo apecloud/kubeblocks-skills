@@ -2,10 +2,13 @@
 name: kubeblocks-restore
 metadata:
   version: "0.1.0"
-description: Restore KubeBlocks database clusters from backups. Supports full restore (create new cluster from backup) and Point-in-Time Recovery (PITR) to a specific timestamp. Use when the user wants to restore, recover, rebuild, or roll back a database cluster from a backup. Requires an existing backup created by the backup skill. NOT for creating backups (see kubeblocks-backup skill) or for creating a brand new cluster without backup data (see kubeblocks-create-cluster).
+description: "Legacy compatibility shim for restore workflows. The primary Day-2 entry is kubeblocks-op-restore. Keep this skill callable for older references, but do not recommend it as the main path for cold-start agents."
 ---
 
 # Restore KubeBlocks Database Clusters
+
+> Legacy compatibility shim. Primary entry: [kubeblocks-op-restore](../kubeblocks-op-restore/SKILL.md). Keep the preserved workflow below for detailed reference, but do not recommend this skill as the main path for cold-start agents.
+
 
 ## Overview
 

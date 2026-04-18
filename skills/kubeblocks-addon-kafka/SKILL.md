@@ -2,10 +2,13 @@
 name: kubeblocks-addon-kafka
 metadata:
   version: "0.1.0"
-description: Deploy and manage Apache Kafka clusters on KubeBlocks with topology selection guidance. Supports combined mode (broker + controller co-located) and separated mode (dedicated broker and controller nodes) with optional monitoring exporter. Use when the user mentions Kafka, message queue, event streaming, message broker, or explicitly wants to create a Kafka cluster. Provides topology comparison, best-practice defaults, and connection methods. For generic cluster creation across all engines, see kubeblocks-create-cluster. For Day-2 operations (scaling, etc.), use the corresponding operation skill.
+description: "Legacy compatibility shim for Kafka provisioning on KubeBlocks. The primary create-time entry is kubeblocks-engine-kafka. Keep this skill callable for older references, but do not recommend it as the main path for cold-start agents."
 ---
 
 # Deploy Kafka on KubeBlocks
+
+> Legacy compatibility shim. Primary entry: [kubeblocks-engine-kafka](../kubeblocks-engine-kafka/SKILL.md). Keep the preserved workflow below for detailed reference, but do not recommend this skill as the main path for cold-start agents.
+
 
 ## Overview
 

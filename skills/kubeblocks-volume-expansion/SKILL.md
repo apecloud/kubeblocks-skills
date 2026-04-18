@@ -2,10 +2,13 @@
 name: kubeblocks-volume-expansion
 metadata:
   version: "0.1.0"
-description: Expand persistent volume storage for KubeBlocks database clusters via OpsRequest. Requires the StorageClass to support volume expansion (allowVolumeExpansion=true). Use when the user needs more disk space, wants to increase storage, expand volumes, or resize PVCs. NOT for changing CPU/memory (see vertical-scaling) or adding more replicas (see horizontal-scaling). Note that volume shrinking is not supported by Kubernetes.
+description: "Legacy compatibility shim for volume expansion. The primary Day-2 entry is kubeblocks-op-volume-expansion. Keep this skill callable for older references, but do not recommend it as the main path for cold-start agents."
 ---
 
 # Volume Expansion: Increase Storage
+
+> Legacy compatibility shim. Primary entry: [kubeblocks-op-volume-expansion](../kubeblocks-op-volume-expansion/SKILL.md). Keep the preserved workflow below for detailed reference, but do not recommend this skill as the main path for cold-start agents.
+
 
 ## Overview
 

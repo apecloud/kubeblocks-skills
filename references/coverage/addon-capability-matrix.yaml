@@ -1,2 +1,358 @@
 schema_version: v1alpha1
-records: []
+records:
+  - addon: mysql
+    engine: mysql
+    tier: tier1-dedicated
+    entry_skill: kubeblocks-engine-mysql
+    family: sql
+    addon_repo_path: addons/mysql
+    example_refs:
+      - examples/mysql/cluster.yaml
+      - examples/mysql/scale-out.yaml
+      - examples/mysql/verticalscale.yaml
+      - examples/mysql/volumeexpand.yaml
+      - examples/mysql/pod-monitor.yaml
+    docs_refs:
+      - examples/mysql/README.md
+    supported_ops:
+      - lifecycle
+      - horizontal_scale
+      - vertical_scale
+      - volume_expansion
+      - reconfigure
+      - switchover
+      - backup
+      - restore
+      - expose
+    supported_observability:
+      exporter: true
+      pod_monitor_example: true
+  - addon: postgresql
+    engine: postgresql
+    tier: tier1-dedicated
+    entry_skill: kubeblocks-engine-postgresql
+    family: sql
+    addon_repo_path: addons/postgresql
+    example_refs:
+      - examples/postgresql/cluster.yaml
+      - examples/postgresql/scale-out.yaml
+      - examples/postgresql/verticalscale.yaml
+      - examples/postgresql/volumeexpand.yaml
+      - examples/postgresql/pod-monitor.yaml
+    docs_refs:
+      - examples/postgresql/README.md
+    supported_ops:
+      - lifecycle
+      - horizontal_scale
+      - vertical_scale
+      - volume_expansion
+      - reconfigure
+      - switchover
+      - backup
+      - restore
+      - expose
+    supported_observability:
+      exporter: true
+      pod_monitor_example: true
+  - addon: redis
+    engine: redis
+    tier: tier1-dedicated
+    entry_skill: kubeblocks-engine-redis
+    family: null
+    addon_repo_path: addons/redis
+    example_refs:
+      - examples/redis/cluster.yaml
+      - examples/redis/scale-out.yaml
+      - examples/redis/verticalscale.yaml
+      - examples/redis/volumeexpand.yaml
+      - examples/redis/pod-monitor.yaml
+    docs_refs:
+      - examples/redis/README.md
+    supported_ops:
+      - lifecycle
+      - horizontal_scale
+      - vertical_scale
+      - volume_expansion
+      - reconfigure
+      - switchover
+      - backup
+      - restore
+      - expose
+    supported_observability:
+      exporter: true
+      pod_monitor_example: true
+  - addon: mongodb
+    engine: mongodb
+    tier: tier1-dedicated
+    entry_skill: kubeblocks-engine-mongodb
+    family: null
+    addon_repo_path: addons/mongodb
+    example_refs:
+      - examples/mongodb/cluster.yaml
+      - examples/mongodb/scale-out.yaml
+      - examples/mongodb/verticalscale.yaml
+      - examples/mongodb/volumeexpand.yaml
+      - examples/mongodb/backup.yaml
+    docs_refs:
+      - examples/mongodb/README.md
+    supported_ops:
+      - lifecycle
+      - horizontal_scale
+      - vertical_scale
+      - volume_expansion
+      - reconfigure
+      - switchover
+      - backup
+      - restore
+      - expose
+    supported_observability:
+      exporter: false
+      pod_monitor_example: false
+  - addon: kafka
+    engine: kafka
+    tier: tier1-dedicated
+    entry_skill: kubeblocks-engine-kafka
+    family: streaming
+    addon_repo_path: addons/kafka
+    example_refs:
+      - examples/kafka/cluster-combined.yaml
+      - examples/kafka/scale-out.yaml
+      - examples/kafka/verticalscale.yaml
+      - examples/kafka/volumeexpand.yaml
+      - examples/kafka/exporter-pod-monitor.yaml
+    docs_refs:
+      - examples/kafka/README.md
+    supported_ops:
+      - lifecycle
+      - horizontal_scale
+      - vertical_scale
+      - volume_expansion
+      - reconfigure
+      - expose
+    supported_observability:
+      exporter: true
+      pod_monitor_example: true
+  - addon: elasticsearch
+    engine: elasticsearch
+    tier: tier1-dedicated
+    entry_skill: kubeblocks-engine-elasticsearch
+    family: search
+    addon_repo_path: addons/elasticsearch
+    example_refs:
+      - examples/elasticsearch/cluster-multi-node.yaml
+      - examples/elasticsearch/scale-out.yaml
+      - examples/elasticsearch/verticalscale.yaml
+      - examples/elasticsearch/volumeexpand.yaml
+      - examples/elasticsearch/pod-monitor.yaml
+    docs_refs:
+      - examples/elasticsearch/README.md
+    supported_ops:
+      - lifecycle
+      - horizontal_scale
+      - vertical_scale
+      - volume_expansion
+      - expose
+    supported_observability:
+      exporter: true
+      pod_monitor_example: true
+  - addon: milvus
+    engine: milvus
+    tier: tier1-dedicated
+    entry_skill: kubeblocks-engine-milvus
+    family: vector
+    addon_repo_path: addons/milvus
+    example_refs:
+      - examples/milvus/cluster.yaml
+      - examples/milvus/scale-out.yaml
+      - examples/milvus/verticalscale.yaml
+      - examples/milvus/pod-monitor.yaml
+    docs_refs:
+      - examples/milvus/README.md
+    supported_ops:
+      - lifecycle
+      - horizontal_scale
+      - vertical_scale
+    supported_observability:
+      exporter: true
+      pod_monitor_example: true
+  - addon: qdrant
+    engine: qdrant
+    tier: tier1-dedicated
+    entry_skill: kubeblocks-engine-qdrant
+    family: vector
+    addon_repo_path: addons/qdrant
+    example_refs:
+      - examples/qdrant/cluster.yaml
+      - examples/qdrant/scale-out.yaml
+      - examples/qdrant/verticalscale.yaml
+      - examples/qdrant/volumeexpand.yaml
+      - examples/qdrant/pod-monitor.yaml
+    docs_refs:
+      - examples/qdrant/README.md
+    supported_ops:
+      - lifecycle
+      - horizontal_scale
+      - vertical_scale
+      - volume_expansion
+      - backup
+      - restore
+    supported_observability:
+      exporter: true
+      pod_monitor_example: true
+  - addon: rabbitmq
+    engine: rabbitmq
+    tier: tier1-dedicated
+    entry_skill: kubeblocks-engine-rabbitmq
+    family: streaming
+    addon_repo_path: addons/rabbitmq
+    example_refs:
+      - examples/rabbitmq/cluster.yaml
+      - examples/rabbitmq/scale-out.yaml
+      - examples/rabbitmq/verticalscale.yaml
+      - examples/rabbitmq/volumeexpand.yaml
+      - examples/rabbitmq/pod-monitor.yaml
+    docs_refs:
+      - examples/rabbitmq/README.md
+    supported_ops:
+      - lifecycle
+      - horizontal_scale
+      - vertical_scale
+      - volume_expansion
+      - reconfigure
+      - expose
+    supported_observability:
+      exporter: true
+      pod_monitor_example: true
+  - addon: clickhouse
+    engine: clickhouse
+    tier: tier1-dedicated
+    entry_skill: kubeblocks-engine-clickhouse
+    family: ts-analytics
+    addon_repo_path: addons/clickhouse
+    example_refs:
+      - examples/clickhouse/cluster.yaml
+      - examples/clickhouse/scale-out.yaml
+      - examples/clickhouse/verticalscale.yaml
+      - examples/clickhouse/volumeexpand.yaml
+      - examples/clickhouse/pod-monitor.yaml
+    docs_refs:
+      - examples/clickhouse/README.md
+    supported_ops:
+      - lifecycle
+      - horizontal_scale
+      - vertical_scale
+      - volume_expansion
+      - reconfigure
+      - switchover
+      - backup
+      - restore
+      - expose
+    supported_observability:
+      exporter: true
+      pod_monitor_example: true
+  - addon: mariadb
+    engine: mariadb
+    tier: tier1-dedicated
+    entry_skill: kubeblocks-engine-mariadb
+    family: sql
+    addon_repo_path: addons/mariadb
+    example_refs:
+      - examples/mariadb/cluster.yaml
+      - examples/mariadb/verticalscale.yaml
+      - examples/mariadb/volumeexpand.yaml
+      - examples/mariadb/start.yaml
+    docs_refs:
+      - examples/mariadb/README.md
+    supported_ops:
+      - lifecycle
+      - vertical_scale
+      - volume_expansion
+    supported_observability:
+      exporter: false
+      pod_monitor_example: false
+  - addon: minio
+    engine: minio
+    tier: tier1-dedicated
+    entry_skill: kubeblocks-engine-minio
+    family: null
+    addon_repo_path: addons/minio
+    example_refs:
+      - examples/minio/cluster.yaml
+      - examples/minio/scale-out.yaml
+      - examples/minio/verticalscale.yaml
+      - examples/minio/start.yaml
+    docs_refs:
+      - examples/minio/README.md
+    supported_ops:
+      - lifecycle
+      - horizontal_scale
+      - vertical_scale
+    supported_observability:
+      exporter: false
+      pod_monitor_example: false
+  - addon: opensearch
+    engine: opensearch
+    tier: tier1-dedicated
+    entry_skill: kubeblocks-engine-opensearch
+    family: search
+    addon_repo_path: addons/opensearch
+    example_refs:
+      - examples/opensearch/cluster.yaml
+      - examples/opensearch/scale-out.yaml
+      - examples/opensearch/verticalscale.yaml
+      - examples/opensearch/volumeexpand.yaml
+    docs_refs:
+      - examples/opensearch/README.md
+    supported_ops:
+      - lifecycle
+      - horizontal_scale
+      - vertical_scale
+      - volume_expansion
+    supported_observability:
+      exporter: false
+      pod_monitor_example: false
+  - addon: pulsar
+    engine: pulsar
+    tier: tier1-dedicated
+    entry_skill: kubeblocks-engine-pulsar
+    family: streaming
+    addon_repo_path: addons/pulsar
+    example_refs:
+      - examples/pulsar/cluster-basic.yaml
+      - examples/pulsar/scale-out.yaml
+      - examples/pulsar/verticalscale.yaml
+      - examples/pulsar/volumeexpand.yaml
+    docs_refs:
+      - examples/pulsar/README.md
+    supported_ops:
+      - lifecycle
+      - horizontal_scale
+      - vertical_scale
+      - volume_expansion
+      - reconfigure
+      - expose
+    supported_observability:
+      exporter: false
+      pod_monitor_example: false
+  - addon: tidb
+    engine: tidb
+    tier: tier1-dedicated
+    entry_skill: kubeblocks-engine-tidb
+    family: sql
+    addon_repo_path: addons/tidb
+    example_refs:
+      - examples/tidb/cluster.yaml
+      - examples/tidb/scale-out.yaml
+      - examples/tidb/verticalscale.yaml
+      - examples/tidb/volumeexpand.yaml
+      - examples/tidb/pod-monitor.yaml
+    docs_refs:
+      - examples/tidb/README.md
+    supported_ops:
+      - lifecycle
+      - horizontal_scale
+      - vertical_scale
+      - volume_expansion
+    supported_observability:
+      exporter: true
+      pod_monitor_example: true

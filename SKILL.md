@@ -31,34 +31,55 @@ Always route in this order:
    Route to [kubeblocks-preflight](skills/kubeblocks-preflight/SKILL.md) before any engine-specific provisioning.
 
 4. **Provision a database after preflight**
-   - MySQL → [addon-mysql](skills/kubeblocks-addon-mysql/SKILL.md)
-   - PostgreSQL → [addon-postgresql](skills/kubeblocks-addon-postgresql/SKILL.md)
-   - Redis → [addon-redis](skills/kubeblocks-addon-redis/SKILL.md)
-   - MongoDB → [addon-mongodb](skills/kubeblocks-addon-mongodb/SKILL.md)
-   - Kafka → [addon-kafka](skills/kubeblocks-addon-kafka/SKILL.md)
-   - Elasticsearch → [addon-elasticsearch](skills/kubeblocks-addon-elasticsearch/SKILL.md)
-   - Milvus → [addon-milvus](skills/kubeblocks-addon-milvus/SKILL.md)
-   - Qdrant → [addon-qdrant](skills/kubeblocks-addon-qdrant/SKILL.md)
-   - RabbitMQ → [addon-rabbitmq](skills/kubeblocks-addon-rabbitmq/SKILL.md)
-   - Other engines without dedicated entry skills → [create-cluster](skills/kubeblocks-create-cluster/SKILL.md)
+   - MySQL → [engine-mysql](skills/kubeblocks-engine-mysql/SKILL.md)
+   - PostgreSQL → [engine-postgresql](skills/kubeblocks-engine-postgresql/SKILL.md)
+   - Redis → [engine-redis](skills/kubeblocks-engine-redis/SKILL.md)
+   - MongoDB → [engine-mongodb](skills/kubeblocks-engine-mongodb/SKILL.md)
+   - Kafka → [engine-kafka](skills/kubeblocks-engine-kafka/SKILL.md)
+   - Elasticsearch → [engine-elasticsearch](skills/kubeblocks-engine-elasticsearch/SKILL.md)
+   - Milvus → [engine-milvus](skills/kubeblocks-engine-milvus/SKILL.md)
+   - Qdrant → [engine-qdrant](skills/kubeblocks-engine-qdrant/SKILL.md)
+   - RabbitMQ → [engine-rabbitmq](skills/kubeblocks-engine-rabbitmq/SKILL.md)
+   - ClickHouse → [engine-clickhouse](skills/kubeblocks-engine-clickhouse/SKILL.md)
+   - MariaDB → [engine-mariadb](skills/kubeblocks-engine-mariadb/SKILL.md)
+   - MinIO → [engine-minio](skills/kubeblocks-engine-minio/SKILL.md)
+   - OpenSearch → [engine-opensearch](skills/kubeblocks-engine-opensearch/SKILL.md)
+   - Pulsar → [engine-pulsar](skills/kubeblocks-engine-pulsar/SKILL.md)
+   - TiDB → [engine-tidb](skills/kubeblocks-engine-tidb/SKILL.md)
+   - Other engines without dedicated entry skills → [engine-generic](skills/kubeblocks-engine-generic/SKILL.md)
 
 5. **Operate an existing cluster**
-   Route to the matching Day-2 skill:
-   - lifecycle, scaling, backup, restore, parameters, switchover, rebuild, expose, TLS, accounts, or upgrade.
+   Route to the matching capability layer:
+   - lifecycle → [op-lifecycle](skills/kubeblocks-op-lifecycle/SKILL.md)
+   - horizontal scale → [op-horizontal-scale](skills/kubeblocks-op-horizontal-scale/SKILL.md)
+   - vertical scale → [op-vertical-scale](skills/kubeblocks-op-vertical-scale/SKILL.md)
+   - volume expansion → [op-volume-expansion](skills/kubeblocks-op-volume-expansion/SKILL.md)
+   - parameters → [op-reconfigure](skills/kubeblocks-op-reconfigure/SKILL.md)
+   - backup → [op-backup](skills/kubeblocks-op-backup/SKILL.md)
+   - restore → [op-restore](skills/kubeblocks-op-restore/SKILL.md)
+   - expose → [op-expose](skills/kubeblocks-op-expose/SKILL.md)
+   - switchover → [op-switchover](skills/kubeblocks-op-switchover/SKILL.md)
+   - engine upgrade → [op-upgrade](skills/kubeblocks-op-upgrade/SKILL.md)
+   - account / password management → [manage-accounts](skills/kubeblocks-manage-accounts/SKILL.md)
+   - TLS / mTLS → [configure-tls](skills/kubeblocks-configure-tls/SKILL.md)
+   - safe deletion → [delete-cluster](skills/kubeblocks-delete-cluster/SKILL.md)
 
 6. **Observability**
+   - Broad observability ask → [observability-router](skills/kubeblocks-observability-router/SKILL.md)
    - Existing Prometheus/Grafana stack → [observability-existing-stack](skills/kubeblocks-observability-existing-stack/SKILL.md)
    - No monitoring base yet → [observability-bootstrap-stack](skills/kubeblocks-observability-bootstrap-stack/SKILL.md)
    - If the user only says “set up monitoring”, use the shim [setup-monitoring](skills/kubeblocks-setup-monitoring/SKILL.md), which routes to the right observability branch.
 
 7. **Troubleshooting**
-   Route to [troubleshoot](skills/kubeblocks-troubleshoot/SKILL.md).
+   Route to [troubleshoot](skills/kubeblocks-troubleshoot/SKILL.md) from any stage when state is unknown, capability is unclear, or observed behavior is broken.
+   For replica recovery or HA repair after troubleshooting, also consider [rebuild-replica](skills/kubeblocks-rebuild-replica/SKILL.md).
 
 ## Hard Routing Rules
 
-- Do **not** route MySQL, PostgreSQL, Redis, MongoDB, or Kafka to the generic [create-cluster](skills/kubeblocks-create-cluster/SKILL.md) path.
+- Do **not** route the Tier-1 engine set to [engine-generic](skills/kubeblocks-engine-generic/SKILL.md) or to any family/taxonomy-only explanation layer.
 - Do **not** provision a first-time database without going through [kubeblocks-preflight](skills/kubeblocks-preflight/SKILL.md) when environment readiness is unknown.
 - Do **not** equate “metrics exist” with “monitoring is delivered”. Observability must declare whether it is only `metrics-ready`, `scrape-ready`, `dashboard-ready`, or `alerting-ready`.
+- Do **not** recommend legacy `kubeblocks-addon-*`, `kubeblocks-create-cluster`, or old Day-2 names as the primary path when the corresponding `kubeblocks-engine-*`, `kubeblocks-engine-generic`, or `kubeblocks-op-*` entry exists.
 
 ## Recommendation Bundle Contract
 
@@ -78,4 +99,4 @@ Always route in this order:
 - **Existing Prometheus/Grafana**:
   Route to `observability-existing-stack`, not full monitoring bootstrap.
 - **Unknown or low-frequency engines**:
-  Only then use [create-cluster](skills/kubeblocks-create-cluster/SKILL.md) as the `other-addons` fallback.
+  Only then use [engine-generic](skills/kubeblocks-engine-generic/SKILL.md) as the `other-addons` fallback.

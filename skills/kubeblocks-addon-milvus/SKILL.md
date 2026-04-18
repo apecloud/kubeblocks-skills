@@ -2,10 +2,13 @@
 name: kubeblocks-addon-milvus
 metadata:
   version: "0.1.0"
-description: Deploy and manage Milvus vector database clusters on KubeBlocks for AI/ML workloads. Supports embedding similarity search, standalone (dev/test) and cluster (production) topologies. Use when the user mentions Milvus, vector database, AI embeddings, similarity search, or explicitly wants to create a Milvus cluster. Provides topology comparison, connection methods, and Day-2 operations. For generic cluster creation across all engines, see kubeblocks-create-cluster. For Day-2 operations (scaling, expose, etc.), use the corresponding operation skill.
+description: "Legacy compatibility shim for Milvus provisioning on KubeBlocks. The primary create-time entry is kubeblocks-engine-milvus. Keep this skill callable for older references, but do not recommend it as the main path for cold-start agents."
 ---
 
 # Deploy Milvus on KubeBlocks
+
+> Legacy compatibility shim. Primary entry: [kubeblocks-engine-milvus](../kubeblocks-engine-milvus/SKILL.md). Keep the preserved workflow below for detailed reference, but do not recommend this skill as the main path for cold-start agents.
+
 
 ## Overview
 

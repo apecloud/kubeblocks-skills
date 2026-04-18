@@ -2,10 +2,13 @@
 name: kubeblocks-vertical-scaling
 metadata:
   version: "0.1.0"
-description: Scale CPU and memory resources for KubeBlocks database clusters via OpsRequest (vertical scaling). Supports in-place updates when the feature gate is enabled. Use when the user wants to change, increase, decrease, resize, or adjust CPU or memory resources of a database cluster. NOT for adding/removing replicas or shards (see horizontal-scaling) or expanding disk storage (see volume-expansion).
+description: "Legacy compatibility shim for vertical scaling. The primary Day-2 entry is kubeblocks-op-vertical-scale. Keep this skill callable for older references, but do not recommend it as the main path for cold-start agents."
 ---
 
 # Vertical Scaling: Change CPU and Memory
+
+> Legacy compatibility shim. Primary entry: [kubeblocks-op-vertical-scale](../kubeblocks-op-vertical-scale/SKILL.md). Keep the preserved workflow below for detailed reference, but do not recommend this skill as the main path for cold-start agents.
+
 
 ## Overview
 

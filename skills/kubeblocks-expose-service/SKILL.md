@@ -2,10 +2,13 @@
 name: kubeblocks-expose-service
 metadata:
   version: "0.1.0"
-description: Expose KubeBlocks database clusters externally via LoadBalancer or NodePort services using the Expose OpsRequest. Includes cloud-specific annotations for AWS NLB, Azure LB, GCP, and Alibaba Cloud. Use when the user wants to access the database from outside the Kubernetes cluster, expose a service externally, set up external connectivity, or create a public endpoint. NOT for configuring internal ClusterIP services (default behavior) or setting up TLS for connections (see configure-tls).
+description: "Legacy compatibility shim for service exposure. The primary Day-2 entry is kubeblocks-op-expose. Keep this skill callable for older references, but do not recommend it as the main path for cold-start agents."
 ---
 
 # Expose Database Service Externally
+
+> Legacy compatibility shim. Primary entry: [kubeblocks-op-expose](../kubeblocks-op-expose/SKILL.md). Keep the preserved workflow below for detailed reference, but do not recommend this skill as the main path for cold-start agents.
+
 
 ## Overview
 
