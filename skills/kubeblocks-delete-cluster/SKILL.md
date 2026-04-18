@@ -1,11 +1,19 @@
 ---
 name: kubeblocks-delete-cluster
-metadata:
-  version: "0.1.0"
-description: Safely delete a KubeBlocks database cluster with pre-deletion checks for backups, PVCs, and dependent resources. Use when the user wants to remove, delete, destroy, tear down, or clean up a database cluster. NOT for stopping a cluster temporarily (see kubeblocks-cluster-lifecycle) or uninstalling the KubeBlocks operator (see kubeblocks-install skill).
+version: "0.2.0"
+description: Destructive lifecycle capability entry for removing an existing KubeBlocks cluster. Use when the user wants to decommission a database cluster and has explicitly confirmed the data-protection boundary. Do not confuse this with stop/start lifecycle actions or operator uninstall.
 ---
 
 # Delete a KubeBlocks Database Cluster
+
+This skill belongs to the **destructive lifecycle / data-protection boundary** for already-created clusters.
+
+## Entry Contract
+
+- Use this only after confirming the target cluster already exists and the user explicitly intends to decommission it.
+- Treat deletion as a lifecycle action gated by backup, restore, PVC, and `terminationPolicy` checks.
+- Use [kubeblocks-op-backup](../kubeblocks-op-backup/SKILL.md) or [kubeblocks-op-restore](../kubeblocks-op-restore/SKILL.md) before destructive deletion when recovery posture is unclear.
+- Route non-destructive stop/start needs to [kubeblocks-op-lifecycle](../kubeblocks-op-lifecycle/SKILL.md).
 
 ## Overview
 

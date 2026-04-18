@@ -1,0 +1,57 @@
+schema_version: v1alpha1
+description: >
+  Machine-readable observability support truth for cold-start agents. This
+  matrix states whether an engine has exporter evidence, scrape evidence,
+  dashboard evidence, alerting evidence, and what readiness ceiling can be
+  claimed without guessing.
+
+required_fields:
+  - engine
+  - entry_skill
+  - exporter
+  - scrape_examples
+  - dashboard_examples
+  - alerting_examples
+  - readiness_ceiling
+  - recommended_path
+  - docs_refs
+  - example_refs
+  - core_refs
+  - support_level
+  - evidence_confidence
+
+allowed_readiness_ceiling:
+  - none
+  - metrics-ready
+  - scrape-ready
+  - dashboard-ready
+  - alerting-ready
+
+allowed_support_levels:
+  - official
+  - provisional
+  - examples-only
+
+allowed_evidence_confidence:
+  - high
+  - medium
+  - low
+
+example:
+  engine: mysql
+  entry_skill: kubeblocks-observability-router
+  exporter: true
+  scrape_examples: true
+  dashboard_examples: false
+  alerting_examples: true
+  readiness_ceiling: alerting-ready
+  recommended_path: kubeblocks-observability-existing-stack
+  docs_refs:
+    - "kubeblocks-docs:supported-addons"
+  example_refs:
+    - examples/mysql/pod-monitor.yaml
+    - examples/mysql/alert-rules.yaml
+  core_refs:
+    - "kubeblocks-core:pkg/common/monitor.go"
+  support_level: official
+  evidence_confidence: high

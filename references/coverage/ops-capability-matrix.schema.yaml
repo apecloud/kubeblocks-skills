@@ -12,11 +12,18 @@ required_fields:
   - vertical_scale
   - volume_expansion
   - monitoring_exporter
+  - account
+  - logs
   - reconfigure
   - switchover
+  - failover_model
   - expose
   - backup
   - restore
+  - rebuild_instance
+  - core_refs
+  - support_level
+  - evidence_confidence
   - evidence_refs
 
 allowed_status_values:
@@ -24,6 +31,22 @@ allowed_status_values:
   - partial
   - unsupported
   - unknown
+
+allowed_failover_models:
+  - automatic
+  - manual
+  - not_applicable
+  - unknown
+
+allowed_support_levels:
+  - official
+  - provisional
+  - examples-only
+
+allowed_evidence_confidence:
+  - high
+  - medium
+  - low
 
 tier1_minimum_required:
   - start
@@ -43,11 +66,19 @@ example:
   vertical_scale: supported
   volume_expansion: supported
   monitoring_exporter: supported
+  account: supported
+  logs: supported
   reconfigure: supported
   switchover: supported
+  failover_model: automatic
   expose: supported
   backup: supported
   restore: supported
+  rebuild_instance: supported
+  core_refs:
+    - "kubeblocks-core:apis/operations/v1alpha1/opsrequest_types.go"
+  support_level: official
+  evidence_confidence: high
   evidence_refs:
     - examples/mysql/start.yaml
     - examples/mysql/stop.yaml

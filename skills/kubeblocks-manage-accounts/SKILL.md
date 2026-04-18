@@ -1,11 +1,19 @@
 ---
 name: kubeblocks-manage-accounts
-metadata:
-  version: "0.1.0"
-description: Manage database accounts and passwords for KubeBlocks clusters. Configure custom root passwords at cluster creation time and define password generation policies (length, complexity). Use when the user wants to set, change, reset, rotate, or customize database passwords, credentials, or account security policies. NOT for managing TLS/SSL certificates (see configure-tls) or for application-level database user management via SQL (connect directly to the database instead).
+version: "0.2.0"
+description: Access-security capability entry for account, password, and credential handling on existing KubeBlocks clusters. Use when the user wants to retrieve, rotate, reset, or preconfigure database credentials. Do not use this as a create-time primary entry; create-time routing still starts at preflight plus the dedicated engine skill.
 ---
 
 # Manage Database Accounts and Passwords
+
+This skill belongs to the **access-security capability layer** for already-created clusters.
+
+## Entry Contract
+
+- Prefer this skill only after the cluster already exists, or when a create-time path explicitly asks for credential preconfiguration.
+- Use [ops-capability-matrix](../../references/coverage/ops-capability-matrix.yaml) to confirm whether the target engine has `account` support, and use [addon-capability-matrix](../../references/coverage/addon-capability-matrix.yaml) for supporting docs/example evidence.
+- Keep this skill focused on system accounts, Secrets, and password policy. Do **not** treat it as SQL-level user management for arbitrary application users.
+- Route TLS / mTLS requests to [kubeblocks-configure-tls](../kubeblocks-configure-tls/SKILL.md), and broken-state credential recovery to [kubeblocks-troubleshoot](../kubeblocks-troubleshoot/SKILL.md).
 
 ## Overview
 

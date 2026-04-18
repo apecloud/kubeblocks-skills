@@ -6,6 +6,7 @@ The route contract defines three things:
 2. Allowed next hops for each intent
 3. Forbidden paths that must be treated as errors
 4. Legacy-name compatibility through `references/routing/shim-map.yaml`
+5. Evidence-backed truths through `engine-tier-map`, `engine-create-matrix`, `observability-capability-matrix`, and `ops-capability-matrix`
 
 Examples:
 
@@ -17,6 +18,7 @@ Examples:
 - broad monitoring request:
   - allowed next hop: `kubeblocks-observability-router`
   - follow-up: `existing-stack` or `bootstrap-stack`
+  - ceiling claim: only as high as `observability-capability-matrix.yaml` allows for that engine
 
 - old V1 engine entry names:
   - allowed only as shim targets
@@ -27,5 +29,6 @@ Examples:
   - forbidden as the primary create-time route for Tier-1 engines
 
 - runtime protocol:
-  - allowed only as optional templates under `references/templates/*`
+  - truth lives in `references/runtime/runtime-contract.yaml`
+  - allowed templates live under `references/templates/*`
   - forbidden as an implicit dependency for cold-start routing

@@ -1,11 +1,19 @@
 ---
 name: kubeblocks-rebuild-replica
-metadata:
-  version: "0.1.0"
-description: Rebuild a failed replica in MySQL or PostgreSQL clusters managed by KubeBlocks. Use when a replica's data is corrupted, the pod is in CrashLoopBackOff, replication is broken, or you need to recover or repair a secondary instance. NOT for planned switchover (see switchover) or full cluster restore (see restore).
+version: "0.2.0"
+description: Recovery capability entry for replica repair via RebuildInstance on existing KubeBlocks clusters. Use when a secondary is unrecoverable and normal failover is insufficient. Do not use this as a create-time entry or as a substitute for planned switchover or full restore.
 ---
 
 # Rebuild Failed Replica
+
+This skill belongs to the **recovery capability layer** and should normally be entered only after diagnosis.
+
+## Entry Contract
+
+- Prefer [kubeblocks-troubleshoot](../kubeblocks-troubleshoot/SKILL.md) first when the failure mode is still unclear.
+- Use this skill when the engine supports `rebuild_instance` and the problem is specifically replica repair, not planned switchover or whole-cluster restore.
+- Use [ops-capability-matrix](../../references/coverage/ops-capability-matrix.yaml) to confirm the target engine supports `rebuild_instance`, and use [addon-capability-matrix](../../references/coverage/addon-capability-matrix.yaml) for example evidence.
+- Route planned topology changes to [kubeblocks-op-switchover](../kubeblocks-op-switchover/SKILL.md) and data rehydration from backup to [kubeblocks-op-restore](../kubeblocks-op-restore/SKILL.md).
 
 ## Overview
 

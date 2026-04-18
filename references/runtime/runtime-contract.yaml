@@ -1,0 +1,60 @@
+schema_version: v1alpha1
+artifacts:
+  - name: environment-profile
+    path_pattern: .kubeblocks-agent/state/environment-profile.yaml
+    template_ref: references/templates/environment-profile-template.yaml
+    required_fields:
+      - generated_at
+      - refresh_after
+      - kube_context
+      - kubeblocks_version
+      - storage_summary
+      - observability_summary
+      - risk_flags
+      - recommendation_bundle
+    freshness_field: refresh_after
+  - name: route-context
+    path_pattern: .kubeblocks-agent/state/route-context.yaml
+    template_ref: references/templates/route-context-template.yaml
+    required_fields:
+      - generated_at
+      - refresh_after
+      - user_intent
+      - chosen_route
+      - rejected_routes
+      - why_not_generic
+      - why_not_family
+    freshness_field: refresh_after
+  - name: cluster-state
+    path_pattern: .kubeblocks-agent/state/cluster-<name>.yaml
+    template_ref: references/templates/cluster-state-template.yaml
+    required_fields:
+      - captured_at
+      - refresh_after
+      - cluster_name
+      - engine
+      - topology
+      - service_version
+      - storage_class
+      - supported_ops_snapshot
+      - observability_mode
+    freshness_field: refresh_after
+  - name: action-log-record
+    path_pattern: .kubeblocks-agent/logs/<timestamp>.jsonl
+    template_ref: references/templates/action-log-record.schema.yaml
+    required_fields:
+      - ts
+      - skill
+      - action
+      - target
+      - result
+      - rollback_hint
+  - name: handoff
+    path_pattern: .kubeblocks-agent/HANDOFF.md
+    template_ref: references/templates/handoff-template.md
+    required_sections:
+      - Current State
+      - Verified Facts
+      - Open Risks
+      - Next Safe Action
+      - Rollback Boundary

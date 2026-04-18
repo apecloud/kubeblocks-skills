@@ -15,10 +15,41 @@ from repo_checks import (
     load_yaml_rel,
     markdown_files,
     reference_only_family_routes,
+    require_keys,
     skill_files,
     skill_name_map,
     valid_route_target,
 )
+
+ALLOWED_SUPPORT_LEVELS = {"official", "provisional", "examples-only"}
+ALLOWED_EVIDENCE_CONFIDENCE = {"high", "medium", "low"}
+ALLOWED_READINESS_CEILINGS = {
+    "none",
+    "metrics-ready",
+    "scrape-ready",
+    "dashboard-ready",
+    "alerting-ready",
+}
+
+
+def require_string_list(
+    record: dict,
+    key: str,
+    label: str,
+    errors: list[str],
+    *,
+    allow_empty: bool = False,
+):
+    values = record.get(key)
+    if not isinstance(values, list):
+        errors.append(f"{label}: `{key}` must be a list")
+        return
+    if not allow_empty and not values:
+        errors.append(f"{label}: `{key}` must not be empty")
+        return
+    for value in values:
+        if not isinstance(value, str) or not value:
+            errors.append(f"{label}: `{key}` entries must be non-empty strings")
 
 
 def main():
@@ -73,7 +104,15 @@ def main():
     if not coverage_fixture.get("required_tier1_engines"):
         errors.append("tests/fixtures/coverage/tier1-required-engines.yaml: missing required_tier1_engines")
     min_ops = load_yaml_rel("tests/fixtures/coverage/tier1-min-ops.yaml") or {}
-    for key in ["required_columns", "required_status_columns", "allowed_status_values"]:
+    for key in [
+        "required_columns",
+        "required_status_columns",
+        "allowed_status_values",
+        "required_enum_columns",
+        "allowed_failover_models",
+        "allowed_support_levels",
+        "allowed_evidence_confidence",
+    ]:
         if not min_ops.get(key):
             errors.append(f"tests/fixtures/coverage/tier1-min-ops.yaml: missing `{key}`")
 
@@ -82,6 +121,161 @@ def main():
         for target in record.get("required_profiles", []) + record.get("follow_up_routes", []) + record.get("forbidden_routes", []):
             if not valid_route_target(target, skill_names, family_routes):
                 errors.append(f"references/routing/route-matrix.yaml:{record.get('intent')}: unknown target `{target}`")
+
+    tier1_required = set(coverage_fixture.get("required_tier1_engines", []))
+    engine_create_matrix = load_yaml_rel("references/coverage/engine-create-matrix.yaml") or {}
+    engine_create_records = {
+        record.get("engine"): record for record in engine_create_matrix.get("records", [])
+    }
+    for engine in sorted(tier1_required):
+        label = f"references/coverage/engine-create-matrix.yaml:{engine}"
+        record = engine_create_records.get(engine)
+        if record is None:
+            errors.append(f"{label}: missing Tier-1 record")
+            continue
+        require_keys(
+            record,
+            [
+                "engine",
+                "entry_skill",
+                "topology_options",
+                "default_topology",
+                "service_version_strategy",
+                "preflight_requirements",
+                "sizing_profiles",
+                "connection_methods",
+                "next_hops",
+                "forbidden_routes",
+                "docs_refs",
+                "example_refs",
+                "core_refs",
+                "support_level",
+                "evidence_confidence",
+            ],
+            label,
+            errors,
+        )
+        expected_entry = f"kubeblocks-engine-{engine}"
+        if record.get("entry_skill") != expected_entry:
+            errors.append(f"{label}: expected entry_skill `{expected_entry}`")
+        elif record["entry_skill"] not in skill_names:
+            errors.append(f"{label}: unknown entry_skill `{record['entry_skill']}`")
+        if record.get("support_level") not in ALLOWED_SUPPORT_LEVELS:
+            errors.append(f"{label}: invalid support_level `{record.get('support_level')}`")
+        if record.get("evidence_confidence") not in ALLOWED_EVIDENCE_CONFIDENCE:
+            errors.append(
+                f"{label}: invalid evidence_confidence `{record.get('evidence_confidence')}`"
+            )
+        require_string_list(record, "docs_refs", label, errors)
+        require_string_list(record, "example_refs", label, errors)
+        require_string_list(record, "core_refs", label, errors)
+        if record.get("default_topology") not in record.get("topology_options", []):
+            errors.append(f"{label}: default_topology must be present in topology_options")
+        for key in ["preflight_requirements", "sizing_profiles", "connection_methods"]:
+            require_string_list(record, key, label, errors)
+        for key in ["next_hops", "forbidden_routes"]:
+            require_string_list(record, key, label, errors)
+            for target in record.get(key, []):
+                if not valid_route_target(target, skill_names, family_routes):
+                    errors.append(f"{label}: unknown route target `{target}` in `{key}`")
+
+    observability_matrix = load_yaml_rel(
+        "references/coverage/observability-capability-matrix.yaml"
+    ) or {}
+    observability_records = {
+        record.get("engine"): record
+        for record in observability_matrix.get("records", [])
+    }
+    for engine in sorted(tier1_required):
+        label = f"references/coverage/observability-capability-matrix.yaml:{engine}"
+        record = observability_records.get(engine)
+        if record is None:
+            errors.append(f"{label}: missing Tier-1 record")
+            continue
+        require_keys(
+            record,
+            [
+                "engine",
+                "entry_skill",
+                "exporter",
+                "scrape_examples",
+                "dashboard_examples",
+                "alerting_examples",
+                "readiness_ceiling",
+                "recommended_path",
+                "docs_refs",
+                "example_refs",
+                "core_refs",
+                "support_level",
+                "evidence_confidence",
+            ],
+            label,
+            errors,
+        )
+        if record.get("entry_skill") != "kubeblocks-observability-router":
+            errors.append(f"{label}: entry_skill must be `kubeblocks-observability-router`")
+        elif record["entry_skill"] not in skill_names:
+            errors.append(f"{label}: unknown entry_skill `{record['entry_skill']}`")
+        if record.get("recommended_path") not in skill_names:
+            errors.append(
+                f"{label}: unknown recommended_path `{record.get('recommended_path')}`"
+            )
+        if record.get("readiness_ceiling") not in ALLOWED_READINESS_CEILINGS:
+            errors.append(
+                f"{label}: invalid readiness_ceiling `{record.get('readiness_ceiling')}`"
+            )
+        if record.get("support_level") not in ALLOWED_SUPPORT_LEVELS:
+            errors.append(f"{label}: invalid support_level `{record.get('support_level')}`")
+        if record.get("evidence_confidence") not in ALLOWED_EVIDENCE_CONFIDENCE:
+            errors.append(
+                f"{label}: invalid evidence_confidence `{record.get('evidence_confidence')}`"
+            )
+        require_string_list(record, "docs_refs", label, errors)
+        require_string_list(
+            record,
+            "example_refs",
+            label,
+            errors,
+            allow_empty=not bool(record.get("exporter")),
+        )
+        require_string_list(record, "core_refs", label, errors)
+
+    runtime_contract = load_yaml_rel("references/runtime/runtime-contract.yaml") or {}
+    artifacts = runtime_contract.get("artifacts", [])
+    if not artifacts:
+        errors.append("references/runtime/runtime-contract.yaml: missing `artifacts`")
+    for artifact in artifacts:
+        label = f"references/runtime/runtime-contract.yaml:{artifact.get('name')}"
+        if "template_ref" not in artifact:
+            errors.append(f"{label}: missing `template_ref`")
+            continue
+        template_path = ROOT / artifact["template_ref"]
+        if not template_path.exists():
+            errors.append(f"{label}: missing template `{artifact['template_ref']}`")
+            continue
+        if template_path.suffix == ".md":
+            text = template_path.read_text(encoding="utf-8")
+            for section in artifact.get("required_sections", []):
+                if f"## {section}" not in text:
+                    errors.append(
+                        f"{label}: template `{artifact['template_ref']}` missing heading `{section}`"
+                    )
+        else:
+            template = load_yaml(template_path) or {}
+            required_fields = artifact.get("required_fields", [])
+            if template_path.name.endswith(".schema.yaml"):
+                template_fields = template.get("required_fields", [])
+                missing = [field for field in required_fields if field not in template_fields]
+                if missing:
+                    errors.append(
+                        f"{label}: template `{artifact['template_ref']}` missing required_fields {missing}"
+                    )
+            else:
+                for field in required_fields:
+                    if field not in template:
+                        errors.append(
+                            f"{label}: template `{artifact['template_ref']}` missing field `{field}`"
+                        )
 
     shim_pairs = load_shim_pairs()
     shim_fixture_pairs = load_shim_pairs("tests/fixtures/migrations/v1-shims.yaml")
@@ -96,7 +290,14 @@ def main():
         "references/coverage/engine-tier-map.yaml",
         "references/coverage/addon-capability-matrix.yaml",
         "references/coverage/ops-capability-matrix.yaml",
+        "references/coverage/engine-create-matrix.yaml",
+        "references/coverage/observability-capability-matrix.yaml",
         "references/routing/route-matrix.yaml",
+        "references/runtime/runtime-contract.yaml",
+        "references/coverage/addon-capability-matrix.schema.yaml",
+        "references/coverage/ops-capability-matrix.schema.yaml",
+        "references/coverage/engine-create-matrix.schema.yaml",
+        "references/coverage/observability-capability-matrix.schema.yaml",
     ]:
         if not (ROOT / rel).exists():
             errors.append(f"{rel}: missing")

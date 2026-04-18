@@ -1,0 +1,227 @@
+schema_version: v1alpha1
+records:
+  - engine: mysql
+    entry_skill: kubeblocks-engine-mysql
+    topology_options: [semisync, mgr, orchestrator, proxysql]
+    default_topology: semisync
+    service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+    preflight_requirements: [storage_class, volume_binding_mode, addon_readiness, observability_mode]
+    sizing_profiles: [demo, production]
+    connection_methods: [in-cluster service, port-forward, exposed service]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-op-reconfigure, kubeblocks-op-backup, kubeblocks-observability-router]
+    forbidden_routes: [kubeblocks-engine-generic, kubeblocks-family-sql, kubeblocks-addon-mysql]
+    docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/mysql/README.md]
+    example_refs: [examples/mysql/cluster.yaml, examples/mysql/cluster-mgr.yaml, examples/mysql/cluster-orc.yaml, examples/mysql/cluster-proxysql.yaml]
+    core_refs: ["kubeblocks-core:apis/apps/v1/cluster_types.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: postgresql
+    entry_skill: kubeblocks-engine-postgresql
+    topology_options: [replication, replication-with-etcd]
+    default_topology: replication
+    service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+    preflight_requirements: [storage_class, volume_binding_mode, addon_readiness, observability_mode]
+    sizing_profiles: [demo, production]
+    connection_methods: [in-cluster service, port-forward, exposed service]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-op-reconfigure, kubeblocks-op-backup, kubeblocks-observability-router]
+    forbidden_routes: [kubeblocks-engine-generic, kubeblocks-family-sql, kubeblocks-addon-postgresql]
+    docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/postgresql/README.md]
+    example_refs: [examples/postgresql/cluster.yaml, examples/postgresql/cluster-with-etcd.yaml]
+    core_refs: ["kubeblocks-core:apis/apps/v1/cluster_types.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: redis
+    entry_skill: kubeblocks-engine-redis
+    topology_options: [standalone, replication, sharding]
+    default_topology: replication
+    service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+    preflight_requirements: [storage_class, volume_binding_mode, addon_readiness, observability_mode]
+    sizing_profiles: [demo, production]
+    connection_methods: [in-cluster service, port-forward, exposed service]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-op-reconfigure, kubeblocks-op-backup, kubeblocks-observability-router]
+    forbidden_routes: [kubeblocks-engine-generic, kubeblocks-addon-redis]
+    docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/redis/README.md]
+    example_refs: [examples/redis/cluster-standalone.yaml, examples/redis/cluster.yaml, examples/redis/cluster-sharding.yaml, examples/redis/cluster-twemproxy.yaml]
+    core_refs: ["kubeblocks-core:apis/apps/v1/cluster_types.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: mongodb
+    entry_skill: kubeblocks-engine-mongodb
+    topology_options: [replicaset, sharding]
+    default_topology: replicaset
+    service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+    preflight_requirements: [storage_class, volume_binding_mode, addon_readiness]
+    sizing_profiles: [demo, production]
+    connection_methods: [in-cluster service, port-forward, exposed service]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-op-backup, kubeblocks-observability-router]
+    forbidden_routes: [kubeblocks-engine-generic, kubeblocks-addon-mongodb]
+    docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/mongodb/README.md]
+    example_refs: [examples/mongodb/cluster.yaml]
+    core_refs: ["kubeblocks-core:apis/apps/v1/cluster_types.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: kafka
+    entry_skill: kubeblocks-engine-kafka
+    topology_options: [combined, separated]
+    default_topology: combined
+    service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+    preflight_requirements: [storage_class, volume_binding_mode, addon_readiness, observability_mode]
+    sizing_profiles: [demo, production]
+    connection_methods: [in-cluster service, port-forward, nodeport-or-loadbalancer]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-op-reconfigure, kubeblocks-observability-router]
+    forbidden_routes: [kubeblocks-engine-generic, kubeblocks-family-streaming, kubeblocks-addon-kafka, kubeblocks-engine-pulsar, kubeblocks-engine-rabbitmq]
+    docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/kafka/README.md]
+    example_refs: [examples/kafka/cluster-combined.yaml, examples/kafka/cluster-separated.yaml]
+    core_refs: ["kubeblocks-core:apis/apps/v1/cluster_types.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: elasticsearch
+    entry_skill: kubeblocks-engine-elasticsearch
+    topology_options: [single-node, multi-node]
+    default_topology: multi-node
+    service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+    preflight_requirements: [storage_class, volume_binding_mode, addon_readiness]
+    sizing_profiles: [demo, production]
+    connection_methods: [in-cluster service, port-forward, exposed service]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-op-expose, kubeblocks-observability-router]
+    forbidden_routes: [kubeblocks-engine-generic, kubeblocks-family-search, kubeblocks-addon-elasticsearch, kubeblocks-engine-opensearch]
+    docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/elasticsearch/README.md]
+    example_refs: [examples/elasticsearch/cluster-multi-node.yaml]
+    core_refs: ["kubeblocks-core:apis/apps/v1/cluster_types.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: milvus
+    entry_skill: kubeblocks-engine-milvus
+    topology_options: [standalone, cluster]
+    default_topology: cluster
+    service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+    preflight_requirements: [storage_class, volume_binding_mode, addon_readiness, dependency_clusters]
+    sizing_profiles: [demo, production]
+    connection_methods: [in-cluster service, port-forward]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-observability-router]
+    forbidden_routes: [kubeblocks-engine-generic, kubeblocks-family-vector, kubeblocks-addon-milvus, kubeblocks-engine-qdrant]
+    docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/milvus/README.md]
+    example_refs: [examples/milvus/cluster-standalone.yaml, examples/milvus/cluster.yaml]
+    core_refs: ["kubeblocks-core:apis/apps/v1/cluster_types.go"]
+    support_level: official
+    evidence_confidence: medium
+  - engine: qdrant
+    entry_skill: kubeblocks-engine-qdrant
+    topology_options: [single-node, cluster]
+    default_topology: cluster
+    service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+    preflight_requirements: [storage_class, volume_binding_mode, addon_readiness]
+    sizing_profiles: [demo, production]
+    connection_methods: [in-cluster service, port-forward, exposed service]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-op-backup, kubeblocks-observability-router]
+    forbidden_routes: [kubeblocks-engine-generic, kubeblocks-family-vector, kubeblocks-addon-qdrant, kubeblocks-engine-milvus]
+    docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/qdrant/README.md]
+    example_refs: [examples/qdrant/cluster.yaml]
+    core_refs: ["kubeblocks-core:apis/apps/v1/cluster_types.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: rabbitmq
+    entry_skill: kubeblocks-engine-rabbitmq
+    topology_options: [single-node, cluster]
+    default_topology: cluster
+    service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+    preflight_requirements: [storage_class, volume_binding_mode, addon_readiness, observability_mode]
+    sizing_profiles: [demo, production]
+    connection_methods: [in-cluster service, port-forward, exposed service]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-op-reconfigure, kubeblocks-observability-router]
+    forbidden_routes: [kubeblocks-engine-generic, kubeblocks-family-streaming, kubeblocks-addon-rabbitmq, kubeblocks-engine-kafka, kubeblocks-engine-pulsar]
+    docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/rabbitmq/README.md]
+    example_refs: [examples/rabbitmq/cluster.yaml]
+    core_refs: ["kubeblocks-core:apis/apps/v1/cluster_types.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: clickhouse
+    entry_skill: kubeblocks-engine-clickhouse
+    topology_options: [standalone, sharding, keeper]
+    default_topology: sharding
+    service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+    preflight_requirements: [storage_class, volume_binding_mode, addon_readiness, observability_mode]
+    sizing_profiles: [demo, production]
+    connection_methods: [in-cluster service, port-forward, nodeport-or-loadbalancer]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-op-backup, kubeblocks-observability-router]
+    forbidden_routes: [kubeblocks-engine-generic, kubeblocks-family-ts-analytics]
+    docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/clickhouse/README.md]
+    example_refs: [examples/clickhouse/cluster-standalone.yaml, examples/clickhouse/cluster.yaml, examples/clickhouse/cluster-with-nodeport.yaml]
+    core_refs: ["kubeblocks-core:apis/apps/v1/cluster_types.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: mariadb
+    entry_skill: kubeblocks-engine-mariadb
+    topology_options: [replication]
+    default_topology: replication
+    service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+    preflight_requirements: [storage_class, volume_binding_mode, addon_readiness]
+    sizing_profiles: [demo, production]
+    connection_methods: [in-cluster service, port-forward]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-vertical-scale, kubeblocks-observability-router]
+    forbidden_routes: [kubeblocks-engine-generic, kubeblocks-family-sql, kubeblocks-engine-mysql]
+    docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/mariadb/README.md]
+    example_refs: [examples/mariadb/cluster.yaml]
+    core_refs: ["kubeblocks-core:apis/apps/v1/cluster_types.go"]
+    support_level: official
+    evidence_confidence: medium
+  - engine: minio
+    entry_skill: kubeblocks-engine-minio
+    topology_options: [standalone, distributed]
+    default_topology: distributed
+    service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+    preflight_requirements: [storage_class, volume_binding_mode, addon_readiness]
+    sizing_profiles: [demo, production]
+    connection_methods: [in-cluster service, port-forward]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-observability-router]
+    forbidden_routes: [kubeblocks-engine-generic]
+    docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/minio/README.md]
+    example_refs: [examples/minio/cluster.yaml]
+    core_refs: ["kubeblocks-core:apis/apps/v1/cluster_types.go"]
+    support_level: official
+    evidence_confidence: medium
+  - engine: opensearch
+    entry_skill: kubeblocks-engine-opensearch
+    topology_options: [single-node, multi-node]
+    default_topology: multi-node
+    service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+    preflight_requirements: [storage_class, volume_binding_mode, addon_readiness]
+    sizing_profiles: [demo, production]
+    connection_methods: [in-cluster service, port-forward, exposed service]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-op-expose, kubeblocks-observability-router]
+    forbidden_routes: [kubeblocks-engine-generic, kubeblocks-family-search, kubeblocks-engine-elasticsearch]
+    docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/opensearch/README.md]
+    example_refs: [examples/opensearch/cluster.yaml]
+    core_refs: ["kubeblocks-core:apis/apps/v1/cluster_types.go"]
+    support_level: official
+    evidence_confidence: medium
+  - engine: pulsar
+    entry_skill: kubeblocks-engine-pulsar
+    topology_options: [basic, enhanced, external-zookeeper]
+    default_topology: basic
+    service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+    preflight_requirements: [storage_class, volume_binding_mode, addon_readiness, dependency_clusters]
+    sizing_profiles: [demo, production]
+    connection_methods: [in-cluster service, port-forward, nodeport-or-loadbalancer]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-op-reconfigure, kubeblocks-observability-router]
+    forbidden_routes: [kubeblocks-engine-generic, kubeblocks-family-streaming, kubeblocks-engine-kafka, kubeblocks-engine-rabbitmq]
+    docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/pulsar/README.md]
+    example_refs: [examples/pulsar/cluster-basic.yaml, examples/pulsar/cluster-enhanced.yaml, examples/pulsar/cluster-service-refer.yaml]
+    core_refs: ["kubeblocks-core:apis/apps/v1/cluster_types.go"]
+    support_level: official
+    evidence_confidence: medium
+  - engine: tidb
+    entry_skill: kubeblocks-engine-tidb
+    topology_options: [standard, with-tiflash]
+    default_topology: standard
+    service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+    preflight_requirements: [storage_class, volume_binding_mode, addon_readiness, observability_mode]
+    sizing_profiles: [demo, production]
+    connection_methods: [in-cluster service, port-forward]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-observability-router]
+    forbidden_routes: [kubeblocks-engine-generic, kubeblocks-family-sql, kubeblocks-engine-mysql, kubeblocks-engine-postgresql]
+    docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/tidb/README.md]
+    example_refs: [examples/tidb/cluster.yaml]
+    core_refs: ["kubeblocks-core:apis/apps/v1/cluster_types.go"]
+    support_level: official
+    evidence_confidence: medium

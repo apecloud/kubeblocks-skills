@@ -49,10 +49,15 @@ def main():
             load_yaml_rel("references/coverage/addon-capability-matrix.yaml") or {}
         ).get("records", [])
     }
+    addon_schema = load_yaml_rel("references/coverage/addon-capability-matrix.schema.yaml") or {}
     approved_families = {
         route.removeprefix("kubeblocks-family-")
         for route in reference_only_family_routes()
     }
+    allowed_support_levels = set(addon_schema.get("allowed_support_levels", []))
+    allowed_evidence_confidence = set(
+        addon_schema.get("allowed_evidence_confidence", [])
+    )
 
     for engine in sorted(required):
         tier_record = tier_map.get(engine)
@@ -86,6 +91,17 @@ def main():
             errors.append(f"addon-capability-matrix:{engine}: example_refs must not be empty")
         if not addon_record.get("docs_refs"):
             errors.append(f"addon-capability-matrix:{engine}: docs_refs must not be empty")
+        if not addon_record.get("core_refs"):
+            errors.append(f"addon-capability-matrix:{engine}: core_refs must not be empty")
+        if addon_record.get("support_level") not in allowed_support_levels:
+            errors.append(
+                f"addon-capability-matrix:{engine}: invalid support_level `{addon_record.get('support_level')}`"
+            )
+        if addon_record.get("evidence_confidence") not in allowed_evidence_confidence:
+            errors.append(
+                "addon-capability-matrix:"
+                f"{engine}: invalid evidence_confidence `{addon_record.get('evidence_confidence')}`"
+            )
 
         addon_repo_path = addon_record.get("addon_repo_path")
         if not addon_repo_path:
@@ -98,6 +114,11 @@ def main():
         for ref in addon_record.get("example_refs", []):
             if addons_repo.exists() and not (addons_repo / ref).exists():
                 errors.append(f"addon-capability-matrix:{engine}: missing example ref {ref}")
+        for ref in addon_record.get("core_refs", []):
+            if not str(ref).startswith("kubeblocks-core:"):
+                errors.append(
+                    f"addon-capability-matrix:{engine}: core_ref must start with `kubeblocks-core:` ({ref})"
+                )
 
     for item in errors:
         print(f"ERROR: {item}")

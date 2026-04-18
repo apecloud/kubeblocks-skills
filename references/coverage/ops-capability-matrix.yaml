@@ -8,11 +8,21 @@ records:
     vertical_scale: supported
     volume_expansion: supported
     monitoring_exporter: supported
+    account: supported
+    logs: supported
     reconfigure: supported
     switchover: supported
+    failover_model: automatic
     expose: supported
     backup: supported
     restore: supported
+    rebuild_instance: supported
+    core_refs:
+      - "kubeblocks-core:apis/operations/v1alpha1/opsrequest_types.go"
+      - "kubeblocks-core:apis/dataprotection/v1alpha1/backup_types.go"
+      - "kubeblocks-core:apis/dataprotection/v1alpha1/restore_types.go"
+    support_level: official
+    evidence_confidence: high
     evidence_refs:
       - examples/mysql/start.yaml
       - examples/mysql/stop.yaml
@@ -26,6 +36,7 @@ records:
       - examples/mysql/expose-enable.yaml
       - examples/mysql/backup.yaml
       - examples/mysql/restore.yaml
+      - examples/mysql/rebuild-instance.yaml
   - engine: postgresql
     start: supported
     stop: supported
@@ -34,11 +45,21 @@ records:
     vertical_scale: supported
     volume_expansion: supported
     monitoring_exporter: supported
+    account: supported
+    logs: supported
     reconfigure: supported
     switchover: supported
+    failover_model: automatic
     expose: supported
     backup: supported
     restore: supported
+    rebuild_instance: supported
+    core_refs:
+      - "kubeblocks-core:apis/operations/v1alpha1/opsrequest_types.go"
+      - "kubeblocks-core:apis/dataprotection/v1alpha1/backup_types.go"
+      - "kubeblocks-core:apis/dataprotection/v1alpha1/restore_types.go"
+    support_level: official
+    evidence_confidence: high
     evidence_refs:
       - examples/postgresql/start.yaml
       - examples/postgresql/stop.yaml
@@ -52,6 +73,7 @@ records:
       - examples/postgresql/expose-enable.yaml
       - examples/postgresql/backup-pg-basebasekup.yaml
       - examples/postgresql/restore.yaml
+      - examples/postgresql/rebuild.yaml
   - engine: redis
     start: supported
     stop: supported
@@ -60,11 +82,21 @@ records:
     vertical_scale: supported
     volume_expansion: supported
     monitoring_exporter: supported
+    account: supported
+    logs: supported
     reconfigure: supported
     switchover: supported
+    failover_model: automatic
     expose: supported
     backup: supported
     restore: supported
+    rebuild_instance: unsupported
+    core_refs:
+      - "kubeblocks-core:apis/operations/v1alpha1/opsrequest_types.go"
+      - "kubeblocks-core:apis/dataprotection/v1alpha1/backup_types.go"
+      - "kubeblocks-core:apis/dataprotection/v1alpha1/restore_types.go"
+    support_level: official
+    evidence_confidence: high
     evidence_refs:
       - examples/redis/start.yaml
       - examples/redis/stop.yaml
@@ -86,11 +118,21 @@ records:
     vertical_scale: supported
     volume_expansion: supported
     monitoring_exporter: unsupported
+    account: supported
+    logs: supported
     reconfigure: supported
     switchover: supported
+    failover_model: automatic
     expose: supported
     backup: supported
     restore: supported
+    rebuild_instance: unsupported
+    core_refs:
+      - "kubeblocks-core:apis/operations/v1alpha1/opsrequest_types.go"
+      - "kubeblocks-core:apis/dataprotection/v1alpha1/backup_types.go"
+      - "kubeblocks-core:apis/dataprotection/v1alpha1/restore_types.go"
+    support_level: official
+    evidence_confidence: high
     evidence_refs:
       - examples/mongodb/start.yaml
       - examples/mongodb/stop.yaml
@@ -111,11 +153,19 @@ records:
     vertical_scale: supported
     volume_expansion: supported
     monitoring_exporter: supported
+    account: unknown
+    logs: supported
     reconfigure: supported
     switchover: unsupported
+    failover_model: not_applicable
     expose: partial
     backup: unsupported
     restore: unsupported
+    rebuild_instance: unsupported
+    core_refs:
+      - "kubeblocks-core:apis/operations/v1alpha1/opsrequest_types.go"
+    support_level: official
+    evidence_confidence: high
     evidence_refs:
       - examples/kafka/start.yaml
       - examples/kafka/stop.yaml
@@ -134,11 +184,19 @@ records:
     vertical_scale: supported
     volume_expansion: supported
     monitoring_exporter: supported
+    account: unknown
+    logs: supported
     reconfigure: unsupported
     switchover: unsupported
+    failover_model: not_applicable
     expose: supported
     backup: unsupported
     restore: unsupported
+    rebuild_instance: unsupported
+    core_refs:
+      - "kubeblocks-core:apis/operations/v1alpha1/opsrequest_types.go"
+    support_level: official
+    evidence_confidence: high
     evidence_refs:
       - examples/elasticsearch/start.yaml
       - examples/elasticsearch/stop.yaml
@@ -156,11 +214,19 @@ records:
     vertical_scale: supported
     volume_expansion: unsupported
     monitoring_exporter: supported
+    account: unknown
+    logs: supported
     reconfigure: unsupported
     switchover: unsupported
+    failover_model: not_applicable
     expose: unsupported
     backup: unsupported
     restore: unsupported
+    rebuild_instance: unsupported
+    core_refs:
+      - "kubeblocks-core:apis/operations/v1alpha1/opsrequest_types.go"
+    support_level: official
+    evidence_confidence: medium
     evidence_refs:
       - examples/milvus/start.yaml
       - examples/milvus/stop.yaml
@@ -176,11 +242,21 @@ records:
     vertical_scale: supported
     volume_expansion: supported
     monitoring_exporter: supported
+    account: unknown
+    logs: supported
     reconfigure: unsupported
     switchover: unsupported
+    failover_model: not_applicable
     expose: unsupported
     backup: supported
     restore: supported
+    rebuild_instance: unsupported
+    core_refs:
+      - "kubeblocks-core:apis/operations/v1alpha1/opsrequest_types.go"
+      - "kubeblocks-core:apis/dataprotection/v1alpha1/backup_types.go"
+      - "kubeblocks-core:apis/dataprotection/v1alpha1/restore_types.go"
+    support_level: official
+    evidence_confidence: high
     evidence_refs:
       - examples/qdrant/start.yaml
       - examples/qdrant/stop.yaml
@@ -199,11 +275,19 @@ records:
     vertical_scale: supported
     volume_expansion: supported
     monitoring_exporter: supported
+    account: unknown
+    logs: supported
     reconfigure: supported
     switchover: unsupported
+    failover_model: automatic
     expose: supported
     backup: unsupported
     restore: unsupported
+    rebuild_instance: unsupported
+    core_refs:
+      - "kubeblocks-core:apis/operations/v1alpha1/opsrequest_types.go"
+    support_level: official
+    evidence_confidence: high
     evidence_refs:
       - examples/rabbitmq/start.yaml
       - examples/rabbitmq/stop.yaml
@@ -222,11 +306,21 @@ records:
     vertical_scale: supported
     volume_expansion: supported
     monitoring_exporter: supported
+    account: unknown
+    logs: supported
     reconfigure: supported
     switchover: supported
+    failover_model: manual
     expose: supported
     backup: supported
     restore: supported
+    rebuild_instance: unsupported
+    core_refs:
+      - "kubeblocks-core:apis/operations/v1alpha1/opsrequest_types.go"
+      - "kubeblocks-core:apis/dataprotection/v1alpha1/backup_types.go"
+      - "kubeblocks-core:apis/dataprotection/v1alpha1/restore_types.go"
+    support_level: official
+    evidence_confidence: high
     evidence_refs:
       - examples/clickhouse/start.yaml
       - examples/clickhouse/stop.yaml
@@ -248,11 +342,19 @@ records:
     vertical_scale: supported
     volume_expansion: supported
     monitoring_exporter: unsupported
+    account: unknown
+    logs: supported
     reconfigure: unsupported
     switchover: unsupported
+    failover_model: unknown
     expose: unsupported
     backup: unsupported
     restore: unsupported
+    rebuild_instance: unsupported
+    core_refs:
+      - "kubeblocks-core:apis/operations/v1alpha1/opsrequest_types.go"
+    support_level: official
+    evidence_confidence: medium
     evidence_refs:
       - examples/mariadb/start.yaml
       - examples/mariadb/stop.yaml
@@ -267,11 +369,19 @@ records:
     vertical_scale: supported
     volume_expansion: unsupported
     monitoring_exporter: unsupported
+    account: unknown
+    logs: supported
     reconfigure: unsupported
     switchover: unsupported
+    failover_model: not_applicable
     expose: unsupported
     backup: unsupported
     restore: unsupported
+    rebuild_instance: unsupported
+    core_refs:
+      - "kubeblocks-core:apis/operations/v1alpha1/opsrequest_types.go"
+    support_level: official
+    evidence_confidence: medium
     evidence_refs:
       - examples/minio/start.yaml
       - examples/minio/stop.yaml
@@ -286,11 +396,19 @@ records:
     vertical_scale: supported
     volume_expansion: supported
     monitoring_exporter: unsupported
+    account: unknown
+    logs: supported
     reconfigure: unsupported
     switchover: unsupported
+    failover_model: not_applicable
     expose: unsupported
     backup: unsupported
     restore: unsupported
+    rebuild_instance: unsupported
+    core_refs:
+      - "kubeblocks-core:apis/operations/v1alpha1/opsrequest_types.go"
+    support_level: official
+    evidence_confidence: medium
     evidence_refs:
       - examples/opensearch/start.yaml
       - examples/opensearch/stop.yaml
@@ -306,11 +424,19 @@ records:
     vertical_scale: supported
     volume_expansion: supported
     monitoring_exporter: unsupported
+    account: unknown
+    logs: supported
     reconfigure: supported
     switchover: unsupported
+    failover_model: not_applicable
     expose: partial
     backup: unsupported
     restore: unsupported
+    rebuild_instance: unsupported
+    core_refs:
+      - "kubeblocks-core:apis/operations/v1alpha1/opsrequest_types.go"
+    support_level: official
+    evidence_confidence: medium
     evidence_refs:
       - examples/pulsar/start.yaml
       - examples/pulsar/stop.yaml
@@ -328,11 +454,19 @@ records:
     vertical_scale: supported
     volume_expansion: supported
     monitoring_exporter: supported
+    account: unknown
+    logs: supported
     reconfigure: unsupported
     switchover: unsupported
+    failover_model: automatic
     expose: unsupported
     backup: unsupported
     restore: unsupported
+    rebuild_instance: unsupported
+    core_refs:
+      - "kubeblocks-core:apis/operations/v1alpha1/opsrequest_types.go"
+    support_level: official
+    evidence_confidence: medium
     evidence_refs:
       - examples/tidb/start.yaml
       - examples/tidb/stop.yaml
