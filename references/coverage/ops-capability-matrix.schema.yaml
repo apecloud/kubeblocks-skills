@@ -2,7 +2,7 @@ schema_version: v1alpha1
 description: >
   Engine x operation capability matrix. Tier-1 engines must populate the minimum
   required columns before the V2 routing is considered stable.
-  `core_refs` and `evidence_refs` are maintainer provenance fields, not cold-start runtime prerequisites.
+  `core_refs` and `evidence_refs` are provenance fields for optional secondary evidence, not cold-start runtime prerequisites or primary truth.
 
 required_fields:
   - engine

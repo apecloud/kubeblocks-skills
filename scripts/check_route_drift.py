@@ -67,12 +67,16 @@ def main():
         errors.append("README.md must explicitly state that family is not a cold-start primary entry")
     if "only this repo" not in readme_text:
         errors.append("README.md must explicitly state that runtime should work with only this repo")
-    if "maintainer evidence only" not in readme_text:
-        errors.append("README.md must explicitly mark addon/core provenance as maintainer evidence only")
+    if "not runtime prerequisites" not in readme_text:
+        errors.append("README.md must explicitly state that addon/core repos are not runtime prerequisites")
+    if "optional secondary evidence" not in readme_text:
+        errors.append("README.md must explicitly allow addon/core repos only as optional secondary evidence")
     if "only this repo" not in agents_text:
         errors.append("AGENTS.md must explicitly state that runtime should work with only this repo")
-    if "maintainer evidence only" not in agents_text:
-        errors.append("AGENTS.md must explicitly mark addon/core provenance as maintainer evidence only")
+    if "not runtime prerequisites" not in agents_text:
+        errors.append("AGENTS.md must explicitly state that addon/core repos are not runtime prerequisites")
+    if "optional secondary evidence" not in agents_text:
+        errors.append("AGENTS.md must explicitly allow addon/core repos only as optional secondary evidence")
     if "family/taxonomy-only explanation layer" not in root_text:
         errors.append("SKILL.md must explicitly forbid routing Tier-1 engines to family")
     if "Do **not** require `kubeblocks-addons` or KubeBlocks core repo checkouts as runtime prerequisites." not in root_text:

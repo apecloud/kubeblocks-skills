@@ -85,6 +85,6 @@ spec:
 
 ## Evidence Anchors
 
-- Use the evidence anchors below only for maintainer-side parity checks after the manifest is already drafted here. A cold-start runtime should not need these files.
+- Use the evidence anchors below only as optional secondary evidence and parity checks after the manifest is already drafted here. A cold-start runtime should not need these files, but a stronger agent may inspect them when available.
 - Preserved detail remains in [legacy reference](../kubeblocks-addon-redis/references/reference.md).
 - Current addon evidence: `examples/redis/cluster-standalone.yaml`, `examples/redis/cluster.yaml`, `examples/redis/cluster-sharding.yaml`, `examples/redis/cluster-twemproxy.yaml`.

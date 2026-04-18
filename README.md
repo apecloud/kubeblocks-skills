@@ -27,15 +27,19 @@ That means the runtime path must **not** require:
 
 If a create, ops, observability, or troubleshoot path still depends on those repos at runtime, that is a repo defect and should be fixed here.
 
+A stronger agent is still free to inspect upstream open-source repos on its own initiative. The rule is only that the installed skills repo must remain sufficient for the main runtime path.
+
 ### Maintainer Contract
 
-`kubeblocks-addons` and KubeBlocks core repos are **maintainer evidence only**.
+`kubeblocks-addons` and KubeBlocks core repos are **not runtime prerequisites** and must never become the primary truth for the main path.
 
 Maintainers may use them to:
 
 - prove addon/example coverage
 - prove control-plane behavior boundaries
 - update the truth files shipped inside this repo
+
+Stronger agents may also inspect those open-source repos opportunistically, but only as optional secondary evidence.
 
 But the installed skills repo itself must remain the runtime source of truth for cold-start agents.
 
@@ -224,6 +228,15 @@ The intended order is:
 4. use addon examples only as evidence anchors or parity checks
 
 This is how the repo avoids overfitting to the current example directory layout.
+
+## Cold-Start Evaluation Modes
+
+When evaluating whether the repo is good enough, check two modes:
+
+1. `Baseline cold-start mode`
+   Only this repo, official public docs, and cluster feedback are available. The main path must still work.
+2. `Optional deep-evidence mode`
+   A stronger agent may inspect upstream open-source repos to confirm or debug, but that must only make decisions safer. It must not replace repo truth or change the primary route selection model.
 
 ## Validation
 

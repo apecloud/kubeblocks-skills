@@ -4,7 +4,9 @@ Runtime assumption:
 
 - A user should be able to install **only this repo** and still use it.
 - The cold-start runtime dependency is: **this repo + official public KubeBlocks docs**.
-- `kubeblocks-addons` and KubeBlocks core repos are **maintainer evidence only**, not runtime prerequisites.
+- `kubeblocks-addons` and KubeBlocks core repos are **not runtime prerequisites** and must never become the primary truth for the main path.
+- A stronger agent may still inspect upstream open-source repos opportunistically, but the main path here must not depend on that extra research.
+- Treat addon/core source as optional secondary evidence when available, not as the default runtime input.
 - If a runtime path still requires raw addon examples or core source checkout to make the main decision, treat that as a repo gap and fix the repo.
 
 Start here:
@@ -29,7 +31,7 @@ Truth precedence:
 3. `references/coverage/*.yaml`
 4. `references/runtime/runtime-contract.yaml`
 5. `skills/*/SKILL.md`
-6. addon examples and legacy references as evidence only
+6. addon examples, legacy references, and optional upstream code inspection as secondary evidence only
 
 Important constraints:
 
