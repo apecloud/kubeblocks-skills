@@ -107,6 +107,43 @@ def load_shim_pairs(relative_path: str = "references/routing/shim-map.yaml"):
     }
 
 
+def load_path_migration_skill_pairs(
+    relative_path: str = "references/testing/path-migrations.md",
+):
+    text = (ROOT / relative_path).read_text(encoding="utf-8")
+    pairs: dict[str, str] = {}
+    duplicates: list[tuple[int, str, str, str]] = []
+    malformed: list[tuple[int, str, str]] = []
+
+    for lineno, line in enumerate(text.splitlines(), start=1):
+        stripped = line.strip()
+        if not stripped.startswith("|"):
+            continue
+        cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+        if len(cells) < 2:
+            continue
+        if set(cells[0]) == {"-"} and set(cells[1]) == {"-"}:
+            continue
+
+        old_match = re.fullmatch(r"`(kubeblocks-[a-z0-9-]+)`", cells[0])
+        new_match = re.fullmatch(r"`(kubeblocks-[a-z0-9-]+)`", cells[1])
+        if old_match is None and new_match is None:
+            continue
+        if old_match is None or new_match is None:
+            malformed.append((lineno, cells[0], cells[1]))
+            continue
+
+        legacy_skill = old_match.group(1)
+        new_skill = new_match.group(1)
+        previous = pairs.get(legacy_skill)
+        if previous is not None:
+            duplicates.append((lineno, legacy_skill, previous, new_skill))
+            continue
+        pairs[legacy_skill] = new_skill
+
+    return pairs, duplicates, malformed
+
+
 def require_keys(record: dict, keys: list[str], label: str, errors: list[str]):
     for key in keys:
         if key not in record:

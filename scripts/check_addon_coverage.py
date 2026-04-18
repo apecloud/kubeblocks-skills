@@ -11,18 +11,26 @@ from repo_checks import ROOT, load_yaml_rel, reference_only_family_routes
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description=(
+            "Cross-check Tier-1 addon coverage against the local kubeblocks-addons repo. "
+            "This script requires a kubeblocks-addons checkout."
+        )
+    )
     parser.add_argument(
         "--addons-repo",
         default=str(ROOT.parent / "kubeblocks-addons"),
-        help="Path to the kubeblocks-addons checkout",
+        help="Path to the kubeblocks-addons checkout (default: ../kubeblocks-addons)",
     )
     args = parser.parse_args()
 
     errors: list[str] = []
     addons_repo = Path(args.addons_repo)
     if not addons_repo.exists():
-        errors.append(f"addons repo not found: {addons_repo}")
+        errors.append(
+            "addons repo not found: "
+            f"{addons_repo} (clone kubeblocks-addons as ../kubeblocks-addons or pass --addons-repo)"
+        )
 
     required = set(
         (load_yaml_rel("tests/fixtures/coverage/tier1-required-engines.yaml") or {}).get(

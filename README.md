@@ -144,9 +144,12 @@ Run:
 
 ```bash
 python3 scripts/validate_skills.py
-python3 scripts/check_addon_coverage.py
-python3 scripts/check_ops_coverage.py
 python3 scripts/check_route_drift.py
+
+# Cross-repo coverage checks. These require a local kubeblocks-addons checkout.
+# Default lookup: ../kubeblocks-addons
+python3 scripts/check_addon_coverage.py --addons-repo ../kubeblocks-addons
+python3 scripts/check_ops_coverage.py --addons-repo ../kubeblocks-addons
 ```
 
 It checks:
@@ -154,8 +157,13 @@ It checks:
 - frontmatter presence and version fields
 - relative Markdown links in the router, README, skill files, and routing/testing references
 - Tier-1 routing fixtures point to existing skills or approved reference-only families
-- shim fixtures stay aligned with `references/routing/shim-map.yaml`
+- `references/routing/shim-map.yaml`, `references/testing/path-migrations.md`, and routing fixtures stay aligned
 - addon, ops, and routing truth stay consistent with the Tier-1 baseline
+
+Script contract:
+
+- `validate_skills.py` and `check_route_drift.py` are repo-local and run in a clean clone.
+- `check_addon_coverage.py` and `check_ops_coverage.py` are cross-repo checks. They require a `kubeblocks-addons` checkout, either at the default sibling path `../kubeblocks-addons` or via `--addons-repo /path/to/kubeblocks-addons`.
 
 ### Initial Routing Fixtures
 
@@ -167,12 +175,14 @@ See the machine-runnable fixtures under [tests/fixtures/](tests/fixtures/):
 
 ### Path Migrations
 
-[references/testing/path-migrations.md](references/testing/path-migrations.md) is the single source of truth for:
+[references/testing/path-migrations.md](references/testing/path-migrations.md) is the human-facing migration ledger for:
 
 - old path / new path migrations
 - customer-visible vs internal-only changes
 - shim / fallback behavior
 - optional one-liner and do-not-say guidance
+
+Machine-readable legacy-name truth lives in [references/routing/shim-map.yaml](references/routing/shim-map.yaml). The route drift check parses the exact skill-to-skill rows in `path-migrations.md` and requires them to match `shim-map.yaml` pair-for-pair.
 
 ## Runtime State Protocol
 
@@ -193,13 +203,15 @@ When changing routing or skill boundaries:
 1. Update [SKILL.md](SKILL.md) if the next-hop logic changes.
 2. Update the affected leaf skills.
 3. Update the relevant truth files under `references/coverage/` and `references/routing/`.
-4. Update [references/testing/path-migrations.md](references/testing/path-migrations.md) and `references/routing/shim-map.yaml` if a path or recommendation changed.
+4. Update [references/testing/path-migrations.md](references/testing/path-migrations.md) and `references/routing/shim-map.yaml` together if a path or recommendation changed.
 5. Update the relevant fixtures under `tests/fixtures/`.
 6. Run all four checks:
    - `python3 scripts/validate_skills.py`
-   - `python3 scripts/check_addon_coverage.py`
-   - `python3 scripts/check_ops_coverage.py`
    - `python3 scripts/check_route_drift.py`
+   - `python3 scripts/check_addon_coverage.py --addons-repo ../kubeblocks-addons`
+   - `python3 scripts/check_ops_coverage.py --addons-repo ../kubeblocks-addons`
+
+For the two coverage checks, either keep `kubeblocks-addons` as a sibling checkout of this repo or pass an explicit `--addons-repo` path.
 
 ## License
 

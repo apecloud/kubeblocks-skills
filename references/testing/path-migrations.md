@@ -5,6 +5,7 @@
 | `install -> kubeblocks-create-cluster` | `install -> preflight -> engine entry` | customer-visible | no | 首次建库前先做 preflight，先把存储/拓扑/监控路径定下来。 | 装好 KubeBlocks 就能直接建任意数据库。 |
 | `kubeblocks-create-cluster` | `kubeblocks-engine-generic` | internal-only | yes | generic fallback 统一收口到 engine-generic。 | create-cluster 继续作为冷启动主入口。 |
 | `kubeblocks-create-cluster` for MySQL / PG / Redis / MongoDB / Kafka | dedicated `kubeblocks-engine-*` entry | customer-visible | yes, generic path kept only for `other-addons` | 高频引擎默认走对应 engine 入口，generic 只兜底其他引擎。 | 高频引擎继续推荐走 generic 模板。 |
+| `kubeblocks-setup-monitoring` | `kubeblocks-observability-router` | internal-only | yes | 旧监控入口保留为 shim，新主入口统一收口到 observability-router。 | 继续把 setup-monitoring 当作冷启动主入口。 |
 | `kubeblocks-setup-monitoring` as one big skill | `kubeblocks-observability-router` -> `observability-existing-stack` or `observability-bootstrap-stack` | customer-visible | yes | 先判断是接入现有监控，还是新装一套监控基座。 | 有 metrics 就等于监控已经交付。 |
 | Root skill mixes routing and long-form docs | Root skill is router only; deep explanation lives in README / leaf skills | internal-only | no | 根入口只做下一跳判断。 | 根入口里继续堆所有实现细节。 |
 | `kubeblocks-addon-mysql` | `kubeblocks-engine-mysql` | internal-only | yes | MySQL 建库统一走 dedicated engine entry。 | 继续把 addon-mysql 当作冷启动主入口。 |

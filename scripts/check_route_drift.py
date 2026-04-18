@@ -8,6 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent / "lib"))
 
 from repo_checks import (
     ROOT,
+    load_path_migration_skill_pairs,
     load_shim_pairs,
     load_yaml_rel,
     reference_only_family_routes,
@@ -22,6 +23,10 @@ def main():
     family_routes = reference_only_family_routes()
     shim_pairs = load_shim_pairs()
     migration_pairs = load_shim_pairs("tests/fixtures/migrations/v1-shims.yaml")
+    path_migration_map, path_migration_duplicates, path_migration_malformed = (
+        load_path_migration_skill_pairs()
+    )
+    path_migration_pairs = set(path_migration_map.items())
 
     if shim_pairs != migration_pairs:
         missing = shim_pairs - migration_pairs
@@ -31,12 +36,30 @@ def main():
         if extra:
             errors.append(f"v1-shims fixture has extra pairs not in shim-map: {sorted(extra)}")
 
+    if shim_pairs != path_migration_pairs:
+        missing = shim_pairs - path_migration_pairs
+        extra = path_migration_pairs - shim_pairs
+        if missing:
+            errors.append(f"path-migrations.md missing shim-map pairs: {sorted(missing)}")
+        if extra:
+            errors.append(f"path-migrations.md has extra exact shim pairs not in shim-map: {sorted(extra)}")
+
+    for lineno, legacy_skill, previous_target, duplicate_target in path_migration_duplicates:
+        errors.append(
+            "path-migrations.md:"
+            f"{lineno}: duplicate legacy skill `{legacy_skill}` maps to "
+            f"`{previous_target}` and `{duplicate_target}`"
+        )
+
+    for lineno, legacy_cell, new_cell in path_migration_malformed:
+        errors.append(
+            "path-migrations.md:"
+            f"{lineno}: exact shim rows must use `` `kubeblocks-*` | `kubeblocks-*` `` cells, got "
+            f"`{legacy_cell}` -> `{new_cell}`"
+        )
+
     readme_text = (ROOT / "README.md").read_text(encoding="utf-8")
     root_text = (ROOT / "SKILL.md").read_text(encoding="utf-8")
-    migrations_text = (ROOT / "references/testing/path-migrations.md").read_text(
-        encoding="utf-8"
-    )
-
     if "kubeblocks-family-" in readme_text or "kubeblocks-family-" in root_text:
         errors.append("README.md / SKILL.md must not expose kubeblocks-family-* as executable routes")
     if "not a cold-start create-time primary entry" not in readme_text:
@@ -95,10 +118,6 @@ def main():
         errors.append("route-matrix:create-other-engine must follow up to kubeblocks-engine-generic")
 
     for legacy_skill, new_skill in sorted(shim_pairs):
-        if legacy_skill not in migrations_text or new_skill not in migrations_text:
-            errors.append(
-                f"path-migrations.md must mention shim pair `{legacy_skill}` -> `{new_skill}`"
-            )
         if legacy_skill not in skill_names:
             errors.append(f"shim-map: missing legacy skill `{legacy_skill}` in repo")
         if new_skill not in skill_names:
