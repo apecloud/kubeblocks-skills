@@ -40,6 +40,24 @@ Use this as the primary create-time entry for RabbitMQ. Tier-1 RabbitMQ never fa
 - `production`: `cluster` with odd replica counts, persistent storage, and clear exposure requirements for AMQP and management UI.
 - Do not present an even-sized production cluster as the safe default for quorum queues.
 
+## Minimal Create Path
+
+```yaml
+apiVersion: apps.kubeblocks.io/v1
+kind: Cluster
+metadata:
+  name: <cluster>
+  namespace: <ns>
+spec:
+  terminationPolicy: Delete
+```
+
+- Do not leave this skill to read raw addon examples before drafting the manifest.
+- Keep one `name: rabbitmq` component, use `componentDef: rabbitmq`, and set `serviceVersion`, `replicas: 3`, `resources`, and `volumeClaimTemplates` on that component.
+- Validate with `kubectl apply --dry-run=server -f <rabbitmq-cluster.yaml>`.
+- Apply with `kubectl apply -f <rabbitmq-cluster.yaml>`.
+- Watch `kubectl get cluster <name> -n <ns> -w` until the phase is `Running`.
+
 ## Connection and Validation
 
 - Supported connection methods: `in-cluster service`, `port-forward`, `exposed service`
@@ -59,7 +77,8 @@ Use this as the primary create-time entry for RabbitMQ. Tier-1 RabbitMQ never fa
 - Never route RabbitMQ create through `kubeblocks-engine-generic`, `kubeblocks-family-streaming`, `kubeblocks-addon-rabbitmq`, `kubeblocks-engine-kafka`, or `kubeblocks-engine-pulsar`.
 - If the request is really log-streaming Kafka or Pulsar semantics, switch engines before apply.
 
-## Preserved References
+## Evidence Anchors
 
-- There is no separate preserved legacy reference file for this engine in the current repo; use the addon examples directly when you need YAML detail.
+- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
 - Current addon evidence: `examples/rabbitmq/cluster.yaml`.
+- There is no separate legacy reference file for this engine in the current repository snapshot.

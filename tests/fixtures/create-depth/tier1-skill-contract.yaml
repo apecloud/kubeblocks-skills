@@ -5,37 +5,135 @@ required_headings:
   - "ServiceVersion / Version Strategy"
   - "Preflight Interpretation"
   - "Sizing Profiles"
+  - "Minimal Create Path"
   - "Connection and Validation"
   - "Next Hops"
   - "Forbidden Routes"
+required_create_tokens_common:
+  - "apiVersion: apps.kubeblocks.io/v1"
+  - "kind: Cluster"
+  - "terminationPolicy: Delete"
+  - "Do not leave this skill to read raw addon examples before drafting the manifest."
+  - "kubectl apply --dry-run=server -f"
+  - "kubectl apply -f"
+  - "Use the evidence anchors below only to verify parity after the manifest is already drafted here."
+disallowed_patterns_common:
+  - "Detailed YAML and topology-specific examples remain in"
+  - "use the addon examples directly when you need YAML detail"
+  - "## Preserved References"
 records:
   - engine: mysql
     entry_skill: kubeblocks-engine-mysql
+    required_create_tokens:
+      - "componentDef: mysql-8.0"
+      - "componentDef: mysql-mgr-8.0"
+      - "componentDef: mysql-orc-8.0"
+      - "clusterDef: mysql"
+      - "topology: semisync-proxysql"
+      - "name: proxysql"
   - engine: postgresql
     entry_skill: kubeblocks-engine-postgresql
+    required_create_tokens:
+      - "clusterDef: postgresql"
+      - "topology: replication"
+      - "replication-with-etcd"
+      - "ETCD3_HOST"
+      - "name: postgresql"
   - engine: redis
     entry_skill: kubeblocks-engine-redis
+    required_create_tokens:
+      - "clusterDef: redis"
+      - "topology: standalone"
+      - "topology: replication"
+      - "shardings:"
+      - "componentDef: redis-cluster-7"
+      - "name: redis-sentinel"
   - engine: mongodb
     entry_skill: kubeblocks-engine-mongodb
+    required_create_tokens:
+      - "clusterDef: mongodb"
+      - "topology: replicaset"
+      - "topology: sharding"
+      - "name: mongodb"
   - engine: kafka
     entry_skill: kubeblocks-engine-kafka
+    required_create_tokens:
+      - "clusterDef: kafka"
+      - "topology: combined_monitor"
+      - "topology: separated_monitor"
+      - "name: kafka-combine"
+      - "name: kafka-broker"
+      - "name: kafka-controller"
+      - "name: kafka-exporter"
   - engine: elasticsearch
     entry_skill: kubeblocks-engine-elasticsearch
+    required_create_tokens:
+      - "componentDef: elasticsearch-8"
+      - "componentDef: elasticsearch-master-8"
+      - "componentDef: elasticsearch-data-8"
+      - "name: mdit"
+      - "name: master"
+      - "name: data"
   - engine: milvus
     entry_skill: kubeblocks-engine-milvus
+    required_create_tokens:
+      - "clusterDef: milvus"
+      - "topology: standalone"
+      - "topology: cluster"
+      - "name: proxy"
+      - "name: mixcoord"
+      - "name: datanode"
   - engine: qdrant
     entry_skill: kubeblocks-engine-qdrant
+    required_create_tokens:
+      - "clusterDef: qdrant"
+      - "topology: cluster"
+      - "name: qdrant"
   - engine: rabbitmq
     entry_skill: kubeblocks-engine-rabbitmq
+    required_create_tokens:
+      - "componentDef: rabbitmq"
+      - "name: rabbitmq"
   - engine: clickhouse
     entry_skill: kubeblocks-engine-clickhouse
+    required_create_tokens:
+      - "clusterDef: clickhouse"
+      - "topology: standalone"
+      - "topology: cluster"
+      - "name: ch-keeper"
+      - "shardings:"
   - engine: mariadb
     entry_skill: kubeblocks-engine-mariadb
+    required_create_tokens:
+      - "componentDef: mariadb"
+      - "name: mariadb"
   - engine: minio
     entry_skill: kubeblocks-engine-minio
+    required_create_tokens:
+      - "componentDef: minio"
+      - "name: minio"
+      - "MINIO_BUCKETS"
   - engine: opensearch
     entry_skill: kubeblocks-engine-opensearch
+    required_create_tokens:
+      - "componentDef: opensearch-core"
+      - "componentDef: opensearch-dashboard"
+      - "name: opensearch"
+      - "name: dashboard"
   - engine: pulsar
     entry_skill: kubeblocks-engine-pulsar
+    required_create_tokens:
+      - "clusterDef: pulsar"
+      - "topology: pulsar-basic-cluster"
+      - "topology: pulsar-enhanced-cluster"
+      - "name: broker"
+      - "name: bookies"
+      - "name: proxy"
   - engine: tidb
     entry_skill: kubeblocks-engine-tidb
+    required_create_tokens:
+      - "clusterDef: tidb"
+      - "topology: cluster"
+      - "name: tidb-pd"
+      - "name: tikv"
+      - "name: tidb"

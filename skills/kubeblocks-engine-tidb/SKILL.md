@@ -40,6 +40,26 @@ Use this as the primary create-time entry for TiDB. Tier-1 TiDB never falls back
 - `production`: `standard` with storage sized for TiKV, quorum-aware PD sizing, and explicit observability from day 1.
 - Treat TiKV storage as the dominant capacity constraint in create-time planning.
 
+## Minimal Create Path
+
+```yaml
+apiVersion: apps.kubeblocks.io/v1
+kind: Cluster
+metadata:
+  name: <cluster>
+  namespace: <ns>
+spec:
+  terminationPolicy: Delete
+```
+
+- Do not leave this skill to read raw addon examples before drafting the manifest.
+- Set `clusterDef: tidb` for every TiDB create path in this wave.
+- The agent-facing `standard` path maps to addon `topology: cluster`.
+- Keep `name: tidb-pd`, `name: tikv`, and `name: tidb` on the same `serviceVersion`, with PVC-backed storage on the PD and TiKV components before apply.
+- Validate with `kubectl apply --dry-run=server -f <tidb-cluster.yaml>`.
+- Apply with `kubectl apply -f <tidb-cluster.yaml>`.
+- Watch `kubectl get cluster <name> -n <ns> -w` until the phase is `Running`.
+
 ## Connection and Validation
 
 - Supported connection methods: `in-cluster service`, `port-forward`
@@ -59,6 +79,7 @@ Use this as the primary create-time entry for TiDB. Tier-1 TiDB never falls back
 - Never route TiDB create through `kubeblocks-engine-generic`, `kubeblocks-family-sql`, `kubeblocks-engine-mysql`, or `kubeblocks-engine-postgresql`.
 - If the user really wants MySQL or PostgreSQL semantics, switch engines before apply.
 
-## Preserved References
+## Evidence Anchors
 
+- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
 - Current addon evidence: `examples/tidb/cluster.yaml`.

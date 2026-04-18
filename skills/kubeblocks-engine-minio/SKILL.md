@@ -40,6 +40,25 @@ Use this as the primary create-time entry for MinIO. Tier-1 MinIO never falls ba
 - `production`: `distributed` with 4 or more even replicas, anti-affinity from preflight, and storage sized for object growth.
 - Treat replica count as an erasure-coding and durability decision, not just horizontal scale.
 
+## Minimal Create Path
+
+```yaml
+apiVersion: apps.kubeblocks.io/v1
+kind: Cluster
+metadata:
+  name: <cluster>
+  namespace: <ns>
+spec:
+  terminationPolicy: Delete
+```
+
+- Do not leave this skill to read raw addon examples before drafting the manifest.
+- Keep one `name: minio` component, use `componentDef: minio`, and set `replicas: 2` only for dev/test; for production distributed quorum start at an even count of `4` or more.
+- Keep optional bucket bootstrap in env `MINIO_BUCKETS` instead of inventing a second create path.
+- Validate with `kubectl apply --dry-run=server -f <minio-cluster.yaml>`.
+- Apply with `kubectl apply -f <minio-cluster.yaml>`.
+- Watch `kubectl get cluster <name> -n <ns> -w` until the phase is `Running`.
+
 ## Connection and Validation
 
 - Supported connection methods: `in-cluster service`, `port-forward`
@@ -60,6 +79,7 @@ Use this as the primary create-time entry for MinIO. Tier-1 MinIO never falls ba
 - Never route MinIO create through `kubeblocks-engine-generic`.
 - If the user really wants a database engine instead of object storage, switch engines before apply.
 
-## Preserved References
+## Evidence Anchors
 
+- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
 - Current addon evidence: `examples/minio/cluster.yaml`.

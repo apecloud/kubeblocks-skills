@@ -41,6 +41,25 @@ Use this as the primary create-time entry for Elasticsearch. Tier-1 Elasticsearc
 - `production`: `multi-node`, dedicated data PVCs, explicit spread or anti-affinity, and enough memory for JVM heap planning.
 - Do not recommend `single-node` for anything that needs availability or shard movement.
 
+## Minimal Create Path
+
+```yaml
+apiVersion: apps.kubeblocks.io/v1
+kind: Cluster
+metadata:
+  name: <cluster>
+  namespace: <ns>
+spec:
+  terminationPolicy: Delete
+```
+
+- Do not leave this skill to read raw addon examples before drafting the manifest.
+- `single-node`: keep one `name: mdit` component, use `componentDef: elasticsearch-8`, and set `serviceVersion`, `replicas: 1`, `resources`, and `volumeClaimTemplates` directly on that component.
+- `multi-node`: split the manifest into `name: master` and `name: data`, use `componentDef: elasticsearch-master-8` and `componentDef: elasticsearch-data-8`, and size master/data replicas independently.
+- Validate with `kubectl apply --dry-run=server -f <elasticsearch-cluster.yaml>`.
+- Apply with `kubectl apply -f <elasticsearch-cluster.yaml>`.
+- Watch `kubectl get cluster <name> -n <ns> -w` until the phase is `Running`.
+
 ## Connection and Validation
 
 - Supported connection methods: `in-cluster service`, `port-forward`, `exposed service`
@@ -60,7 +79,8 @@ Use this as the primary create-time entry for Elasticsearch. Tier-1 Elasticsearc
 - Never route Elasticsearch create through `kubeblocks-engine-generic`, `kubeblocks-family-search`, `kubeblocks-addon-elasticsearch`, or `kubeblocks-engine-opensearch`.
 - If the user really wants OpenSearch semantics or dashboard defaults, switch engines before apply.
 
-## Preserved References
+## Evidence Anchors
 
-- There is no separate preserved legacy reference file for this engine in the current repo; use the addon examples directly when you need YAML detail.
+- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
 - Current addon evidence: `examples/elasticsearch/cluster-multi-node.yaml`, `examples/elasticsearch/cluster-single-node.yaml`, `examples/elasticsearch/cluster-with-kibana.yaml`.
+- There is no separate legacy reference file for this engine in the current repository snapshot.

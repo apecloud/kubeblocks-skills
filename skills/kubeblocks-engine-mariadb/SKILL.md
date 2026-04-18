@@ -40,6 +40,24 @@ Use this as the primary create-time entry for MariaDB. Tier-1 MariaDB never fall
 - `production`: still `standalone` in the current truth, but with larger PVCs, backups, and a clear external recovery story.
 - Do not present MariaDB as a Tier-1 HA default until the addon evidence changes.
 
+## Minimal Create Path
+
+```yaml
+apiVersion: apps.kubeblocks.io/v1
+kind: Cluster
+metadata:
+  name: <cluster>
+  namespace: <ns>
+spec:
+  terminationPolicy: Delete
+```
+
+- Do not leave this skill to read raw addon examples before drafting the manifest.
+- Keep one `name: mariadb` component, use `componentDef: mariadb`, and set `serviceVersion`, `replicas: 1`, `resources`, and `volumeClaimTemplates` on that component.
+- Validate with `kubectl apply --dry-run=server -f <mariadb-cluster.yaml>`.
+- Apply with `kubectl apply -f <mariadb-cluster.yaml>`.
+- Watch `kubectl get cluster <name> -n <ns> -w` until the phase is `Running`.
+
 ## Connection and Validation
 
 - Supported connection methods: `in-cluster service`, `port-forward`
@@ -60,6 +78,7 @@ Use this as the primary create-time entry for MariaDB. Tier-1 MariaDB never fall
 - Never route MariaDB create through `kubeblocks-engine-generic`, `kubeblocks-family-sql`, or `kubeblocks-engine-mysql`.
 - If the user really wants MySQL HA topologies, switch engines before apply.
 
-## Preserved References
+## Evidence Anchors
 
+- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
 - Current addon evidence: `examples/mariadb/cluster.yaml`.

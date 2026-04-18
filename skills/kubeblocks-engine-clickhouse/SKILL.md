@@ -41,6 +41,26 @@ Use this as the primary create-time entry for ClickHouse. Tier-1 ClickHouse neve
 - `production`: `cluster` with keeper, shard sizing, and storage sized for analytical retention and merge pressure.
 - Treat shard count and replica count as data-distribution decisions, not just replica cosmetics.
 
+## Minimal Create Path
+
+```yaml
+apiVersion: apps.kubeblocks.io/v1
+kind: Cluster
+metadata:
+  name: <cluster>
+  namespace: <ns>
+spec:
+  terminationPolicy: Delete
+```
+
+- Do not leave this skill to read raw addon examples before drafting the manifest.
+- Set `clusterDef: clickhouse` for every ClickHouse create path in this wave.
+- `standalone`: set `topology: standalone` and keep the data plane as a single ClickHouse service path without `shardings:`.
+- `cluster`: set `topology: cluster`, keep `name: ch-keeper` under `componentSpecs`, and put the actual ClickHouse data plane under `shardings:` with template `name: clickhouse`.
+- Validate with `kubectl apply --dry-run=server -f <clickhouse-cluster.yaml>`.
+- Apply with `kubectl apply -f <clickhouse-cluster.yaml>`.
+- Watch `kubectl get cluster <name> -n <ns> -w` until the phase is `Running`.
+
 ## Connection and Validation
 
 - Supported connection methods: `in-cluster service`, `port-forward`, `nodeport-or-loadbalancer`
@@ -61,6 +81,7 @@ Use this as the primary create-time entry for ClickHouse. Tier-1 ClickHouse neve
 - Never route ClickHouse create through `kubeblocks-engine-generic` or `kubeblocks-family-ts-analytics`.
 - If the request is really GreptimeDB or another analytics engine, switch engines before apply.
 
-## Preserved References
+## Evidence Anchors
 
+- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
 - Current addon evidence: `examples/clickhouse/cluster-standalone.yaml`, `examples/clickhouse/cluster.yaml`, `examples/clickhouse/cluster-with-nodeport.yaml`.

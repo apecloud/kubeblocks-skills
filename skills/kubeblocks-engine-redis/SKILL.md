@@ -42,6 +42,27 @@ Use this as the primary create-time entry for Redis. Tier-1 Redis never falls ba
 - `production`: `replication` or `sharding` with explicit failover expectations, anti-affinity, and capacity headroom for rebalancing.
 - For `sharding`, treat shard count as a capacity decision, not a cosmetic topology toggle.
 
+## Minimal Create Path
+
+```yaml
+apiVersion: apps.kubeblocks.io/v1
+kind: Cluster
+metadata:
+  name: <cluster>
+  namespace: <ns>
+spec:
+  terminationPolicy: Delete
+```
+
+- Do not leave this skill to read raw addon examples before drafting the manifest.
+- Set `clusterDef: redis` for every dedicated Redis path in this wave.
+- `standalone`: set `topology: standalone`, keep a single `name: redis` component, and place `serviceVersion`, `resources`, and `volumeClaimTemplates` on that component.
+- `replication`: set `topology: replication`, keep `name: redis` and `name: redis-sentinel`, and size replicas plus PVCs on the storage-bearing Redis component.
+- `sharding`: declare `shardings:` instead of a single component, use template `name: redis`, set `componentDef: redis-cluster-7`, and put `serviceVersion`, `replicas`, `resources`, and `volumeClaimTemplates` on the shard template.
+- Validate with `kubectl apply --dry-run=server -f <redis-cluster.yaml>`.
+- Apply with `kubectl apply -f <redis-cluster.yaml>`.
+- Watch `kubectl get cluster <name> -n <ns> -w` until the phase is `Running`.
+
 ## Connection and Validation
 
 - Supported connection methods: `in-cluster service`, `port-forward`, `exposed service`
@@ -62,7 +83,8 @@ Use this as the primary create-time entry for Redis. Tier-1 Redis never falls ba
 - Never route Redis create through `kubeblocks-engine-generic` or `kubeblocks-addon-redis`.
 - Do not collapse Redis into a generic cache path when the user is really asking for replication or cluster sharding semantics.
 
-## Preserved References
+## Evidence Anchors
 
-- Detailed YAML and topology-specific examples remain in [legacy reference](../kubeblocks-addon-redis/references/reference.md).
+- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
+- Preserved detail remains in [legacy reference](../kubeblocks-addon-redis/references/reference.md).
 - Current addon evidence: `examples/redis/cluster-standalone.yaml`, `examples/redis/cluster.yaml`, `examples/redis/cluster-sharding.yaml`, `examples/redis/cluster-twemproxy.yaml`.

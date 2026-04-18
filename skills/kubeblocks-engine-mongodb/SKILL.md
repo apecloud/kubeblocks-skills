@@ -41,6 +41,26 @@ Use this as the primary create-time entry for MongoDB. Tier-1 MongoDB never fall
 - `production`: `replicaset` or `sharding` with explicit anti-affinity, volume sizing, and backup posture from day 1.
 - Treat `sharding` as an advanced scale path, not a default recommendation.
 
+## Minimal Create Path
+
+```yaml
+apiVersion: apps.kubeblocks.io/v1
+kind: Cluster
+metadata:
+  name: <cluster>
+  namespace: <ns>
+spec:
+  terminationPolicy: Delete
+```
+
+- Do not leave this skill to read raw addon examples before drafting the manifest.
+- Set `clusterDef: mongodb` for every MongoDB create path in this wave.
+- `replicaset`: set `topology: replicaset`, keep a single `name: mongodb` component, and place `serviceVersion`, `replicas`, `resources`, and `volumeClaimTemplates` on that component.
+- `sharding`: set `topology: sharding`, let the topology manage router, config, and shard roles, and do not collapse that path back into one `name: mongodb` component after the engine is identified.
+- Validate with `kubectl apply --dry-run=server -f <mongodb-cluster.yaml>`.
+- Apply with `kubectl apply -f <mongodb-cluster.yaml>`.
+- Watch `kubectl get cluster <name> -n <ns> -w` until the phase is `Running`.
+
 ## Connection and Validation
 
 - Supported connection methods: `in-cluster service`, `port-forward`, `exposed service`
@@ -61,7 +81,8 @@ Use this as the primary create-time entry for MongoDB. Tier-1 MongoDB never fall
 - Never route MongoDB create through `kubeblocks-engine-generic` or `kubeblocks-addon-mongodb`.
 - Do not collapse MongoDB sharding into a generic document-store path after the engine has already been identified.
 
-## Preserved References
+## Evidence Anchors
 
-- Detailed YAML and topology-specific examples remain in [legacy reference](../kubeblocks-addon-mongodb/references/reference.md).
+- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
+- Preserved detail remains in [legacy reference](../kubeblocks-addon-mongodb/references/reference.md).
 - Current addon evidence: `examples/mongodb/cluster.yaml` for ReplicaSet, plus preserved sharding detail in the legacy reference.

@@ -184,9 +184,15 @@ def main():
         "tests/fixtures/create-depth/tier1-skill-contract.yaml"
     ) or {}
     required_headings = create_depth_fixture.get("required_headings", [])
+    common_create_tokens = create_depth_fixture.get("required_create_tokens_common", [])
+    disallowed_patterns = create_depth_fixture.get("disallowed_patterns_common", [])
     if not required_headings:
         errors.append(
             "tests/fixtures/create-depth/tier1-skill-contract.yaml: missing `required_headings`"
+        )
+    if not common_create_tokens:
+        errors.append(
+            "tests/fixtures/create-depth/tier1-skill-contract.yaml: missing `required_create_tokens_common`"
         )
     create_depth_records = create_depth_fixture.get("records", [])
     if not create_depth_records:
@@ -217,6 +223,16 @@ def main():
                 errors.append(
                     f"{label}: {skill_path.relative_to(ROOT)} missing heading `{heading}`"
                 )
+        for token in common_create_tokens:
+            if token not in text:
+                errors.append(
+                    f"{label}: {skill_path.relative_to(ROOT)} missing common create token `{token}`"
+                )
+        for pattern in disallowed_patterns:
+            if pattern in text:
+                errors.append(
+                    f"{label}: {skill_path.relative_to(ROOT)} still contains disallowed fallback pattern `{pattern}`"
+                )
         if record.get("service_version_strategy") and record["service_version_strategy"] not in text:
             errors.append(
                 f"{label}: {skill_path.relative_to(ROOT)} missing exact service_version_strategy text"
@@ -240,6 +256,11 @@ def main():
                     errors.append(
                         f"{label}: {skill_path.relative_to(ROOT)} missing `{value}` from `{key}`"
                     )
+        for token in fixture.get("required_create_tokens", []):
+            if token not in text:
+                errors.append(
+                    f"{label}: {skill_path.relative_to(ROOT)} missing engine-specific create token `{token}`"
+                )
 
     observability_matrix = load_yaml_rel(
         "references/coverage/observability-capability-matrix.yaml"

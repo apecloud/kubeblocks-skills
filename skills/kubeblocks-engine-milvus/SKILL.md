@@ -41,6 +41,26 @@ Use this as the primary create-time entry for Milvus. Tier-1 Milvus never falls 
 - `production`: `cluster` with explicit etcd, MinIO, and Pulsar dependency posture plus observability from day 1.
 - Treat Milvus dependency capacity as part of the create decision, not as an afterthought.
 
+## Minimal Create Path
+
+```yaml
+apiVersion: apps.kubeblocks.io/v1
+kind: Cluster
+metadata:
+  name: <cluster>
+  namespace: <ns>
+spec:
+  terminationPolicy: Delete
+```
+
+- Do not leave this skill to read raw addon examples before drafting the manifest.
+- Set `clusterDef: milvus` for every Milvus create path in this wave.
+- `standalone`: set `topology: standalone`, keep a single `name: milvus` component, and set `serviceVersion`, `resources`, and `volumeClaimTemplates` on that component.
+- `cluster`: set `topology: cluster`, let the topology materialize `name: proxy`, `name: mixcoord`, `name: datanode`, `name: indexnode`, and `name: querynode`, and only continue after dependency clusters are already resolved in preflight.
+- Validate with `kubectl apply --dry-run=server -f <milvus-cluster.yaml>`.
+- Apply with `kubectl apply -f <milvus-cluster.yaml>`.
+- Watch `kubectl get cluster <name> -n <ns> -w` until the phase is `Running`.
+
 ## Connection and Validation
 
 - Supported connection methods: `in-cluster service`, `port-forward`
@@ -60,7 +80,8 @@ Use this as the primary create-time entry for Milvus. Tier-1 Milvus never falls 
 - Never route Milvus create through `kubeblocks-engine-generic`, `kubeblocks-family-vector`, `kubeblocks-addon-milvus`, or `kubeblocks-engine-qdrant`.
 - If the request is actually a lightweight vector store with Qdrant semantics, switch engines before apply.
 
-## Preserved References
+## Evidence Anchors
 
-- There is no separate preserved legacy reference file for this engine in the current repo; use the addon examples directly when you need YAML detail.
+- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
 - Current addon evidence: `examples/milvus/cluster-standalone.yaml`, `examples/milvus/cluster.yaml`.
+- There is no separate legacy reference file for this engine in the current repository snapshot.

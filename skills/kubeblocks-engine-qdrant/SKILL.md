@@ -40,6 +40,25 @@ Use this as the primary create-time entry for Qdrant. Tier-1 Qdrant never falls 
 - `production`: `cluster` with explicit capacity headroom for data redistribution during scale or member replacement.
 - Keep replica counts odd when possible to reduce Raft coordination risk.
 
+## Minimal Create Path
+
+```yaml
+apiVersion: apps.kubeblocks.io/v1
+kind: Cluster
+metadata:
+  name: <cluster>
+  namespace: <ns>
+spec:
+  terminationPolicy: Delete
+```
+
+- Do not leave this skill to read raw addon examples before drafting the manifest.
+- Set `clusterDef: qdrant` and `topology: cluster`.
+- Keep one `name: qdrant` component and set `serviceVersion`, `replicas: 3`, `resources`, and `volumeClaimTemplates` directly on that component.
+- Validate with `kubectl apply --dry-run=server -f <qdrant-cluster.yaml>`.
+- Apply with `kubectl apply -f <qdrant-cluster.yaml>`.
+- Watch `kubectl get cluster <name> -n <ns> -w` until the phase is `Running`.
+
 ## Connection and Validation
 
 - Supported connection methods: `in-cluster service`, `port-forward`, `exposed service`
@@ -59,7 +78,8 @@ Use this as the primary create-time entry for Qdrant. Tier-1 Qdrant never falls 
 - Never route Qdrant create through `kubeblocks-engine-generic`, `kubeblocks-family-vector`, `kubeblocks-addon-qdrant`, or `kubeblocks-engine-milvus`.
 - If the request is really Milvus-style dependency-backed vector search, switch engines before apply.
 
-## Preserved References
+## Evidence Anchors
 
-- There is no separate preserved legacy reference file for this engine in the current repo; use the addon examples directly when you need YAML detail.
+- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
 - Current addon evidence: `examples/qdrant/cluster.yaml`.
+- There is no separate legacy reference file for this engine in the current repository snapshot.

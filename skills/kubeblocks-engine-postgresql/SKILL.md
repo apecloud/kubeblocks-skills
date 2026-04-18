@@ -41,6 +41,26 @@ Use this as the primary create-time entry for PostgreSQL. Tier-1 PostgreSQL neve
 - `production`: dedicated storage, anti-affinity or spread constraints from preflight, and observability enabled from day 1.
 - Treat `replication-with-etcd` as an advanced platform shape, not the default recommendation.
 
+## Minimal Create Path
+
+```yaml
+apiVersion: apps.kubeblocks.io/v1
+kind: Cluster
+metadata:
+  name: <cluster>
+  namespace: <ns>
+spec:
+  terminationPolicy: Delete
+```
+
+- Do not leave this skill to read raw addon examples before drafting the manifest.
+- Set `clusterDef: postgresql` for every PostgreSQL create path in this wave.
+- `replication`: set `topology: replication`, keep a single `name: postgresql` component, and put `serviceVersion`, `replicas`, `resources`, and `volumeClaimTemplates` on that component.
+- `replication-with-etcd`: still render `clusterDef: postgresql` with `topology: replication`, then inject env `ETCD3_HOST` and leave the Kubernetes DCS env unset so Patroni points at external etcd instead of the in-cluster default.
+- Validate with `kubectl apply --dry-run=server -f <postgresql-cluster.yaml>`.
+- Apply with `kubectl apply -f <postgresql-cluster.yaml>`.
+- Watch `kubectl get cluster <name> -n <ns> -w` until the phase is `Running`.
+
 ## Connection and Validation
 
 - Supported connection methods: `in-cluster service`, `port-forward`, `exposed service`
@@ -60,7 +80,8 @@ Use this as the primary create-time entry for PostgreSQL. Tier-1 PostgreSQL neve
 - Never route PostgreSQL create through `kubeblocks-engine-generic`, `kubeblocks-family-sql`, `kubeblocks-addon-postgresql`, or `kubeblocks-engine-tidb`.
 - Do not force PostgreSQL through MySQL- or TiDB-like semantics.
 
-## Preserved References
+## Evidence Anchors
 
-- Detailed YAML and topology-specific examples remain in [legacy reference](../kubeblocks-addon-postgresql/references/reference.md).
+- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
+- Preserved detail remains in [legacy reference](../kubeblocks-addon-postgresql/references/reference.md).
 - Current addon evidence: `examples/postgresql/cluster.yaml`, `examples/postgresql/cluster-with-etcd.yaml`.

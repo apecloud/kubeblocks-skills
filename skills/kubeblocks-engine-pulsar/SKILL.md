@@ -42,6 +42,27 @@ Use this as the primary create-time entry for Pulsar. Tier-1 Pulsar never falls 
 - `production`: `basic` or `enhanced` with explicit storage, monitoring, and component-count decisions made up front.
 - Treat bookie count and broker count as real durability and throughput decisions, not just cosmetic replica numbers.
 
+## Minimal Create Path
+
+```yaml
+apiVersion: apps.kubeblocks.io/v1
+kind: Cluster
+metadata:
+  name: <cluster>
+  namespace: <ns>
+spec:
+  terminationPolicy: Delete
+```
+
+- Do not leave this skill to read raw addon examples before drafting the manifest.
+- Set `clusterDef: pulsar` for every Pulsar create path in this wave.
+- `basic`: render the addon topology as `topology: pulsar-basic-cluster`, keep `name: broker`, `name: bookies`, and `name: zookeeper`, and size broker/bookie storage directly.
+- `enhanced`: render the addon topology as `topology: pulsar-enhanced-cluster`, keep the `basic` components, and add `name: proxy` plus `name: bookies-recovery`.
+- `external-zookeeper`: keep `clusterDef: pulsar`, use external service references for ZooKeeper, and do not leave both a local `name: zookeeper` quorum and an external ZooKeeper contract in the same manifest.
+- Validate with `kubectl apply --dry-run=server -f <pulsar-cluster.yaml>`.
+- Apply with `kubectl apply -f <pulsar-cluster.yaml>`.
+- Watch `kubectl get cluster <name> -n <ns> -w` until the phase is `Running`.
+
 ## Connection and Validation
 
 - Supported connection methods: `in-cluster service`, `port-forward`, `nodeport-or-loadbalancer`
@@ -61,6 +82,7 @@ Use this as the primary create-time entry for Pulsar. Tier-1 Pulsar never falls 
 - Never route Pulsar create through `kubeblocks-engine-generic`, `kubeblocks-family-streaming`, `kubeblocks-engine-kafka`, or `kubeblocks-engine-rabbitmq`.
 - If the request is really Kafka-style log streaming or queue-style RabbitMQ semantics, switch engines before apply.
 
-## Preserved References
+## Evidence Anchors
 
+- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
 - Current addon evidence: `examples/pulsar/cluster-basic.yaml`, `examples/pulsar/cluster-enhanced.yaml`, `examples/pulsar/cluster-service-refer.yaml`.

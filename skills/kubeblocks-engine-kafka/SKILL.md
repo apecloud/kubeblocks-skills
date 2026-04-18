@@ -41,6 +41,26 @@ Use this as the primary create-time entry for Kafka. Tier-1 Kafka never falls ba
 - `production`: explicit controller quorum, broker sizing based on retention and throughput, and monitoring wired in from day 1.
 - For `separated`, do not undersize controllers just because they are isolated from brokers.
 
+## Minimal Create Path
+
+```yaml
+apiVersion: apps.kubeblocks.io/v1
+kind: Cluster
+metadata:
+  name: <cluster>
+  namespace: <ns>
+spec:
+  terminationPolicy: Delete
+```
+
+- Do not leave this skill to read raw addon examples before drafting the manifest.
+- Set `clusterDef: kafka` for every Kafka create path in this wave.
+- `combined`: render the addon topology as `topology: combined_monitor`, keep `name: kafka-combine` plus `name: kafka-exporter`, and preserve both `data` and `metadata` PVCs on the combined component.
+- `separated`: render the addon topology as `topology: separated_monitor`, keep `name: kafka-broker`, `name: kafka-controller`, and `name: kafka-exporter`, and size broker plus controller PVCs independently.
+- Validate with `kubectl apply --dry-run=server -f <kafka-cluster.yaml>`.
+- Apply with `kubectl apply -f <kafka-cluster.yaml>`.
+- Watch `kubectl get cluster <name> -n <ns> -w` until the phase is `Running`.
+
 ## Connection and Validation
 
 - Supported connection methods: `in-cluster service`, `port-forward`, `nodeport-or-loadbalancer`
@@ -61,7 +81,8 @@ Use this as the primary create-time entry for Kafka. Tier-1 Kafka never falls ba
 - Never route Kafka create through `kubeblocks-engine-generic`, `kubeblocks-family-streaming`, `kubeblocks-addon-kafka`, `kubeblocks-engine-pulsar`, or `kubeblocks-engine-rabbitmq`.
 - If the request is really queue-style RabbitMQ or bookie-backed Pulsar semantics, switch engines before apply.
 
-## Preserved References
+## Evidence Anchors
 
-- Detailed YAML and topology-specific examples remain in [legacy reference](../kubeblocks-addon-kafka/references/reference.md).
+- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
+- Preserved detail remains in [legacy reference](../kubeblocks-addon-kafka/references/reference.md).
 - Current addon evidence: `examples/kafka/cluster-combined.yaml`, `examples/kafka/cluster-separated.yaml`.

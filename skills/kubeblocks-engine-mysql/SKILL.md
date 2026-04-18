@@ -43,6 +43,27 @@ Use this as the primary create-time entry for MySQL. Tier-1 MySQL never falls ba
 - `production`: dedicated storage, anti-affinity or spread policies from preflight, monitoring on day 1, and replicas sized for failover headroom.
 - For `mgr`, production should start at three MySQL members; do not present a one- or two-member `mgr` shape as normal.
 
+## Minimal Create Path
+
+```yaml
+apiVersion: apps.kubeblocks.io/v1
+kind: Cluster
+metadata:
+  name: <cluster>
+  namespace: <ns>
+spec:
+  terminationPolicy: Delete
+```
+
+- Do not leave this skill to read raw addon examples before drafting the manifest.
+- `semisync`: keep a single `name: mysql` component, use `componentDef: mysql-8.0`, and set `serviceVersion`, `replicas`, `resources`, and `volumeClaimTemplates` directly on that component.
+- `mgr`: keep a single `name: mysql` component, switch to `componentDef: mysql-mgr-8.0`, and keep `replicas: 3` as the minimum safe starting point.
+- `orchestrator`: keep a single `name: mysql` component, use `componentDef: mysql-orc-8.0`, and add `serviceRefs:` that point at the external Orchestrator service before apply.
+- `proxysql`: set `clusterDef: mysql`, set `topology: semisync-proxysql`, keep the storage-bearing `name: mysql` component, and add a second `name: proxysql` component for routing.
+- Validate with `kubectl apply --dry-run=server -f <mysql-cluster.yaml>`.
+- Apply with `kubectl apply -f <mysql-cluster.yaml>`.
+- Watch `kubectl get cluster <name> -n <ns> -w` until the phase is `Running`.
+
 ## Connection and Validation
 
 - Supported connection methods: `in-cluster service`, `port-forward`, `exposed service`
@@ -62,7 +83,8 @@ Use this as the primary create-time entry for MySQL. Tier-1 MySQL never falls ba
 - Never route MySQL create through `kubeblocks-engine-generic`, `kubeblocks-family-sql`, `kubeblocks-addon-mysql`, `kubeblocks-engine-mariadb`, or `kubeblocks-engine-tidb`.
 - If the request is really MariaDB or TiDB semantics, switch engines before applying anything.
 
-## Preserved References
+## Evidence Anchors
 
-- Detailed YAML and topology-specific examples remain in [legacy reference](../kubeblocks-addon-mysql/references/reference.md).
+- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
+- Preserved detail remains in [legacy reference](../kubeblocks-addon-mysql/references/reference.md).
 - Current addon evidence: `examples/mysql/cluster.yaml`, `examples/mysql/cluster-mgr.yaml`, `examples/mysql/cluster-orc.yaml`, `examples/mysql/cluster-proxysql.yaml`.

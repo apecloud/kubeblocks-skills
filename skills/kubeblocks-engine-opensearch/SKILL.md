@@ -40,6 +40,25 @@ Use this as the primary create-time entry for OpenSearch. Tier-1 OpenSearch neve
 - `production`: `cluster` with persistent storage, enough memory for search workloads, and an explicit dashboard/access plan.
 - Treat dashboard exposure as part of the rollout plan, not as an afterthought.
 
+## Minimal Create Path
+
+```yaml
+apiVersion: apps.kubeblocks.io/v1
+kind: Cluster
+metadata:
+  name: <cluster>
+  namespace: <ns>
+spec:
+  terminationPolicy: Delete
+```
+
+- Do not leave this skill to read raw addon examples before drafting the manifest.
+- Keep `name: opensearch` as the core storage-bearing component, use `componentDef: opensearch-core`, and set `serviceVersion`, `replicas: 3`, `resources`, and `volumeClaimTemplates` there.
+- Add `name: dashboard` with `componentDef: opensearch-dashboard` only when the rollout really includes the UI path.
+- Validate with `kubectl apply --dry-run=server -f <opensearch-cluster.yaml>`.
+- Apply with `kubectl apply -f <opensearch-cluster.yaml>`.
+- Watch `kubectl get cluster <name> -n <ns> -w` until the phase is `Running`.
+
 ## Connection and Validation
 
 - Supported connection methods: `in-cluster service`, `port-forward`, `exposed service`
@@ -59,6 +78,7 @@ Use this as the primary create-time entry for OpenSearch. Tier-1 OpenSearch neve
 - Never route OpenSearch create through `kubeblocks-engine-generic`, `kubeblocks-family-search`, or `kubeblocks-engine-elasticsearch`.
 - If the request is really Elasticsearch compatibility work, switch engines before apply.
 
-## Preserved References
+## Evidence Anchors
 
+- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
 - Current addon evidence: `examples/opensearch/cluster.yaml`.
