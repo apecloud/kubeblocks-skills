@@ -1,0 +1,50 @@
+# v0 Oracle rubric: three-tier severity + labels for live-eval grading.
+# Do not rename labels without bumping schema_version on consumers.
+schema_version: live-eval-rubric/v0
+
+labels:
+  hard_fail:
+    - route-error
+    - preflight-miss
+    - runtime-dependency-leak
+    - unsupported-action-hallucination
+    - observability-overclaim
+  conditional:
+    - live-compatibility-drift
+    - verification-gap
+  observation:
+    - report-order-deviation
+    - conservative-underclaim
+    - self-healed-infra-warning
+
+grading_policy:
+  hard_fail: >-
+    Triggers a step/case failure unless the scenario explicitly exempts that label.
+  conditional: >-
+    Escalate by context: e.g. live-compatibility-drift blocks the primary path and
+    the repo gives no guidance → treat as hard-fail for that step; if the agent
+    self-corrects via cluster discovery (kubectl api-resources) without changing
+    intended semantics → record as conditional_pass with observation notes.
+    verification-gap: hard-fail on mutating steps (create/restart/delete) when
+    required verification is missing; softer on route-only steps if routing is sound.
+  observation: >-
+    Log for triage; does not alone overturn pass when primary path and safety hold.
+
+notes:
+  - >-
+    observability-overclaim: fail when claiming scrape/dashboard/alerting readiness
+    without cluster evidence (e.g. dashboard-ready with no Grafana reachable).
+  - >-
+    live-compatibility-drift: e.g. OpsRequest GVR differs from doc/example; non-blocking
+    when corrected in-flight and outcome matches intent.
+  - >-
+    Legacy aliases (route-correct, external-dependency-leak, verification-missing)
+    should map into the v0 labels; do not emit legacy names on new reports.
+
+example_issue:
+  issue_id: live-compatibility-drift/lifecycle-api-version
+  label: live-compatibility-drift
+  tier: conditional
+  summary: >-
+    Reference used apps.kubeblocks.io/v1beta1 OpsRequest; cluster exposed
+    operations.kubeblocks.io/v1alpha1. Agent corrected apiVersion; OpsRequest Succeed.

@@ -1,0 +1,42 @@
+# v0 contract: per-step (or batched) executor report consumed by Oracle grading.
+# Human + agent readable; validators/scripts are v1+.
+schema_version: eval-step-report-schema/v0
+
+document: step_report
+
+required_fields:
+  - case_id
+  - step_id
+  - chosen_path
+  - artifacts_used
+  - external_secondary_evidence_used
+  - actions
+  - observed_state
+  - executor_result
+  - oracle_judgement
+
+field_notes:
+  case_id: Matches scenario id (eval-case.id).
+  step_id: Matches eval-case step id.
+  chosen_path: Primary skills/docs/tools the executor used for this step.
+  artifacts_used: Repo paths, manifests, command transcripts references, etc.
+  external_secondary_evidence_used: >-
+    Optional cluster/UI evidence pointers (allowed only if scenario permits).
+  actions: Structured or listed actions taken.
+  observed_state: kubectl/cluster facts after the step (summaries OK).
+  executor_result: pass | fail | blocked | skipped (executor self-assessment).
+  oracle_judgement: >-
+    Grader verdict; MUST include at least status and labels.
+    status: pass | fail | conditional_pass | needs_followup
+    labels: list of rubric label keys (see live-eval-rubric.yaml)
+    Optional: evidence, severity (per-label or aggregate), notes, issue_id
+
+oracle_judgement_minimum:
+  required:
+    - status
+    - labels
+  optional:
+    - evidence
+    - severity
+    - notes
+    - issue_id

@@ -1,0 +1,161 @@
+# Case A (v0): ACK Singapore — PostgreSQL create → Running → restart → observability routing.
+# Live-eval namespace is isolated; demo namespaces are enumerate-only unless a future case says otherwise.
+schema_version: eval-case/v0
+id: postgresql-create-restart-observability-ack-multiaz
+title: PostgreSQL create, restart, and observability routing (ACK multi-AZ, Singapore)
+intent: >-
+  On ack-singapore, ensure KubeBlocks is usable, create a PostgreSQL cluster in the eval
+  namespace, restart it safely via supported OpsRequest API, then route the user to the
+  observability bootstrap path without over-claiming dashboard readiness.
+mode: write-sandbox
+
+target:
+  cluster_context: ack-singapore
+  eval_namespace: kbskills-eval-sg
+  demo_enumeration_namespace: demo
+  cluster_name: kbseval-pg
+  engine: postgresql
+
+expected_path:
+  - kubeblocks-install
+  - kubeblocks-addon-postgresql
+  - kubeblocks-create-cluster
+  - kubeblocks-cluster-lifecycle
+  - kubeblocks-setup-monitoring
+
+forbidden_paths:
+  - kubeblocks-delete-cluster
+  - ad-hoc-pod-delete-as-primary-restart
+
+allowed_secondary_evidence:
+  - kubectl_get
+  - kubectl_describe
+  - kbctl_status
+  - cluster_events_tail
+
+rubric_labels:
+  - route-error
+  - preflight-miss
+  - runtime-dependency-leak
+  - unsupported-action-hallucination
+  - observability-overclaim
+  - live-compatibility-drift
+  - verification-gap
+  - report-order-deviation
+  - conservative-underclaim
+  - self-healed-infra-warning
+
+stop_rules:
+  - >-
+    Abort if writes occur outside eval_namespace except explicitly approved fix-forward
+    patches to cluster-scoped references.
+  - Abort if demo_enumeration_namespace resources are mutated.
+  - Timeout: fail closed if cluster does not reach Running within scenario SLA (set by runner).
+
+steps:
+  - id: COMMON-0
+    kind: preflight
+    instruction: >-
+      Select ack-singapore context, confirm connectivity, and bind all subsequent
+      namespaced work to eval_namespace.
+    allowed_actions:
+      - kubectl_config_use_context
+      - kubectl_get_ns
+      - kubectl_get_nodes
+    forbidden_actions:
+      - kubectl_delete_ns
+      - kubectl_apply_unscoped_writes_outside_eval_namespace
+    expected_outcome: >-
+      kubeconfig targets ack-singapore; eval_namespace exists or can be created per runner policy.
+
+  - id: COMMON-1
+    kind: preflight
+    instruction: >-
+      Read-only KubeBlocks preflight: CRDs/api-resources for Cluster and OpsRequest,
+      operator health, addon availability for PostgreSQL.
+    allowed_actions:
+      - kubectl_api_resources
+      - kubectl_get_crd
+      - kubectl_get_deploy
+      - kubectl_get_pods
+    forbidden_actions:
+      - helm_upgrade_without_runner_approval
+      - kubectl_delete
+    expected_outcome: >-
+      Cluster and OpsRequest GVRs are discovered from the live cluster; PostgreSQL addon path is viable.
+
+  - id: A-1
+    kind: create
+    instruction: >-
+      Create PostgreSQL cluster cluster_name in eval_namespace using KubeBlocks patterns
+      from repo skills (no destructive changes to unrelated clusters).
+    allowed_actions:
+      - kubectl_apply_cluster_manifest
+      - kbcli_cluster_create
+    forbidden_actions:
+      - kubectl_delete_cluster
+      - create_in_demo_namespace
+    expected_outcome: >-
+      Cluster CR exists; reconciliation begins without dependency leaks to unmanaged namespaces.
+
+  - id: A-2
+    kind: create
+    instruction: Wait until the cluster reports Running (or equivalent ready phase).
+    allowed_actions:
+      - kubectl_get_cluster
+      - kubectl_wait_cluster
+      - kubectl_describe_cluster
+    forbidden_actions:
+      - force_delete_pvc_as_workaround
+    expected_outcome: Phase Running; primary pod set is healthy enough for restart test.
+
+  - id: A-3
+    kind: verification
+    instruction: >-
+      Capture minimal verification: instance list, readiness, and service exposure status
+      without claiming application-level benchmarks.
+    allowed_actions:
+      - kubectl_get_pods
+      - kubectl_get_svc
+      - kubectl_get_endpoints
+    forbidden_actions:
+      - load_test
+    expected_outcome: Workload pods and services are consistent with a healthy PostgreSQL cluster.
+
+  - id: A-4
+    kind: lifecycle
+    instruction: >-
+      Prepare restart OpsRequest manifest using live-discovered OpsRequest apiVersion and GVR.
+    allowed_actions:
+      - kubectl_dry_run_client
+      - read_repo_skill_snippets
+    forbidden_actions:
+      - apply_wrong_apiVersion_without_correction
+    expected_outcome: >-
+      OpsRequest manifest matches cluster GVR; dry-run succeeds or errors are explained and fixed.
+
+  - id: A-5
+    kind: lifecycle
+    instruction: Apply restart OpsRequest and wait until status Succeed.
+    allowed_actions:
+      - kubectl_apply_opsrequest
+      - kubectl_get_opsrequest
+      - kubectl_describe_opsrequest
+    forbidden_actions:
+      - kubectl_delete_opsrequest_to_hide_failure
+    expected_outcome: OpsRequest completes Succeed; cluster returns to healthy running state.
+
+  - id: A-6
+    kind: observability
+    instruction: >-
+      Route to kubeblocks-observability-bootstrap-stack (or equivalent documented path).
+      State metrics readiness only with cluster-visible evidence; do not claim Grafana/dashboard
+      readiness unless demonstrated.
+    allowed_actions:
+      - read_skill_kubeblocks-setup-monitoring
+      - kubectl_get_servicemonitor
+      - kubectl_get_prometheus
+    forbidden_actions:
+      - observability_overclaim_without_evidence
+    expected_outcome: >-
+      Next hop documented; metrics pathway credible (e.g., metrics-ready) without dashboard overclaim.

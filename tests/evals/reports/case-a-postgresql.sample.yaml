@@ -1,0 +1,162 @@
+# Sample graded run for postgresql-create-restart-observability-ack-multiaz (illustrative).
+schema_version: eval-run-sample/v0
+case_id: postgresql-create-restart-observability-ack-multiaz
+sample_note: >-
+  Synthetic consolidation of a Singapore ACK Case A pass with one conditional drift on A-5.
+  Timestamps and UIDs are placeholders.
+
+executor:
+  name: dummy-agent
+  run_date: "2026-04-18"
+
+step_reports:
+  - case_id: postgresql-create-restart-observability-ack-multiaz
+    step_id: COMMON-0
+    chosen_path:
+      - kubectl_config_use_context
+      - kubectl_get_ns
+    artifacts_used: []
+    external_secondary_evidence_used: []
+    actions:
+      - use_context_ack_singapore
+      - verify_namespace_kbskills_eval_sg
+    observed_state:
+      context: ack-singapore
+      namespace: kbskills-eval-sg
+    executor_result: pass
+    oracle_judgement:
+      status: pass
+      labels: []
+
+  - case_id: postgresql-create-restart-observability-ack-multiaz
+    step_id: COMMON-1
+    chosen_path:
+      - kubectl_api_resources
+      - kubectl_get_deploy_kubeblocks
+    artifacts_used:
+      - tests/evals/scenarios/postgresql-create-restart-observability-ack-multiaz.yaml
+    external_secondary_evidence_used:
+      - kubectl_api_resources_output
+    actions:
+      - discovered_cluster_crd
+      - discovered_opsrequest_gvr
+    observed_state:
+      opsrequest_api_version: operations.kubeblocks.io/v1alpha1
+    executor_result: pass
+    oracle_judgement:
+      status: pass
+      labels: []
+
+  - case_id: postgresql-create-restart-observability-ack-multiaz
+    step_id: A-1
+    chosen_path:
+      - kubeblocks-create-cluster
+    artifacts_used:
+      - skills/kubeblocks/skills/kubeblocks-create-cluster/SKILL.md
+    external_secondary_evidence_used: []
+    actions:
+      - apply_postgresql_cluster_kbseval_pg
+    observed_state:
+      cluster: kbseval-pg
+      namespace: kbskills-eval-sg
+    executor_result: pass
+    oracle_judgement:
+      status: pass
+      labels: []
+
+  - case_id: postgresql-create-restart-observability-ack-multiaz
+    step_id: A-2
+    chosen_path:
+      - kubectl_get_cluster
+    artifacts_used: []
+    external_secondary_evidence_used:
+      - kubectl_get_cluster_kbseval_pg
+    actions:
+      - wait_phase_running
+    observed_state:
+      phase: Running
+    executor_result: pass
+    oracle_judgement:
+      status: pass
+      labels: []
+
+  - case_id: postgresql-create-restart-observability-ack-multiaz
+    step_id: A-3
+    chosen_path:
+      - kubectl_get_pods
+      - kubectl_get_svc
+    artifacts_used: []
+    external_secondary_evidence_used:
+      - pod_list
+      - svc_list
+    actions:
+      - verify_ready_pods
+    observed_state:
+      pods_ready: "true"
+    executor_result: pass
+    oracle_judgement:
+      status: pass
+      labels: []
+
+  - case_id: postgresql-create-restart-observability-ack-multiaz
+    step_id: A-4
+    chosen_path:
+      - kubectl_dry_run_client
+      - kubeblocks-cluster-lifecycle
+    artifacts_used:
+      - skills/kubeblocks/skills/kubeblocks-cluster-lifecycle/SKILL.md
+    external_secondary_evidence_used: []
+    actions:
+      - draft_restart_opsrequest
+    observed_state:
+      dry_run: corrected_after_api_discovery
+    executor_result: pass
+    oracle_judgement:
+      status: pass
+      labels:
+        - conservative-underclaim
+
+  - case_id: postgresql-create-restart-observability-ack-multiaz
+    step_id: A-5
+    chosen_path:
+      - kubectl_apply_opsrequest
+    artifacts_used: []
+    external_secondary_evidence_used:
+      - opsrequest_restart_kbseval_pg
+    actions:
+      - initial_apply_used_reference_apiVersion_apps_v1beta1_failed
+      - corrected_to_operations_v1alpha1
+      - restart_opsrequest_name: restart-kbseval-pg
+    observed_state:
+      opsrequest_status: Succeed
+    executor_result: pass
+    oracle_judgement:
+      status: conditional_pass
+      labels:
+        - live-compatibility-drift
+        - self-healed-infra-warning
+      severity: conditional
+      issue_id: live-compatibility-drift/lifecycle-api-version
+      evidence: >-
+        Dry-run/apply first referenced apps.kubeblocks.io/v1beta1; cluster exposed
+        operations.kubeblocks.io/v1alpha1. Agent re-applied with live GVR; final status Succeed.
+      notes: Non-blocking after in-flight correction; log for docs alignment.
+
+  - case_id: postgresql-create-restart-observability-ack-multiaz
+    step_id: A-6
+    chosen_path:
+      - kubeblocks-setup-monitoring
+    artifacts_used:
+      - skills/kubeblocks/skills/kubeblocks-setup-monitoring/SKILL.md
+    external_secondary_evidence_used:
+      - kubectl_get_servicemonitor_optional
+    actions:
+      - route_next_hop_kubeblocks_observability_bootstrap_stack
+    observed_state:
+      next_hop: kubeblocks-observability-bootstrap-stack
+      claim: metrics-ready
+    executor_result: pass
+    oracle_judgement:
+      status: pass
+      labels: []
+      notes: No dashboard-ready overclaim.

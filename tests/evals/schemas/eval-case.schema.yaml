@@ -1,0 +1,52 @@
+# v0 contract: live-eval scenario documents under tests/evals/scenarios/*.yaml
+# Human + agent readable; validators/scripts are v1+.
+schema_version: eval-case-schema/v0
+
+document: scenario
+
+required_root_fields:
+  - id
+  - title
+  - intent
+  - mode
+  - target
+  - expected_path
+  - forbidden_paths
+  - allowed_secondary_evidence
+  - steps
+  - stop_rules
+  - rubric_labels
+
+root_field_notes:
+  id: Stable identifier for the case (often matches filename stem).
+  title: Short human title.
+  intent: Natural-language goal for the executor agent.
+  mode: >-
+    Execution posture, e.g. write-sandbox (non-destructive eval namespace),
+    destructive-demo (explicit demo namespace only), read-only.
+  target: >-
+    Structured binding: cluster context, namespaces, optional cluster name hints,
+    addon/engine hints. Free-form YAML object; scenarios SHOULD document eval_namespace
+    and any demo_enumeration_namespace separately.
+  expected_path: Ordered primary path (skill ids, doc anchors, or route labels).
+  forbidden_paths: Primary routes or skills that must not be used for the main outcome.
+  allowed_secondary_evidence: Optional evidence classes permitted (not runtime prerequisites).
+  steps: Non-empty list of step objects (see required_step_fields).
+  stop_rules: Early-exit rules (timeout, leak detection, abort conditions).
+  rubric_labels: Label keys from live-eval-rubric that are in scope for this scenario.
+
+required_step_fields:
+  - id
+  - kind
+  - instruction
+  - allowed_actions
+  - forbidden_actions
+  - expected_outcome
+
+step_field_notes:
+  id: Step id (e.g. COMMON-0, A-3).
+  kind: Step category (e.g. preflight, create, lifecycle, observability, route-only).
+  instruction: What the executor must do in this step.
+  allowed_actions: Verbs and object types permitted (strings or structured entries).
+  forbidden_actions: Actions that must not occur in this step.
+  expected_outcome: Observable success criteria (cluster state, artifacts, routing).
