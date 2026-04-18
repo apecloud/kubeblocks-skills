@@ -1,29 +1,66 @@
 ---
 name: kubeblocks-engine-postgresql
-version: "0.1.0"
+version: "0.2.0"
 description: Primary create-time entry for PostgreSQL on KubeBlocks. Use when the user wants to provision PostgreSQL and needs the correct topology, version, storage, sizing, connection, and next-hop guidance. Run kubeblocks-preflight first when environment readiness is unknown. The legacy kubeblocks-addon-postgresql skill remains only as a compatibility shim.
 ---
 
 # PostgreSQL Engine Entry
 
-Use this as the primary create-time entry for PostgreSQL.
+Use this as the primary create-time entry for PostgreSQL. Tier-1 PostgreSQL never falls back to `kubeblocks-engine-generic`.
 
-## Entry Contract
+## Cold-Start Contract
 
-- Run [kubeblocks-preflight](../kubeblocks-preflight/SKILL.md) whenever storage, scheduling, addon readiness, or observability readiness is still unknown.
-- Use [engine-tier-map](../../references/coverage/engine-tier-map.yaml), [addon-capability-matrix](../../references/coverage/addon-capability-matrix.yaml), and [route-matrix](../../references/routing/route-matrix.yaml) as the routing and support truth.
-- Keep this entry focused on create-time decisions only: topology, `serviceVersion`, storage and scheduling requirements, sizing, first connection, and next hops.
-- Route existing-cluster work to the matching `kubeblocks-op-*` skill and broad monitoring asks to [kubeblocks-observability-router](../kubeblocks-observability-router/SKILL.md).
+- Run [kubeblocks-preflight](../kubeblocks-preflight/SKILL.md) whenever the environment is not already profiled.
+- Treat [engine-create-matrix](../../references/coverage/engine-create-matrix.yaml) as the create-time truth for topology, version strategy, sizing, validation, next hops, and forbidden routes.
+- Use [observability-capability-matrix](../../references/coverage/observability-capability-matrix.yaml) before promising scrape, dashboard, or alert readiness.
+- Keep the legacy [kubeblocks-addon-postgresql](../kubeblocks-addon-postgresql/SKILL.md) path as preserved detail only, not as the primary cold-start route.
 
-## Create-Time Checklist
+## Topology Selection
 
-1. Confirm the preflight recommendation bundle, especially `storageClassName`, topology-aware storage risk, and observability mode.
-2. Select the engine-specific topology and `serviceVersion`.
-3. Choose demo vs production sizing.
-4. Decide the first readiness / connection verification step.
-5. Hand off follow-up operations to the shared capability layers instead of extending the create path.
+- Default topology: `replication`
+- `replication`: the normal Patroni-style HA path and the default choice for nearly every PostgreSQL rollout.
+- `replication-with-etcd`: use only when the platform explicitly requires an external etcd-backed DCS shape instead of the default addon path.
+- If the user does not know why they need `replication-with-etcd`, stay on `replication`.
 
-## Preserved Detailed Reference
+## ServiceVersion / Version Strategy
 
-For preserved topology-specific manifests and older walkthroughs, see [legacy reference](../kubeblocks-addon-postgresql/references/reference.md).
-Do not route through [kubeblocks-addon-postgresql](../kubeblocks-addon-postgresql/SKILL.md) as the primary cold-start path.
+- Strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+- Current addon evidence surfaces supported lines across PostgreSQL `12`, `14`, `15`, `16`, and `17`, with stable examples anchored on the shipped defaults.
+- If the user asks for "latest", stay within addon-backed supported lines rather than inventing a raw image tag.
+
+## Preflight Interpretation
+
+- `storage_class`: required before apply because PostgreSQL WAL and data PVCs should not rely on implicit defaults in production.
+- `volume_binding_mode`: if the storage class binds late, confirm zone placement before choosing multi-replica HA.
+- `addon_readiness`: PostgreSQL addon must be installed before rollout.
+- `observability_mode`: PostgreSQL has exporter, scrape, and alert examples, so choose existing-stack vs bootstrap before create.
+
+## Sizing Profiles
+
+- `demo`: a compact `replication` shape with small PVCs and minimal resources for evaluation.
+- `production`: dedicated storage, anti-affinity or spread constraints from preflight, and observability enabled from day 1.
+- Treat `replication-with-etcd` as an advanced platform shape, not the default recommendation.
+
+## Connection and Validation
+
+- Supported connection methods: `in-cluster service`, `port-forward`, `exposed service`
+- First validation step: `kubectl get cluster <name> -n <ns>` and wait for `Running`.
+- Default SQL validation: `psql -h <service> -p 5432 -U postgres`.
+- Validate replication readiness before handoff if the user explicitly asked for HA or failover.
+
+## Next Hops
+
+- Day-2 operations currently route to `kubeblocks-op-lifecycle`, `kubeblocks-op-horizontal-scale`, `kubeblocks-op-reconfigure`, `kubeblocks-op-backup`, and `kubeblocks-observability-router`.
+- Access and connection hardening should route to [kubeblocks-manage-accounts](../kubeblocks-manage-accounts/SKILL.md) and [kubeblocks-configure-tls](../kubeblocks-configure-tls/SKILL.md).
+- Failed secondaries should route to [kubeblocks-rebuild-replica](../kubeblocks-rebuild-replica/SKILL.md) rather than direct pod deletion.
+- If the rollout is blocked by a non-Running phase or unresolved storage/platform issue, route to [kubeblocks-troubleshoot](../kubeblocks-troubleshoot/SKILL.md).
+
+## Forbidden Routes
+
+- Never route PostgreSQL create through `kubeblocks-engine-generic`, `kubeblocks-family-sql`, `kubeblocks-addon-postgresql`, or `kubeblocks-engine-tidb`.
+- Do not force PostgreSQL through MySQL- or TiDB-like semantics.
+
+## Preserved References
+
+- Detailed YAML and topology-specific examples remain in [legacy reference](../kubeblocks-addon-postgresql/references/reference.md).
+- Current addon evidence: `examples/postgresql/cluster.yaml`, `examples/postgresql/cluster-with-etcd.yaml`.

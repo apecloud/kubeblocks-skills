@@ -107,7 +107,7 @@ records:
     evidence_confidence: medium
   - engine: qdrant
     entry_skill: kubeblocks-engine-qdrant
-    topology_options: [single-node, cluster]
+    topology_options: [cluster]
     default_topology: cluster
     service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
     preflight_requirements: [storage_class, volume_binding_mode, addon_readiness]
@@ -122,7 +122,7 @@ records:
     evidence_confidence: high
   - engine: rabbitmq
     entry_skill: kubeblocks-engine-rabbitmq
-    topology_options: [single-node, cluster]
+    topology_options: [cluster]
     default_topology: cluster
     service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
     preflight_requirements: [storage_class, volume_binding_mode, addon_readiness, observability_mode]
@@ -137,8 +137,8 @@ records:
     evidence_confidence: high
   - engine: clickhouse
     entry_skill: kubeblocks-engine-clickhouse
-    topology_options: [standalone, sharding, keeper]
-    default_topology: sharding
+    topology_options: [standalone, cluster]
+    default_topology: cluster
     service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
     preflight_requirements: [storage_class, volume_binding_mode, addon_readiness, observability_mode]
     sizing_profiles: [demo, production]
@@ -152,13 +152,13 @@ records:
     evidence_confidence: high
   - engine: mariadb
     entry_skill: kubeblocks-engine-mariadb
-    topology_options: [replication]
-    default_topology: replication
+    topology_options: [standalone]
+    default_topology: standalone
     service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
     preflight_requirements: [storage_class, volume_binding_mode, addon_readiness]
     sizing_profiles: [demo, production]
     connection_methods: [in-cluster service, port-forward]
-    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-vertical-scale, kubeblocks-observability-router]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-vertical-scale, kubeblocks-op-volume-expansion, kubeblocks-observability-router]
     forbidden_routes: [kubeblocks-engine-generic, kubeblocks-family-sql, kubeblocks-engine-mysql]
     docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/mariadb/README.md]
     example_refs: [examples/mariadb/cluster.yaml]
@@ -167,7 +167,7 @@ records:
     evidence_confidence: medium
   - engine: minio
     entry_skill: kubeblocks-engine-minio
-    topology_options: [standalone, distributed]
+    topology_options: [distributed]
     default_topology: distributed
     service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
     preflight_requirements: [storage_class, volume_binding_mode, addon_readiness]
@@ -182,8 +182,8 @@ records:
     evidence_confidence: medium
   - engine: opensearch
     entry_skill: kubeblocks-engine-opensearch
-    topology_options: [single-node, multi-node]
-    default_topology: multi-node
+    topology_options: [cluster]
+    default_topology: cluster
     service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
     preflight_requirements: [storage_class, volume_binding_mode, addon_readiness]
     sizing_profiles: [demo, production]
@@ -212,13 +212,13 @@ records:
     evidence_confidence: medium
   - engine: tidb
     entry_skill: kubeblocks-engine-tidb
-    topology_options: [standard, with-tiflash]
+    topology_options: [standard]
     default_topology: standard
     service_version_strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
     preflight_requirements: [storage_class, volume_binding_mode, addon_readiness, observability_mode]
     sizing_profiles: [demo, production]
     connection_methods: [in-cluster service, port-forward]
-    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-observability-router]
+    next_hops: [kubeblocks-op-lifecycle, kubeblocks-op-horizontal-scale, kubeblocks-op-vertical-scale, kubeblocks-op-volume-expansion, kubeblocks-observability-router]
     forbidden_routes: [kubeblocks-engine-generic, kubeblocks-family-sql, kubeblocks-engine-mysql, kubeblocks-engine-postgresql]
     docs_refs: ["kubeblocks-docs:databases", "kubeblocks-docs:supported-addons", examples/tidb/README.md]
     example_refs: [examples/tidb/cluster.yaml]

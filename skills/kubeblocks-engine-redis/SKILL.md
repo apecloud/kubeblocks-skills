@@ -1,29 +1,68 @@
 ---
 name: kubeblocks-engine-redis
-version: "0.1.0"
+version: "0.2.0"
 description: Primary create-time entry for Redis on KubeBlocks. Use when the user wants to provision Redis and needs the correct topology, version, storage, sizing, connection, and next-hop guidance. Run kubeblocks-preflight first when environment readiness is unknown. The legacy kubeblocks-addon-redis skill remains only as a compatibility shim.
 ---
 
 # Redis Engine Entry
 
-Use this as the primary create-time entry for Redis.
+Use this as the primary create-time entry for Redis. Tier-1 Redis never falls back to `kubeblocks-engine-generic`.
 
-## Entry Contract
+## Cold-Start Contract
 
-- Run [kubeblocks-preflight](../kubeblocks-preflight/SKILL.md) whenever storage, scheduling, addon readiness, or observability readiness is still unknown.
-- Use [engine-tier-map](../../references/coverage/engine-tier-map.yaml), [addon-capability-matrix](../../references/coverage/addon-capability-matrix.yaml), and [route-matrix](../../references/routing/route-matrix.yaml) as the routing and support truth.
-- Keep this entry focused on create-time decisions only: topology, `serviceVersion`, storage and scheduling requirements, sizing, first connection, and next hops.
-- Route existing-cluster work to the matching `kubeblocks-op-*` skill and broad monitoring asks to [kubeblocks-observability-router](../kubeblocks-observability-router/SKILL.md).
+- Run [kubeblocks-preflight](../kubeblocks-preflight/SKILL.md) whenever the environment is not already profiled.
+- Treat [engine-create-matrix](../../references/coverage/engine-create-matrix.yaml) as the create-time truth for topology, version strategy, sizing, validation, next hops, and forbidden routes.
+- Use [observability-capability-matrix](../../references/coverage/observability-capability-matrix.yaml) before promising scrape or alert readiness.
+- Keep the legacy [kubeblocks-addon-redis](../kubeblocks-addon-redis/SKILL.md) path as preserved detail only, not as the primary cold-start route.
 
-## Create-Time Checklist
+## Topology Selection
 
-1. Confirm the preflight recommendation bundle, especially `storageClassName`, topology-aware storage risk, and observability mode.
-2. Select the engine-specific topology and `serviceVersion`.
-3. Choose demo vs production sizing.
-4. Decide the first readiness / connection verification step.
-5. Hand off follow-up operations to the shared capability layers instead of extending the create path.
+- Default topology: `replication`
+- `standalone`: only for dev/test or throwaway cache workloads where HA is unnecessary.
+- `replication`: default choice for most durable Redis rollouts because Sentinel-backed failover is already part of the path.
+- `sharding`: choose only when the keyspace or write load has outgrown a single shard and the client path can speak Redis Cluster.
+- If the user only needs a cache and has no explicit horizontal-scale requirement, stay on `replication`.
 
-## Preserved Detailed Reference
+## ServiceVersion / Version Strategy
 
-For preserved topology-specific manifests and older walkthroughs, see [legacy reference](../kubeblocks-addon-redis/references/reference.md).
-Do not route through [kubeblocks-addon-redis](../kubeblocks-addon-redis/SKILL.md) as the primary cold-start path.
+- Strategy: use the stable addon default from current examples unless the user explicitly pins a serviceVersion
+- Current preserved evidence centers on Redis `7.2.4`, with `7.0.6` still available as an older supported line.
+- For `sharding`, keep the `serviceVersion` aligned across shard template and sentinel or access components.
+
+## Preflight Interpretation
+
+- `storage_class`: required before apply because Redis persistence still lands on PVC-backed storage.
+- `volume_binding_mode`: confirm zone behavior before choosing replicated or sharded layouts that span nodes.
+- `addon_readiness`: Redis addon must be installed first.
+- `observability_mode`: Redis has exporter, scrape, and alert examples, so pick existing-stack vs bootstrap before rollout.
+
+## Sizing Profiles
+
+- `demo`: `standalone` or small `replication` with modest CPU, memory, and PVCs.
+- `production`: `replication` or `sharding` with explicit failover expectations, anti-affinity, and capacity headroom for rebalancing.
+- For `sharding`, treat shard count as a capacity decision, not a cosmetic topology toggle.
+
+## Connection and Validation
+
+- Supported connection methods: `in-cluster service`, `port-forward`, `exposed service`
+- First validation step: `kubectl get cluster <name> -n <ns>` and wait for `Running`.
+- Default validation: `redis-cli -h <service> -p 6379 -a <password> PING`.
+- For `sharding`, validate with `redis-cli -c` and a cluster command such as `CLUSTER INFO` before handoff.
+
+## Next Hops
+
+- Day-2 operations currently route to `kubeblocks-op-lifecycle`, `kubeblocks-op-horizontal-scale`, `kubeblocks-op-reconfigure`, `kubeblocks-op-backup`, and `kubeblocks-observability-router`.
+- Password and Secret handling can route to [kubeblocks-manage-accounts](../kubeblocks-manage-accounts/SKILL.md).
+- Do not send this path to [kubeblocks-rebuild-replica](../kubeblocks-rebuild-replica/SKILL.md); `rebuild_instance` is not the Redis recovery path in the current ops truth.
+- Treat [kubeblocks-configure-tls](../kubeblocks-configure-tls/SKILL.md) as an engine-specific validation task, not an automatic follow-up promise for every Redis rollout.
+- If failover, sharding state, or exposure behavior is unclear, route to [kubeblocks-troubleshoot](../kubeblocks-troubleshoot/SKILL.md).
+
+## Forbidden Routes
+
+- Never route Redis create through `kubeblocks-engine-generic` or `kubeblocks-addon-redis`.
+- Do not collapse Redis into a generic cache path when the user is really asking for replication or cluster sharding semantics.
+
+## Preserved References
+
+- Detailed YAML and topology-specific examples remain in [legacy reference](../kubeblocks-addon-redis/references/reference.md).
+- Current addon evidence: `examples/redis/cluster-standalone.yaml`, `examples/redis/cluster.yaml`, `examples/redis/cluster-sharding.yaml`, `examples/redis/cluster-twemproxy.yaml`.

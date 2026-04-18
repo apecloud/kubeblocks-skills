@@ -15,6 +15,12 @@ This skill belongs to the **access-security capability layer** for already-creat
 - Use [kubeblocks-manage-accounts](../kubeblocks-manage-accounts/SKILL.md) for password rotation, not certificate workflows.
 - If TLS failures are mixed with broken service exposure or pod failures, diagnose first with [kubeblocks-troubleshoot](../kubeblocks-troubleshoot/SKILL.md).
 
+## Engine-Aware Boundaries
+
+- **Validated first-class path:** `mysql` and `postgresql` are the safest default engines for this skill in the current repo because both the docs and the capability layering already route cold-start agents here.
+- **Needs explicit evidence before rollout:** `redis`, `mongodb`, and `kafka` should not automatically inherit the MySQL/PostgreSQL TLS workflow. Confirm addon evidence and engine behavior before promising enablement.
+- **Do not oversell encrypted-by-default semantics:** search, vector, object-storage, and streaming engines may still need engine-native validation or external networking work before this skill becomes executable.
+
 ## Overview
 
 KubeBlocks supports TLS encryption for database connections. Three modes are available:
@@ -22,6 +28,8 @@ KubeBlocks supports TLS encryption for database connections. Three modes are ava
 - **Built-in TLS**: KubeBlocks generates and manages certificates automatically (requires cert-manager)
 - **User-provided TLS**: Use your own CA and certificates
 - **mTLS (Mutual TLS)**: Both server and client authenticate with certificates
+
+If the engine is not clearly covered by the current matrix and references, stop at the contract boundary and escalate instead of applying a generic TLS recipe.
 
 Official docs: https://kubeblocks.io/docs/preview/user_docs/connect-databases/tls-connection
 

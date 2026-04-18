@@ -15,6 +15,12 @@ This skill belongs to the **recovery capability layer** and should normally be e
 - Use [ops-capability-matrix](../../references/coverage/ops-capability-matrix.yaml) to confirm the target engine supports `rebuild_instance`, and use [addon-capability-matrix](../../references/coverage/addon-capability-matrix.yaml) for example evidence.
 - Route planned topology changes to [kubeblocks-op-switchover](../kubeblocks-op-switchover/SKILL.md) and data rehydration from backup to [kubeblocks-op-restore](../kubeblocks-op-restore/SKILL.md).
 
+## Engine-Aware Boundaries
+
+- **Supported recovery path:** `mysql` and `postgresql` are the only engines this skill should actively drive in the current truth.
+- **Do not use this path for** `redis`, `mongodb`, or `kafka`; those engines currently require troubleshooting, switchover, restore, or engine-native repair instead of `RebuildInstance`.
+- If an agent is unsure whether an engine really supports `rebuild_instance`, stop and confirm in the matrix rather than translating this workflow across engines by analogy.
+
 ## Overview
 
 Rebuild replica recovers a failed secondary instance by recreating its data from the primary or from a backup. Use this when:

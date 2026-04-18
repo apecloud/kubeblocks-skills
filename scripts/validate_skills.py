@@ -55,7 +55,8 @@ def require_string_list(
 def main():
     errors: list[str] = []
     warnings: list[str] = []
-    skill_names = set(skill_name_map())
+    skill_paths = skill_name_map()
+    skill_names = set(skill_paths)
     family_routes = reference_only_family_routes()
 
     for path in skill_files():
@@ -179,6 +180,67 @@ def main():
                 if not valid_route_target(target, skill_names, family_routes):
                     errors.append(f"{label}: unknown route target `{target}` in `{key}`")
 
+    create_depth_fixture = load_yaml_rel(
+        "tests/fixtures/create-depth/tier1-skill-contract.yaml"
+    ) or {}
+    required_headings = create_depth_fixture.get("required_headings", [])
+    if not required_headings:
+        errors.append(
+            "tests/fixtures/create-depth/tier1-skill-contract.yaml: missing `required_headings`"
+        )
+    create_depth_records = create_depth_fixture.get("records", [])
+    if not create_depth_records:
+        errors.append(
+            "tests/fixtures/create-depth/tier1-skill-contract.yaml: missing `records`"
+        )
+    for fixture in create_depth_records:
+        engine = fixture.get("engine")
+        entry_skill = fixture.get("entry_skill")
+        label = (
+            "tests/fixtures/create-depth/tier1-skill-contract.yaml"
+            f":{engine or entry_skill or 'unknown'}"
+        )
+        if not engine or not entry_skill:
+            errors.append(f"{label}: missing `engine` or `entry_skill`")
+            continue
+        skill_path = skill_paths.get(entry_skill)
+        if skill_path is None:
+            errors.append(f"{label}: unknown entry_skill `{entry_skill}`")
+            continue
+        record = engine_create_records.get(engine)
+        if record is None:
+            errors.append(f"{label}: missing engine-create-matrix record for `{engine}`")
+            continue
+        text = skill_path.read_text(encoding="utf-8")
+        for heading in required_headings:
+            if f"## {heading}" not in text:
+                errors.append(
+                    f"{label}: {skill_path.relative_to(ROOT)} missing heading `{heading}`"
+                )
+        if record.get("service_version_strategy") and record["service_version_strategy"] not in text:
+            errors.append(
+                f"{label}: {skill_path.relative_to(ROOT)} missing exact service_version_strategy text"
+            )
+        default_topology = record.get("default_topology")
+        if default_topology:
+            if "Default topology:" not in text or f"`{default_topology}`" not in text:
+                errors.append(
+                    f"{label}: {skill_path.relative_to(ROOT)} missing default topology `{default_topology}`"
+                )
+        for key in [
+            "topology_options",
+            "preflight_requirements",
+            "sizing_profiles",
+            "connection_methods",
+            "next_hops",
+            "forbidden_routes",
+        ]:
+            for value in record.get(key, []):
+                if f"`{value}`" not in text:
+                    errors.append(
+                        f"{label}: {skill_path.relative_to(ROOT)} missing `{value}` from `{key}`"
+                    )
+
     observability_matrix = load_yaml_rel(
         "references/coverage/observability-capability-matrix.yaml"
     ) or {}
@@ -294,6 +356,7 @@ def main():
         "references/coverage/observability-capability-matrix.yaml",
         "references/routing/route-matrix.yaml",
         "references/runtime/runtime-contract.yaml",
+        "tests/fixtures/create-depth/tier1-skill-contract.yaml",
         "references/coverage/addon-capability-matrix.schema.yaml",
         "references/coverage/ops-capability-matrix.schema.yaml",
         "references/coverage/engine-create-matrix.schema.yaml",

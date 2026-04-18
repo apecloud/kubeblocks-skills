@@ -1,0 +1,41 @@
+schema_version: v1alpha1
+required_headings:
+  - "Cold-Start Contract"
+  - "Topology Selection"
+  - "ServiceVersion / Version Strategy"
+  - "Preflight Interpretation"
+  - "Sizing Profiles"
+  - "Connection and Validation"
+  - "Next Hops"
+  - "Forbidden Routes"
+records:
+  - engine: mysql
+    entry_skill: kubeblocks-engine-mysql
+  - engine: postgresql
+    entry_skill: kubeblocks-engine-postgresql
+  - engine: redis
+    entry_skill: kubeblocks-engine-redis
+  - engine: mongodb
+    entry_skill: kubeblocks-engine-mongodb
+  - engine: kafka
+    entry_skill: kubeblocks-engine-kafka
+  - engine: elasticsearch
+    entry_skill: kubeblocks-engine-elasticsearch
+  - engine: milvus
+    entry_skill: kubeblocks-engine-milvus
+  - engine: qdrant
+    entry_skill: kubeblocks-engine-qdrant
+  - engine: rabbitmq
+    entry_skill: kubeblocks-engine-rabbitmq
+  - engine: clickhouse
+    entry_skill: kubeblocks-engine-clickhouse
+  - engine: mariadb
+    entry_skill: kubeblocks-engine-mariadb
+  - engine: minio
+    entry_skill: kubeblocks-engine-minio
+  - engine: opensearch
+    entry_skill: kubeblocks-engine-opensearch
+  - engine: pulsar
+    entry_skill: kubeblocks-engine-pulsar
+  - engine: tidb
+    entry_skill: kubeblocks-engine-tidb
