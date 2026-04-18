@@ -1,11 +1,19 @@
 ---
 name: kubeblocks-configure-tls
-metadata:
-  version: "0.1.0"
-description: Configure TLS encryption for KubeBlocks database clusters. Supports built-in certificates (auto-managed via cert-manager), user-provided certificates (bring your own CA/PKI), and mTLS (mutual TLS with client certificates). Use when the user wants to enable TLS, SSL, encryption, HTTPS, or secure database connections with certificates. NOT for managing database passwords (see manage-accounts) or exposing services externally (see expose-service).
+version: "0.2.0"
+description: Access-security capability entry for TLS and mTLS on existing KubeBlocks clusters. Use when the user wants to enable, verify, or rotate encrypted database connections. Do not use this as a create-time primary entry; create-time routing still starts at preflight plus the dedicated engine skill.
 ---
 
 # Configure TLS Encryption
+
+This skill belongs to the **access-security capability layer** for already-created clusters.
+
+## Entry Contract
+
+- Prefer this skill only after the cluster exists and a user is explicitly working on connection security or certificate rotation.
+- Use [ops-capability-matrix](../../references/coverage/ops-capability-matrix.yaml) to confirm engine support boundaries, and [addon-capability-matrix](../../references/coverage/addon-capability-matrix.yaml) for docs/example evidence.
+- Use [kubeblocks-manage-accounts](../kubeblocks-manage-accounts/SKILL.md) for password rotation, not certificate workflows.
+- If TLS failures are mixed with broken service exposure or pod failures, diagnose first with [kubeblocks-troubleshoot](../kubeblocks-troubleshoot/SKILL.md).
 
 ## Overview
 

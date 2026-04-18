@@ -12,14 +12,30 @@ required_fields:
   - addon_repo_path
   - example_refs
   - docs_refs
+  - core_refs
+  - support_level
+  - evidence_confidence
   - supported_ops
   - supported_observability
+
+allowed_support_levels:
+  - official
+  - provisional
+  - examples-only
+
+allowed_evidence_confidence:
+  - high
+  - medium
+  - low
 
 field_notes:
   tier: "tier1-dedicated | tier2-family | tier3-generic"
   family: "optional reference-only taxonomy value; must be one of sql, streaming, vector, search, ts-analytics, coordination, graph, or null"
   docs_refs: "repo-relative doc keys or URLs"
   example_refs: "repo-relative example file paths that establish engine/create/ops evidence"
+  core_refs: "kubeblocks core API/controller evidence, usually symbolic refs such as kubeblocks-core:apis/apps/v1/cluster_types.go"
+  support_level: "official | provisional | examples-only"
+  evidence_confidence: "high | medium | low"
   example_dir: "optional coarse locator for human navigation; cannot replace example_refs"
   supported_ops: "logical capability families, not raw OpsRequest names"
   supported_observability: "minimum exporter / pod-monitor support hints"
@@ -35,7 +51,11 @@ example:
     - examples/mysql/cluster.yaml
     - examples/mysql/opsrequest.yaml
   docs_refs:
-    - kubeblocks-docs:mysql
+    - "kubeblocks-docs:databases"
+  core_refs:
+    - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+  support_level: official
+  evidence_confidence: high
   supported_ops:
     - lifecycle
     - horizontal_scale

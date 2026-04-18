@@ -8,12 +8,21 @@ records:
     addon_repo_path: addons/mysql
     example_refs:
       - examples/mysql/cluster.yaml
+      - examples/mysql/cluster-mgr.yaml
+      - examples/mysql/cluster-orc.yaml
+      - examples/mysql/cluster-proxysql.yaml
       - examples/mysql/scale-out.yaml
       - examples/mysql/verticalscale.yaml
       - examples/mysql/volumeexpand.yaml
       - examples/mysql/pod-monitor.yaml
     docs_refs:
+      - "kubeblocks-docs:databases"
+      - "kubeblocks-docs:supported-addons"
       - examples/mysql/README.md
+    core_refs:
+      - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+    support_level: official
+    evidence_confidence: high
     supported_ops:
       - lifecycle
       - horizontal_scale
@@ -35,12 +44,19 @@ records:
     addon_repo_path: addons/postgresql
     example_refs:
       - examples/postgresql/cluster.yaml
+      - examples/postgresql/cluster-with-etcd.yaml
       - examples/postgresql/scale-out.yaml
       - examples/postgresql/verticalscale.yaml
       - examples/postgresql/volumeexpand.yaml
       - examples/postgresql/pod-monitor.yaml
     docs_refs:
+      - "kubeblocks-docs:databases"
+      - "kubeblocks-docs:supported-addons"
       - examples/postgresql/README.md
+    core_refs:
+      - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+    support_level: official
+    evidence_confidence: high
     supported_ops:
       - lifecycle
       - horizontal_scale
@@ -61,13 +77,22 @@ records:
     family: null
     addon_repo_path: addons/redis
     example_refs:
+      - examples/redis/cluster-standalone.yaml
       - examples/redis/cluster.yaml
+      - examples/redis/cluster-sharding.yaml
+      - examples/redis/cluster-twemproxy.yaml
       - examples/redis/scale-out.yaml
       - examples/redis/verticalscale.yaml
       - examples/redis/volumeexpand.yaml
       - examples/redis/pod-monitor.yaml
     docs_refs:
+      - "kubeblocks-docs:databases"
+      - "kubeblocks-docs:supported-addons"
       - examples/redis/README.md
+    core_refs:
+      - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+    support_level: official
+    evidence_confidence: high
     supported_ops:
       - lifecycle
       - horizontal_scale
@@ -94,7 +119,13 @@ records:
       - examples/mongodb/volumeexpand.yaml
       - examples/mongodb/backup.yaml
     docs_refs:
+      - "kubeblocks-docs:databases"
+      - "kubeblocks-docs:supported-addons"
       - examples/mongodb/README.md
+    core_refs:
+      - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+    support_level: official
+    evidence_confidence: high
     supported_ops:
       - lifecycle
       - horizontal_scale
@@ -116,12 +147,19 @@ records:
     addon_repo_path: addons/kafka
     example_refs:
       - examples/kafka/cluster-combined.yaml
+      - examples/kafka/cluster-separated.yaml
       - examples/kafka/scale-out.yaml
       - examples/kafka/verticalscale.yaml
       - examples/kafka/volumeexpand.yaml
       - examples/kafka/exporter-pod-monitor.yaml
     docs_refs:
+      - "kubeblocks-docs:databases"
+      - "kubeblocks-docs:supported-addons"
       - examples/kafka/README.md
+    core_refs:
+      - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+    support_level: official
+    evidence_confidence: high
     supported_ops:
       - lifecycle
       - horizontal_scale
@@ -145,7 +183,13 @@ records:
       - examples/elasticsearch/volumeexpand.yaml
       - examples/elasticsearch/pod-monitor.yaml
     docs_refs:
+      - "kubeblocks-docs:databases"
+      - "kubeblocks-docs:supported-addons"
       - examples/elasticsearch/README.md
+    core_refs:
+      - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+    support_level: official
+    evidence_confidence: high
     supported_ops:
       - lifecycle
       - horizontal_scale
@@ -162,12 +206,19 @@ records:
     family: vector
     addon_repo_path: addons/milvus
     example_refs:
+      - examples/milvus/cluster-standalone.yaml
       - examples/milvus/cluster.yaml
       - examples/milvus/scale-out.yaml
       - examples/milvus/verticalscale.yaml
       - examples/milvus/pod-monitor.yaml
     docs_refs:
+      - "kubeblocks-docs:databases"
+      - "kubeblocks-docs:supported-addons"
       - examples/milvus/README.md
+    core_refs:
+      - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+    support_level: official
+    evidence_confidence: medium
     supported_ops:
       - lifecycle
       - horizontal_scale
@@ -188,7 +239,13 @@ records:
       - examples/qdrant/volumeexpand.yaml
       - examples/qdrant/pod-monitor.yaml
     docs_refs:
+      - "kubeblocks-docs:databases"
+      - "kubeblocks-docs:supported-addons"
       - examples/qdrant/README.md
+    core_refs:
+      - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+    support_level: official
+    evidence_confidence: high
     supported_ops:
       - lifecycle
       - horizontal_scale
@@ -212,7 +269,13 @@ records:
       - examples/rabbitmq/volumeexpand.yaml
       - examples/rabbitmq/pod-monitor.yaml
     docs_refs:
+      - "kubeblocks-docs:databases"
+      - "kubeblocks-docs:supported-addons"
       - examples/rabbitmq/README.md
+    core_refs:
+      - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+    support_level: official
+    evidence_confidence: high
     supported_ops:
       - lifecycle
       - horizontal_scale
@@ -230,13 +293,20 @@ records:
     family: ts-analytics
     addon_repo_path: addons/clickhouse
     example_refs:
+      - examples/clickhouse/cluster-standalone.yaml
       - examples/clickhouse/cluster.yaml
       - examples/clickhouse/scale-out.yaml
       - examples/clickhouse/verticalscale.yaml
       - examples/clickhouse/volumeexpand.yaml
       - examples/clickhouse/pod-monitor.yaml
     docs_refs:
+      - "kubeblocks-docs:databases"
+      - "kubeblocks-docs:supported-addons"
       - examples/clickhouse/README.md
+    core_refs:
+      - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+    support_level: official
+    evidence_confidence: high
     supported_ops:
       - lifecycle
       - horizontal_scale
@@ -262,7 +332,13 @@ records:
       - examples/mariadb/volumeexpand.yaml
       - examples/mariadb/start.yaml
     docs_refs:
+      - "kubeblocks-docs:databases"
+      - "kubeblocks-docs:supported-addons"
       - examples/mariadb/README.md
+    core_refs:
+      - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+    support_level: official
+    evidence_confidence: medium
     supported_ops:
       - lifecycle
       - vertical_scale
@@ -282,7 +358,13 @@ records:
       - examples/minio/verticalscale.yaml
       - examples/minio/start.yaml
     docs_refs:
+      - "kubeblocks-docs:databases"
+      - "kubeblocks-docs:supported-addons"
       - examples/minio/README.md
+    core_refs:
+      - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+    support_level: official
+    evidence_confidence: medium
     supported_ops:
       - lifecycle
       - horizontal_scale
@@ -302,7 +384,13 @@ records:
       - examples/opensearch/verticalscale.yaml
       - examples/opensearch/volumeexpand.yaml
     docs_refs:
+      - "kubeblocks-docs:databases"
+      - "kubeblocks-docs:supported-addons"
       - examples/opensearch/README.md
+    core_refs:
+      - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+    support_level: official
+    evidence_confidence: medium
     supported_ops:
       - lifecycle
       - horizontal_scale
@@ -319,11 +407,19 @@ records:
     addon_repo_path: addons/pulsar
     example_refs:
       - examples/pulsar/cluster-basic.yaml
+      - examples/pulsar/cluster-enhanced.yaml
+      - examples/pulsar/cluster-service-refer.yaml
       - examples/pulsar/scale-out.yaml
       - examples/pulsar/verticalscale.yaml
       - examples/pulsar/volumeexpand.yaml
     docs_refs:
+      - "kubeblocks-docs:databases"
+      - "kubeblocks-docs:supported-addons"
       - examples/pulsar/README.md
+    core_refs:
+      - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+    support_level: official
+    evidence_confidence: medium
     supported_ops:
       - lifecycle
       - horizontal_scale
@@ -347,7 +443,13 @@ records:
       - examples/tidb/volumeexpand.yaml
       - examples/tidb/pod-monitor.yaml
     docs_refs:
+      - "kubeblocks-docs:databases"
+      - "kubeblocks-docs:supported-addons"
       - examples/tidb/README.md
+    core_refs:
+      - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+    support_level: official
+    evidence_confidence: medium
     supported_ops:
       - lifecycle
       - horizontal_scale

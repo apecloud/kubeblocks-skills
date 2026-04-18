@@ -12,5 +12,5 @@
 ## Next Safe Action
 -
 
-## Rollback Point
+## Rollback Boundary
 -

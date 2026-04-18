@@ -40,7 +40,7 @@ For local installs, prefer a **stable user-level path** such as `~/.agents/skill
 
 The target structure is not "one addon = one primary entry." The target is:
 
-`root router -> environment gate(cluster/install/preflight) -> create path(dedicated engine | generic fallback) -> capability layers(ops/security/backup/observability) -> troubleshoot/recovery`
+`root router -> environment gate(cluster/install/preflight) -> create path(dedicated engine | generic fallback) -> capability layers(lifecycle/scaling/config/data-protection/access-security/observability/recovery) -> troubleshoot`
 
 Key rules:
 
@@ -87,7 +87,7 @@ Key rules:
 | [kubeblocks-engine-tidb](./skills/kubeblocks-engine-tidb/SKILL.md) | Dedicated TiDB entry placeholder. |
 | [kubeblocks-engine-generic](./skills/kubeblocks-engine-generic/SKILL.md) | `other-addons` fallback only. Not for the Tier-1 dedicated set. |
 
-### Ops
+### Shared Capability Layers
 
 | Skill | Purpose |
 |-------|---------|
@@ -101,11 +101,11 @@ Key rules:
 | [kubeblocks-op-backup](./skills/kubeblocks-op-backup/SKILL.md) | Primary backup entry. |
 | [kubeblocks-op-restore](./skills/kubeblocks-op-restore/SKILL.md) | Primary restore entry. |
 | [kubeblocks-op-expose](./skills/kubeblocks-op-expose/SKILL.md) | Primary external service exposure entry. |
-| [kubeblocks-delete-cluster](./skills/kubeblocks-delete-cluster/SKILL.md) | Safe deletion path. |
+| [kubeblocks-delete-cluster](./skills/kubeblocks-delete-cluster/SKILL.md) | Destructive lifecycle path after data-protection checks. |
 | [kubeblocks-upgrade](./skills/kubeblocks-upgrade/SKILL.md) | KubeBlocks operator upgrade. |
-| [kubeblocks-configure-tls](./skills/kubeblocks-configure-tls/SKILL.md) | TLS and mTLS. |
-| [kubeblocks-manage-accounts](./skills/kubeblocks-manage-accounts/SKILL.md) | Accounts and passwords. |
-| [kubeblocks-rebuild-replica](./skills/kubeblocks-rebuild-replica/SKILL.md) | Replica rebuild / recovery support. |
+| [kubeblocks-configure-tls](./skills/kubeblocks-configure-tls/SKILL.md) | Access-security path for TLS and mTLS. |
+| [kubeblocks-manage-accounts](./skills/kubeblocks-manage-accounts/SKILL.md) | Access-security path for accounts and passwords. |
+| [kubeblocks-rebuild-replica](./skills/kubeblocks-rebuild-replica/SKILL.md) | Recovery path for replica repair. |
 
 ### Observability
 
@@ -133,6 +133,9 @@ The repository keeps shared references under [references/](references/):
 - [references/testing/smoke-checklist.md](references/testing/smoke-checklist.md)
 - [references/testing/path-migrations.md](references/testing/path-migrations.md)
 - [references/routing/shim-map.yaml](references/routing/shim-map.yaml)
+- [references/coverage/engine-create-matrix.yaml](references/coverage/engine-create-matrix.yaml)
+- [references/coverage/observability-capability-matrix.yaml](references/coverage/observability-capability-matrix.yaml)
+- [references/runtime/runtime-contract.yaml](references/runtime/runtime-contract.yaml)
 
 ## Testing & Iteration Hooks
 
@@ -158,7 +161,8 @@ It checks:
 - relative Markdown links in the router, README, skill files, and routing/testing references
 - Tier-1 routing fixtures point to existing skills or approved reference-only families
 - `references/routing/shim-map.yaml`, `references/testing/path-migrations.md`, and routing fixtures stay aligned
-- addon, ops, and routing truth stay consistent with the Tier-1 baseline
+- addon, create-time, observability, ops, and routing truth stay consistent with the Tier-1 baseline
+- runtime contract templates stay aligned with the machine-readable runtime artifact contract
 
 Script contract:
 
@@ -195,6 +199,8 @@ Cold-start agents should not depend on pre-existing memory files, but long-runni
 - `.kubeblocks-agent/HANDOFF.md`
 
 These files are runtime artifacts, not static truths. Keep them out of the skill repo and refresh them when the environment changes.
+
+The machine-readable contract for these artifacts lives in [references/runtime/runtime-contract.yaml](references/runtime/runtime-contract.yaml). Templates under [references/templates/](references/templates/) are examples, not mandatory runtime state.
 
 ## Contributing
 

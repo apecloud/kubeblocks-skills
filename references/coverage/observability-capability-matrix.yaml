@@ -1,0 +1,197 @@
+schema_version: v1alpha1
+records:
+  - engine: mysql
+    entry_skill: kubeblocks-observability-router
+    exporter: true
+    scrape_examples: true
+    dashboard_examples: false
+    alerting_examples: true
+    readiness_ceiling: alerting-ready
+    recommended_path: kubeblocks-observability-existing-stack
+    docs_refs: ["kubeblocks-docs:supported-addons", examples/mysql/README.md]
+    example_refs: [examples/mysql/pod-monitor.yaml, examples/mysql/alert-rules.yaml]
+    core_refs: ["kubeblocks-core:pkg/common/monitor.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: postgresql
+    entry_skill: kubeblocks-observability-router
+    exporter: true
+    scrape_examples: true
+    dashboard_examples: false
+    alerting_examples: true
+    readiness_ceiling: alerting-ready
+    recommended_path: kubeblocks-observability-existing-stack
+    docs_refs: ["kubeblocks-docs:supported-addons", examples/postgresql/README.md]
+    example_refs: [examples/postgresql/pod-monitor.yaml, examples/postgresql/alert-rules.yaml]
+    core_refs: ["kubeblocks-core:pkg/common/monitor.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: redis
+    entry_skill: kubeblocks-observability-router
+    exporter: true
+    scrape_examples: true
+    dashboard_examples: false
+    alerting_examples: true
+    readiness_ceiling: alerting-ready
+    recommended_path: kubeblocks-observability-existing-stack
+    docs_refs: ["kubeblocks-docs:supported-addons", examples/redis/README.md]
+    example_refs: [examples/redis/pod-monitor.yaml, examples/redis/alert-rules.yaml]
+    core_refs: ["kubeblocks-core:pkg/common/monitor.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: mongodb
+    entry_skill: kubeblocks-observability-router
+    exporter: false
+    scrape_examples: false
+    dashboard_examples: false
+    alerting_examples: true
+    readiness_ceiling: none
+    recommended_path: kubeblocks-observability-router
+    docs_refs: ["kubeblocks-docs:supported-addons", examples/mongodb/README.md]
+    example_refs: [examples/mongodb/alert-rules.yaml]
+    core_refs: ["kubeblocks-core:pkg/common/monitor.go"]
+    support_level: official
+    evidence_confidence: medium
+  - engine: kafka
+    entry_skill: kubeblocks-observability-router
+    exporter: true
+    scrape_examples: true
+    dashboard_examples: false
+    alerting_examples: false
+    readiness_ceiling: scrape-ready
+    recommended_path: kubeblocks-observability-existing-stack
+    docs_refs: ["kubeblocks-docs:supported-addons", examples/kafka/README.md]
+    example_refs: [examples/kafka/exporter-pod-monitor.yaml, examples/kafka/jvm-pod-monitor.yaml]
+    core_refs: ["kubeblocks-core:pkg/common/monitor.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: elasticsearch
+    entry_skill: kubeblocks-observability-router
+    exporter: true
+    scrape_examples: true
+    dashboard_examples: false
+    alerting_examples: false
+    readiness_ceiling: scrape-ready
+    recommended_path: kubeblocks-observability-existing-stack
+    docs_refs: ["kubeblocks-docs:supported-addons", examples/elasticsearch/README.md]
+    example_refs: [examples/elasticsearch/pod-monitor.yaml]
+    core_refs: ["kubeblocks-core:pkg/common/monitor.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: milvus
+    entry_skill: kubeblocks-observability-router
+    exporter: true
+    scrape_examples: true
+    dashboard_examples: false
+    alerting_examples: false
+    readiness_ceiling: scrape-ready
+    recommended_path: kubeblocks-observability-existing-stack
+    docs_refs: ["kubeblocks-docs:supported-addons", examples/milvus/README.md]
+    example_refs: [examples/milvus/pod-monitor.yaml]
+    core_refs: ["kubeblocks-core:pkg/common/monitor.go"]
+    support_level: official
+    evidence_confidence: medium
+  - engine: qdrant
+    entry_skill: kubeblocks-observability-router
+    exporter: true
+    scrape_examples: true
+    dashboard_examples: false
+    alerting_examples: false
+    readiness_ceiling: scrape-ready
+    recommended_path: kubeblocks-observability-existing-stack
+    docs_refs: ["kubeblocks-docs:supported-addons", examples/qdrant/README.md]
+    example_refs: [examples/qdrant/pod-monitor.yaml]
+    core_refs: ["kubeblocks-core:pkg/common/monitor.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: rabbitmq
+    entry_skill: kubeblocks-observability-router
+    exporter: true
+    scrape_examples: true
+    dashboard_examples: false
+    alerting_examples: false
+    readiness_ceiling: scrape-ready
+    recommended_path: kubeblocks-observability-existing-stack
+    docs_refs: ["kubeblocks-docs:supported-addons", examples/rabbitmq/README.md]
+    example_refs: [examples/rabbitmq/pod-monitor.yaml]
+    core_refs: ["kubeblocks-core:pkg/common/monitor.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: clickhouse
+    entry_skill: kubeblocks-observability-router
+    exporter: true
+    scrape_examples: true
+    dashboard_examples: false
+    alerting_examples: false
+    readiness_ceiling: scrape-ready
+    recommended_path: kubeblocks-observability-existing-stack
+    docs_refs: ["kubeblocks-docs:supported-addons", examples/clickhouse/README.md]
+    example_refs: [examples/clickhouse/pod-monitor.yaml]
+    core_refs: ["kubeblocks-core:pkg/common/monitor.go"]
+    support_level: official
+    evidence_confidence: high
+  - engine: mariadb
+    entry_skill: kubeblocks-observability-router
+    exporter: false
+    scrape_examples: false
+    dashboard_examples: false
+    alerting_examples: false
+    readiness_ceiling: none
+    recommended_path: kubeblocks-observability-router
+    docs_refs: ["kubeblocks-docs:supported-addons", examples/mariadb/README.md]
+    example_refs: []
+    core_refs: ["kubeblocks-core:pkg/common/monitor.go"]
+    support_level: official
+    evidence_confidence: low
+  - engine: minio
+    entry_skill: kubeblocks-observability-router
+    exporter: false
+    scrape_examples: false
+    dashboard_examples: false
+    alerting_examples: false
+    readiness_ceiling: none
+    recommended_path: kubeblocks-observability-router
+    docs_refs: ["kubeblocks-docs:supported-addons", examples/minio/README.md]
+    example_refs: []
+    core_refs: ["kubeblocks-core:pkg/common/monitor.go"]
+    support_level: official
+    evidence_confidence: low
+  - engine: opensearch
+    entry_skill: kubeblocks-observability-router
+    exporter: false
+    scrape_examples: false
+    dashboard_examples: false
+    alerting_examples: false
+    readiness_ceiling: none
+    recommended_path: kubeblocks-observability-router
+    docs_refs: ["kubeblocks-docs:supported-addons", examples/opensearch/README.md]
+    example_refs: []
+    core_refs: ["kubeblocks-core:pkg/common/monitor.go"]
+    support_level: official
+    evidence_confidence: low
+  - engine: pulsar
+    entry_skill: kubeblocks-observability-router
+    exporter: false
+    scrape_examples: false
+    dashboard_examples: false
+    alerting_examples: false
+    readiness_ceiling: none
+    recommended_path: kubeblocks-observability-router
+    docs_refs: ["kubeblocks-docs:supported-addons", examples/pulsar/README.md]
+    example_refs: []
+    core_refs: ["kubeblocks-core:pkg/common/monitor.go"]
+    support_level: official
+    evidence_confidence: low
+  - engine: tidb
+    entry_skill: kubeblocks-observability-router
+    exporter: true
+    scrape_examples: true
+    dashboard_examples: false
+    alerting_examples: false
+    readiness_ceiling: scrape-ready
+    recommended_path: kubeblocks-observability-existing-stack
+    docs_refs: ["kubeblocks-docs:supported-addons", examples/tidb/README.md]
+    example_refs: [examples/tidb/pod-monitor.yaml]
+    core_refs: ["kubeblocks-core:pkg/common/monitor.go"]
+    support_level: official
+    evidence_confidence: medium

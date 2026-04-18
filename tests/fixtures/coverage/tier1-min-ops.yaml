@@ -6,6 +6,8 @@ required_columns:
   - vertical_scale
   - volume_expansion
   - monitoring_exporter
+  - account
+  - logs
 
 required_status_columns:
   - reconfigure
@@ -13,9 +15,31 @@ required_status_columns:
   - expose
   - backup
   - restore
+  - rebuild_instance
 
 allowed_status_values:
   - supported
   - partial
   - unsupported
   - unknown
+
+required_enum_columns:
+  - failover_model
+  - support_level
+  - evidence_confidence
+
+allowed_failover_models:
+  - automatic
+  - manual
+  - not_applicable
+  - unknown
+
+allowed_support_levels:
+  - official
+  - provisional
+  - examples-only
+
+allowed_evidence_confidence:
+  - high
+  - medium
+  - low

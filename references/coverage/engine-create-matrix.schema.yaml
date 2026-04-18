@@ -1,0 +1,86 @@
+schema_version: v1alpha1
+description: >
+  Machine-readable create-time decision truth for dedicated engine entry skills.
+  This matrix answers topology, version strategy, storage/preflight
+  requirements, sizing, connection methods, and forbidden fallback paths for
+  cold-start agents.
+
+required_fields:
+  - engine
+  - entry_skill
+  - topology_options
+  - default_topology
+  - service_version_strategy
+  - preflight_requirements
+  - sizing_profiles
+  - connection_methods
+  - next_hops
+  - forbidden_routes
+  - docs_refs
+  - example_refs
+  - core_refs
+  - support_level
+  - evidence_confidence
+
+allowed_support_levels:
+  - official
+  - provisional
+  - examples-only
+
+allowed_evidence_confidence:
+  - high
+  - medium
+  - low
+
+field_notes:
+  topology_options: "Allowed create-time topology choices for the engine."
+  service_version_strategy: "How a cold-start agent should pick a serviceVersion, not an exhaustive version list."
+  preflight_requirements: "Environment gates that must be satisfied before create-time execution."
+  sizing_profiles: "Named create-time sizing profiles such as demo or production."
+  connection_methods: "First verification / connection paths after creation."
+  next_hops: "Shared capability-layer or observability-layer routes that should be suggested after successful create."
+  forbidden_routes: "Cold-start routes that must not be used for this engine."
+  docs_refs: "Official docs references or stable doc keys."
+  example_refs: "kubeblocks-addons example paths that demonstrate the create-time path."
+  core_refs: "kubeblocks core API/controller references that justify the control-plane model."
+
+example:
+  engine: mysql
+  entry_skill: kubeblocks-engine-mysql
+  topology_options:
+    - semisync
+    - mgr
+    - orchestrator
+    - proxysql
+  default_topology: semisync
+  service_version_strategy: use the stable addon default from the current example set unless the user requests a specific serviceVersion
+  preflight_requirements:
+    - storage_class
+    - volume_binding_mode
+    - addon_readiness
+    - observability_mode
+  sizing_profiles:
+    - demo
+    - production
+  connection_methods:
+    - in-cluster service
+    - port-forward
+    - exposed service
+  next_hops:
+    - kubeblocks-op-lifecycle
+    - kubeblocks-op-horizontal-scale
+    - kubeblocks-observability-router
+  forbidden_routes:
+    - kubeblocks-engine-generic
+    - kubeblocks-family-sql
+    - kubeblocks-addon-mysql
+  docs_refs:
+    - "kubeblocks-docs:databases"
+    - "kubeblocks-docs:supported-addons"
+  example_refs:
+    - examples/mysql/cluster.yaml
+    - examples/mysql/cluster-mgr.yaml
+  core_refs:
+    - "kubeblocks-core:apis/apps/v1/cluster_types.go"
+  support_level: official
+  evidence_confidence: high
