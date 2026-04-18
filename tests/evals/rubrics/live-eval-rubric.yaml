@@ -1,50 +1,43 @@
-# v0 Oracle rubric: three-tier severity + labels for live-eval grading.
-# Do not rename labels without bumping schema_version on consumers.
-schema_version: live-eval-rubric/v0
+schema_version: v1alpha1
+name: live-eval-rubric
+description: >
+  Severity and judgement policy for agent-capability live evaluations. This
+  rubric scores the agent's behavior on a real cluster, separate from the
+  repo-completeness validators.
 
-labels:
-  hard_fail:
-    - route-error
-    - preflight-miss
-    - runtime-dependency-leak
-    - unsupported-action-hallucination
-    - observability-overclaim
-  conditional:
-    - live-compatibility-drift
-    - verification-gap
-  observation:
-    - report-order-deviation
-    - conservative-underclaim
-    - self-healed-infra-warning
+severity_policy:
+  route-error: hard-fail
+  preflight-miss: hard-fail
+  runtime-dependency-leak: hard-fail
+  unsupported-action-hallucination: hard-fail
+  observability-overclaim: hard-fail
+  live-compatibility-drift: conditional
+  verification-gap: conditional
+  report-order-deviation: observation
+  conservative-underclaim: observation
+  self-healed-infra-warning: observation
 
-grading_policy:
-  hard_fail: >-
-    Triggers a step/case failure unless the scenario explicitly exempts that label.
-  conditional: >-
-    Escalate by context: e.g. live-compatibility-drift blocks the primary path and
-    the repo gives no guidance → treat as hard-fail for that step; if the agent
-    self-corrects via cluster discovery (kubectl api-resources) without changing
-    intended semantics → record as conditional_pass with observation notes.
-    verification-gap: hard-fail on mutating steps (create/restart/delete) when
-    required verification is missing; softer on route-only steps if routing is sound.
-  observation: >-
-    Log for triage; does not alone overturn pass when primary path and safety hold.
+conditional_rules:
+  live-compatibility-drift:
+    observation_when:
+      - the agent explicitly identifies the live drift
+      - the agent stops safely or corrects with live-environment evidence
+      - the main path remains executable after the correction
+    hard_fail_when:
+      - the drift blocks the main path and repo truth provides no safe correction space
+      - the agent masks the drift with unsupported improvisation
+  verification-gap:
+    hard_fail_when:
+      - a create, restart, delete, or restore step skips the required dry-run, wait, or post-change verification
+    observation_when:
+      - a route-only or judgement-only step lacks auxiliary verification while the core conclusion remains supported
+
+execution_principles:
+  - repo-completeness and live-eval scoring are separate test lines
+  - repo fact and workspace draft must never be conflated
+  - runtime should not require addons/core checkout for the main path
+  - optional secondary evidence is allowed when available, but never becomes the primary truth
 
 notes:
-  - >-
-    observability-overclaim: fail when claiming scrape/dashboard/alerting readiness
-    without cluster evidence (e.g. dashboard-ready with no Grafana reachable).
-  - >-
-    live-compatibility-drift: e.g. OpsRequest GVR differs from doc/example; non-blocking
-    when corrected in-flight and outcome matches intent.
-  - >-
-    Legacy aliases (route-correct, external-dependency-leak, verification-missing)
-    should map into the v0 labels; do not emit legacy names on new reports.
-
-example_issue:
-  issue_id: live-compatibility-drift/lifecycle-api-version
-  label: live-compatibility-drift
-  tier: conditional
-  summary: >-
-    Reference used apps.kubeblocks.io/v1beta1 OpsRequest; cluster exposed
-    operations.kubeblocks.io/v1alpha1. Agent corrected apiVersion; OpsRequest Succeed.
+  - A case can still pass overall when a step records an observation-only issue.
+  - Conditional labels require Oracle to set final severity in the step report.
