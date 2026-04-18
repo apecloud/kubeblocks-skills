@@ -43,6 +43,8 @@ This repo is not trying to:
 - make runtime memory files mandatory
 - widen coverage faster than the agent can reliably use it
 
+`family` is a reference-only taxonomy and **not a cold-start create-time primary entry**.
+
 The priority is always: **high-frequency paths with low ambiguity first**.
 
 ## Install

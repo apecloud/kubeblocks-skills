@@ -13,9 +13,12 @@ compatibility:
 
 # KubeBlocks Router
 
-This root skill is a **router only**. It should decide the next step, not re-explain every workflow.
+This root skill is **router only**. It should decide the next step, not become a second README and not restate every leaf workflow.
 
-Use [README.md](README.md) for repository overview, installation instructions, and the full skill catalog.
+Use:
+
+- [AGENTS.md](AGENTS.md) for the cold-start agent operating model
+- [README.md](README.md) for repository layout, truth layers, installation, and validation
 
 ## Route Order
 
@@ -78,6 +81,7 @@ Always route in this order:
 
 - Do **not** route the Tier-1 engine set to [engine-generic](skills/kubeblocks-engine-generic/SKILL.md) or to any family/taxonomy-only explanation layer.
 - Do **not** provision a first-time database without going through [kubeblocks-preflight](skills/kubeblocks-preflight/SKILL.md) when environment readiness is unknown.
+- Do **not** send agents back to raw addon examples as the primary create-time path once a dedicated Tier-1 engine entry exists.
 - Do **not** equate “metrics exist” with “monitoring is delivered”. Observability must declare whether it is only `metrics-ready`, `scrape-ready`, `dashboard-ready`, or `alerting-ready`.
 - Do **not** recommend legacy `kubeblocks-addon-*`, `kubeblocks-create-cluster`, or old Day-2 names as the primary path when the corresponding `kubeblocks-engine-*`, `kubeblocks-engine-generic`, or `kubeblocks-op-*` entry exists.
 
