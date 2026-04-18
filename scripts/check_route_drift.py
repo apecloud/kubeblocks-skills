@@ -59,13 +59,24 @@ def main():
         )
 
     readme_text = (ROOT / "README.md").read_text(encoding="utf-8")
+    agents_text = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
     root_text = (ROOT / "SKILL.md").read_text(encoding="utf-8")
     if "kubeblocks-family-" in readme_text or "kubeblocks-family-" in root_text:
         errors.append("README.md / SKILL.md must not expose kubeblocks-family-* as executable routes")
     if "not a cold-start create-time primary entry" not in readme_text:
         errors.append("README.md must explicitly state that family is not a cold-start primary entry")
+    if "only this repo" not in readme_text:
+        errors.append("README.md must explicitly state that runtime should work with only this repo")
+    if "maintainer evidence only" not in readme_text:
+        errors.append("README.md must explicitly mark addon/core provenance as maintainer evidence only")
+    if "only this repo" not in agents_text:
+        errors.append("AGENTS.md must explicitly state that runtime should work with only this repo")
+    if "maintainer evidence only" not in agents_text:
+        errors.append("AGENTS.md must explicitly mark addon/core provenance as maintainer evidence only")
     if "family/taxonomy-only explanation layer" not in root_text:
         errors.append("SKILL.md must explicitly forbid routing Tier-1 engines to family")
+    if "Do **not** require `kubeblocks-addons` or KubeBlocks core repo checkouts as runtime prerequisites." not in root_text:
+        errors.append("SKILL.md must explicitly forbid runtime dependence on kubeblocks-addons/core checkouts")
     for legacy_skill, _new_skill in sorted(shim_pairs):
         if legacy_skill == "kubeblocks-setup-monitoring":
             continue

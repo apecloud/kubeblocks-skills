@@ -1,5 +1,12 @@
 This repository is designed to make a **cold-start agent behave like a KubeBlocks database operator**, not like a generic documentation reader.
 
+Runtime assumption:
+
+- A user should be able to install **only this repo** and still use it.
+- The cold-start runtime dependency is: **this repo + official public KubeBlocks docs**.
+- `kubeblocks-addons` and KubeBlocks core repos are **maintainer evidence only**, not runtime prerequisites.
+- If a runtime path still requires raw addon examples or core source checkout to make the main decision, treat that as a repo gap and fix the repo.
+
 Start here:
 
 1. Read the root [SKILL.md](SKILL.md).

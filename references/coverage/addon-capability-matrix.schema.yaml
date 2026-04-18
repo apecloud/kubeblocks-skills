@@ -31,9 +31,9 @@ allowed_evidence_confidence:
 field_notes:
   tier: "tier1-dedicated | tier2-family | tier3-generic"
   family: "optional reference-only taxonomy value; must be one of sql, streaming, vector, search, ts-analytics, coordination, graph, or null"
-  docs_refs: "repo-relative doc keys or URLs"
-  example_refs: "repo-relative example file paths that establish engine/create/ops evidence"
-  core_refs: "kubeblocks core API/controller evidence, usually symbolic refs such as kubeblocks-core:apis/apps/v1/cluster_types.go"
+  docs_refs: "official public docs keys or URLs that may be used at runtime"
+  example_refs: "maintainer-only example provenance that establishes engine/create/ops evidence; not a runtime prerequisite"
+  core_refs: "maintainer-only KubeBlocks core API/controller evidence, usually symbolic refs such as kubeblocks-core:apis/apps/v1/cluster_types.go"
   support_level: "official | provisional | examples-only"
   evidence_confidence: "high | medium | low"
   example_dir: "optional coarse locator for human navigation; cannot replace example_refs"

@@ -82,6 +82,7 @@ Always route in this order:
 - Do **not** route the Tier-1 engine set to [engine-generic](skills/kubeblocks-engine-generic/SKILL.md) or to any family/taxonomy-only explanation layer.
 - Do **not** provision a first-time database without going through [kubeblocks-preflight](skills/kubeblocks-preflight/SKILL.md) when environment readiness is unknown.
 - Do **not** send agents back to raw addon examples as the primary create-time path once a dedicated Tier-1 engine entry exists.
+- Do **not** require `kubeblocks-addons` or KubeBlocks core repo checkouts as runtime prerequisites. The runtime path must work from this repo plus official public docs.
 - Do **not** equate “metrics exist” with “monitoring is delivered”. Observability must declare whether it is only `metrics-ready`, `scrape-ready`, `dashboard-ready`, or `alerting-ready`.
 - Do **not** recommend legacy `kubeblocks-addon-*`, `kubeblocks-create-cluster`, or old Day-2 names as the primary path when the corresponding `kubeblocks-engine-*`, `kubeblocks-engine-generic`, or `kubeblocks-op-*` entry exists.
 
