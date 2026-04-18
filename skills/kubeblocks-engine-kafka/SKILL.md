@@ -83,6 +83,6 @@ spec:
 
 ## Evidence Anchors
 
-- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
+- Use the evidence anchors below only for maintainer-side parity checks after the manifest is already drafted here. A cold-start runtime should not need these files.
 - Preserved detail remains in [legacy reference](../kubeblocks-addon-kafka/references/reference.md).
 - Current addon evidence: `examples/kafka/cluster-combined.yaml`, `examples/kafka/cluster-separated.yaml`.

@@ -13,6 +13,32 @@ That means the repo should help an agent:
 
 This repo is therefore closer to an agent operating system than a static document set.
 
+## Runtime Contract vs Maintainer Contract
+
+### Runtime Contract
+
+A cold-start agent should be able to operate with **only this repo**, official public KubeBlocks docs, and cluster access.
+
+That means the runtime path must **not** require:
+
+- a local `kubeblocks-addons` checkout
+- a local KubeBlocks core checkout
+- local grep across addon/core repos before the main decision can be made
+
+If a create, ops, observability, or troubleshoot path still depends on those repos at runtime, that is a repo defect and should be fixed here.
+
+### Maintainer Contract
+
+`kubeblocks-addons` and KubeBlocks core repos are **maintainer evidence only**.
+
+Maintainers may use them to:
+
+- prove addon/example coverage
+- prove control-plane behavior boundaries
+- update the truth files shipped inside this repo
+
+But the installed skills repo itself must remain the runtime source of truth for cold-start agents.
+
 ## What A Cold-Start Agent Should Do
 
 The default flow is:
@@ -188,7 +214,7 @@ Use:
 
 ## Examples Are Evidence, Not Primary Truth
 
-The repo still uses `kubeblocks-addons` and KubeBlocks docs as evidence. It does **not** want the cold-start agent to depend on raw example files as its primary decision source.
+The repo still uses `kubeblocks-addons`, KubeBlocks core, and KubeBlocks docs as evidence during maintenance. It does **not** want the cold-start agent to depend on raw example files or source checkouts as its primary decision source.
 
 The intended order is:
 
@@ -217,7 +243,9 @@ Validation is split into two classes:
 - `validate_skills.py` and `check_route_drift.py`
   repo-local checks that should work in a clean clone
 - `check_addon_coverage.py` and `check_ops_coverage.py`
-  cross-repo checks that require `kubeblocks-addons`
+  maintainer-only cross-repo checks that require `kubeblocks-addons`
+
+End users and cold-start agents do **not** need the cross-repo checks to use the installed skills repo.
 
 The validators currently enforce:
 

@@ -3,7 +3,8 @@ description: >
   Machine-readable observability support truth for cold-start agents. This
   matrix states whether an engine has exporter evidence, scrape evidence,
   dashboard evidence, alerting evidence, and what readiness ceiling can be
-  claimed without guessing.
+  claimed without guessing. `example_refs` and `core_refs` are maintainer
+  provenance fields, not cold-start runtime prerequisites.
 
 required_fields:
   - engine

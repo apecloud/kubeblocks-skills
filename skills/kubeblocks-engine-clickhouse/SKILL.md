@@ -83,5 +83,5 @@ spec:
 
 ## Evidence Anchors
 
-- Use the evidence anchors below only to verify parity after the manifest is already drafted here.
+- Use the evidence anchors below only for maintainer-side parity checks after the manifest is already drafted here. A cold-start runtime should not need these files.
 - Current addon evidence: `examples/clickhouse/cluster-standalone.yaml`, `examples/clickhouse/cluster.yaml`, `examples/clickhouse/cluster-with-nodeport.yaml`.
